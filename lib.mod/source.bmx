@@ -57,8 +57,8 @@ Import "raylib/src/external/glfw/src/posix_thread.c"
 Import "raylib/src/external/glfw/src/posix_time.c"
 ?
 Import "raylib/src/external/glfw/src/vulkan.c"
-Import "raylib/src/external/glfw/src/wgl_context.c"
 ?win32
+Import "raylib/src/external/glfw/src/wgl_context.c"
 Import "raylib/src/external/glfw/src/win32_init.c"
 Import "raylib/src/external/glfw/src/win32_joystick.c"
 Import "raylib/src/external/glfw/src/win32_monitor.c"
