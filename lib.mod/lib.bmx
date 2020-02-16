@@ -47,6 +47,7 @@ ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
 ModuleInfo "CC_OPTS: -D_GLFW_COCOA"
 ?linux And Not raspberrypi
 ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
+ModuleInfo "CC_OPTS: -D_POSIX_C_SOURCE=199309L"
 ModuleInfo "CC_OPTS: -D_GLFW_X11"
 ?raspberrypi
 ModuleInfo "CC_OPTS: -DPLATFORM_RPI"
