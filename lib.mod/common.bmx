@@ -23,6 +23,15 @@ SuperStrict
 
 ?linux
 Import "-ldl"
+Import "-lm"
+Import "-lX11"
+Import "-lxcb"
+Import "-lGL"
+Import "-lGLX"
+Import "-lXext"
+Import "-lGLdispatch"
+Import "-lXau"
+Import "-lXdmcp"
 ?
 
 Import "source.bmx"
