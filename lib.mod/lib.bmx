@@ -43,8 +43,10 @@ ModuleInfo "CC_OPTS: -DSUPPORT_CAMERA_SYSTEM"
 ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
 ModuleInfo "CC_OPTS: -D_GLFW_WIN32"
 ?osx
+ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
 ModuleInfo "CC_OPTS: -D_GLFW_COCOA"
 ?linux And Not raspberrypi
+ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
 ModuleInfo "CC_OPTS: -D_GLFW_X11"
 ?raspberrypi
 ModuleInfo "CC_OPTS: -DPLATFORM_RPI"
