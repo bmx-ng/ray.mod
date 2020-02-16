@@ -297,6 +297,10 @@ Extern
 	Function bmx_raylib_DrawBillboard(camera:RCamera, texture:RTexture2D, center:RVector3, size:Float, tint:RColor)="DrawBillboard"
 	Function bmx_raylib_DrawBillboardRec(camera:RCamera, texture:RTexture2D, sourceRec:RRectangle, center:RVector3, size:Float, tint:RColor)="DrawBillboardRec"
 
+	Function bmx_raylib_MeasureText:Int(txt:Byte Ptr, FontSize:Int)="MeasureText"
+	Function bmx_raylib_MeasureTextEx:RVector2(font:RFont, txt:Byte Ptr, FontSize:Float, spacing:Float)="MeasureTextEx"
+	Function bmx_raylib_GetGlyphIndex:Int(font:RFont, codepoint:Int)="GetGlyphIndex"
+
 End Extern
 
 

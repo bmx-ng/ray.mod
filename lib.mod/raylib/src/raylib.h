@@ -161,11 +161,11 @@
 // Structures Definition
 //----------------------------------------------------------------------------------
 // Boolean type
-#if defined(__STDC__) && __STDC_VERSION__ >= 199901L
-    #include <stdbool.h>
-#elif !defined(__cplusplus) && !defined(bool)
+//#if defined(__STDC__) && __STDC_VERSION__ >= 199901L
+//    #include <stdbool.h>
+//#elif !defined(__cplusplus) && !defined(bool)
     typedef enum { false, true } bool;
-#endif
+//#endif
 
 // Vector2 type
 typedef struct Vector2 {

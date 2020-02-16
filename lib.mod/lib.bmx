@@ -56,6 +56,10 @@ ModuleInfo "CC_OPTS: -D_GLFW_X11"
 
 Import "common.bmx"
 
+' Notes -
+' Changed definition of bool in raylib.h to always be enum.
+' Fixes issue where we use Int in BlitzMax to represent bools.
+'
 
 Rem
 bbdoc: Initializes window and OpenGL context.
@@ -1146,5 +1150,24 @@ End Function
 
 Function DrawBillboardRec(camera:RCamera, texture:RTexture2D, sourceRec:RRectangle, center:RVector3, size:Float, tint:RColor)
 	bmx_raylib_DrawBillboardRec(camera, texture, sourceRec, center, size, tint)
+End Function
+
+' Text misc. functions
+Function MeasureText:Int(txt:String, FontSize:Int)
+	Local t:Byte Ptr = txt.ToUTF8String()
+	Local res:Int = bmx_raylib_MeasureText(t, FontSize)
+	MemFree(t)
+	Return res
+End Function
+
+Function MeasureTextEx:RVector2(font:RFont, txt:String, FontSize:Float, spacing:Float)
+	Local t:Byte Ptr = txt.ToUTF8String()
+	Local res:RVector2 = bmx_raylib_MeasureTextEx(font, txt, FontSize, spacing)
+	MemFree(t)
+	Return res
+End Function
+
+Function GetGlyphIndex:Int(font:RFont, codepoint:Int)
+	Return bmx_raylib_GetGlyphIndex(font, codepoint)
 End Function
 
