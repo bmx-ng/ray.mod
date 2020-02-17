@@ -421,6 +421,12 @@ Function SetConfigFlags(flags:UInt)
 	bmx_raylib_SetConfigFlags(flags)
 End Function
 
+Function TakeScreenshot(fileName:String)
+	Local f:Byte Ptr = fileName.ToUTF8String()
+	bmx_raylib_TakeScreenshot(f)
+	MemFree(f)
+End Function
+
 Function GetRandomValue:Int(minimum:Int, maximum:Int)
 	Return bmx_raylib_GetRandomValue(minimum, maximum)
 End Function

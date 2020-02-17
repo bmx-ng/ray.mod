@@ -141,6 +141,7 @@ Extern
 	Function bmx_raylib_DrawPolyLines(center:RVector2, sides:Int, radius:Float, Rotation:Float, color:RColor)="DrawPolyLines"
 
 	Function bmx_raylib_SetConfigFlags(flags:UInt)="SetConfigFlags"
+	Function bmx_raylib_TakeScreenshot(fileName:Byte Ptr)="TakeScreenshot"
 	Function bmx_raylib_GetRandomValue:Int(minimum:Int, maximum:Int)="GetRandomValue"
 
 	Function bmx_raylib_IsKeyPressed:Int(key:Int)="IsKeyPressed"
