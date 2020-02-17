@@ -302,6 +302,25 @@ Extern
 	Function bmx_raylib_MeasureTextEx:RVector2(font:RFont, txt:Byte Ptr, FontSize:Float, spacing:Float)="MeasureTextEx"
 	Function bmx_raylib_GetGlyphIndex:Int(font:RFont, codepoint:Int)="GetGlyphIndex"
 
+	Function bmx_raylib_EaseSineIn:Float(t:Float, b:Float, c:Float, d:Float)="EaseSineIn"
+	Function bmx_raylib_EaseSineOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseSineOut"
+	Function bmx_raylib_EaseSineInOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseSineInOut"
+	Function bmx_raylib_EaseCircIn:Float(t:Float, b:Float, c:Float, d:Float)="EaseCircIn"
+	Function bmx_raylib_EaseCircOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseCircOut"
+	Function bmx_raylib_EaseCircInOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseCircInOut"
+	Function bmx_raylib_EaseExpoIn:Float(t:Float, b:Float, c:Float, d:Float)="EaseExpoIn"
+	Function bmx_raylib_EaseExpoOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseExpoOut"
+	Function bmx_raylib_EaseExpoInOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseExpoInOut"
+	Function bmx_raylib_EaseBackIn:Float(t:Float, b:Float, c:Float, d:Float)="EaseBackIn"
+	Function bmx_raylib_EaseBackOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseBackOut"
+	Function bmx_raylib_EaseBackInOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseBackInOut"
+	Function bmx_raylib_EaseBounceOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseBounceOut"
+	Function bmx_raylib_EaseBounceIn:Float(t:Float, b:Float, c:Float, d:Float)="EaseBounceIn"
+	Function bmx_raylib_EaseBounceInOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseBounceInOut"
+	Function bmx_raylib_EaseElasticIn:Float(t:Float, b:Float, c:Float, d:Float)="EaseElasticIn"
+	Function bmx_raylib_EaseElasticOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseElasticOut"
+	Function bmx_raylib_EaseElasticInOut:Float(t:Float, b:Float, c:Float, d:Float)="EaseElasticInOut"
+
 End Extern
 
 

@@ -60,6 +60,8 @@ Import "common.bmx"
 ' Changed definition of bool in raylib.h to always be enum.
 ' Fixes issue where we use Int in BlitzMax to represent bools.
 '
+' Changed easings.h to not use static inline.
+'
 
 Rem
 bbdoc: Initializes window and OpenGL context.
@@ -1175,5 +1177,139 @@ End Function
 
 Function GetGlyphIndex:Int(font:RFont, codepoint:Int)
 	Return bmx_raylib_GetGlyphIndex(font, codepoint)
+End Function
+
+' Linear Easing functions
+Function EaseLinearNone:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return c * t / d + b
+End Function 
+
+Function EaseLinearIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return c * t / d + b
+End Function
+
+Function EaseLinearOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return c * t / d + b
+End Function
+
+Function EaseLinearInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return c * t / d + b
+End Function
+
+' Sine Easing functions
+Function EaseSineIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseSineIn(t, b, c, d)
+End Function
+
+Function EaseSineOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseSineOut(t, b, c, d)
+End Function
+
+Function EaseSineInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseSineInOut(t, b, c, d)
+End Function
+
+' Circular Easing functions
+Function EaseCircIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseCircIn(t, b, c, d)
+End Function
+
+Function EaseCircOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseCircOut(t, b, c, d)
+End Function
+
+Function EaseCircInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseCircInOut(t, b, c, d)
+End Function
+
+' Cubic Easing functions
+Function EaseCubicIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	t :/ d
+	Return c * t * t * t + b
+End Function
+
+Function EaseCubicOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	t = t / d - 1.0
+	Return c * (t * t * t + 1.0) + b
+End Function
+
+Function EaseCubicInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	t :/ d / 2.0
+	If t < 1.0 Then
+		Return c / 2.0 * t * t * t + b
+	End If
+    t :- 2.0
+	Return c / 2.0 * (t * t * t + 2.0) + b
+End Function
+
+' Quadratic Easing functions
+Function EaseQuadIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	t :/ d
+	Return c * t * t + b
+End Function
+
+Function EaseQuadOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	t :/ d
+	Return -c * t * (t - 2.0) + b
+End Function
+
+Function EaseQuadInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	t :/ d / 2.0
+	If t < 1 Then
+		Return ((c / 2) * (t * t)) + b
+	End If
+    Return -c / 2.0 * (((t - 1.0) * (t - 3.0)) - 1.0) + b
+End Function
+
+' Exponential Easing functions
+Function EaseExpoIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseExpoIn(t, b, c, d)
+End Function
+
+Function EaseExpoOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseExpoOut(t, b, c, d)
+End Function
+
+Function EaseExpoInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseExpoInOut(t, b, c, d)
+End Function
+
+' Back Easing functions
+Function EaseBackIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseBackIn(t, b, c, d)
+End Function
+
+Function EaseBackOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseBackOut(t, b, c, d)
+End Function
+
+Function EaseBackInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseBackInOut(t, b, c, d)
+End Function
+
+' Bounce Easing functions
+Function EaseBounceOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseBounceOut(t, b, c, d)
+End Function
+
+Function EaseBounceIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseBounceIn(t, b, c, d)
+End Function
+
+Function EaseBounceInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseBounceInOut(t, b, c, d)
+End Function
+
+' Elastic Easing functions
+Function EaseElasticIn:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseElasticIn(t, b, c, d)
+End Function
+
+Function EaseElasticOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseElasticOut(t, b, c, d)
+End Function
+
+Function EaseElasticInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
+	Return bmx_raylib_EaseElasticInOut(t, b, c, d)
 End Function
 

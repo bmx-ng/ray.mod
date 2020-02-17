@@ -21,6 +21,7 @@
      distribution.
 */
 #include "raylib.h"
+#include "easings.h"
 
 void bmx_raylib_CloseWindow() {
 	CloseWindow();

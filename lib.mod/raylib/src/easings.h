@@ -82,13 +82,13 @@
 #ifndef EASINGS_H
 #define EASINGS_H
 
-#define EASINGS_STATIC_INLINE     // NOTE: By default, compile functions as static inline
-
-#if defined(EASINGS_STATIC_INLINE)
-    #define EASEDEF static inline
-#else
-    #define EASEDEF extern
-#endif
+//#define EASINGS_STATIC_INLINE     // NOTE: By default, compile functions as static inline
+#define EASEDEF
+//#if defined(EASINGS_STATIC_INLINE)
+//    #define EASEDEF static inline
+//#else
+//    #define EASEDEF extern
+//#endif
 
 #include <math.h>       // Required for: sinf(), cosf(), sqrt(), pow()
 
