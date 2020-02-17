@@ -14,7 +14,7 @@
 Installation
 -------
 
-**ray.mod** requires the latest version of BlitzMax, which you can [here](https://blitzmax.org/downloads/).
+**ray.mod** requires the latest version of BlitzMax, which you can download from [here](https://blitzmax.org/downloads/). Alternatively, releases are available directly from [here](https://github.com/bmx-ng/bmx-ng/releases).
 
 Download or clone the **ray.mod** repository, and extract the contents into your `BlitzMax/mod` folder.
 
