@@ -23,6 +23,34 @@ SuperStrict
 
 Module Ray.GUI
 
+ModuleInfo "Version: 1.00"
+ModuleInfo "License: zlib"
+ModuleInfo "Copyright: Wrapper - 2020 Bruce A Henderson"
+ModuleInfo "Copyright: raylib - 2013-2020 Ramon Santamaria"
+
+ModuleInfo "History: 1.00"
+ModuleInfo "History: Initial Release."
+
+
+ModuleInfo "CC_OPTS: -std=c99"
+ModuleInfo "CC_OPTS: -DSTATIC"
+ModuleInfo "CC_OPTS: -DSUPPORT_CAMERA_SYSTEM"
+
+?win32
+ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
+ModuleInfo "CC_OPTS: -D_GLFW_WIN32"
+?osx
+ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
+ModuleInfo "CC_OPTS: -D_GLFW_COCOA"
+?linux And Not raspberrypi
+ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
+ModuleInfo "CC_OPTS: -D_POSIX_C_SOURCE=199309L"
+ModuleInfo "CC_OPTS: -D_GLFW_X11"
+?raspberrypi
+ModuleInfo "CC_OPTS: -DPLATFORM_RPI"
+ModuleInfo "CC_OPTS: -D_GLFW_X11"
+?
+
 Import "common.bmx"
 
 
