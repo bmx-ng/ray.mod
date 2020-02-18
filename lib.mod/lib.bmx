@@ -268,151 +268,253 @@ Function SetClipboardText(txt:String)
 End Function
 
 ' Cursor-related functions
+Rem
+bbdoc: Shows cursor.
+End Rem
 Function ShowCursor()
 	bmx_raylib_ShowCursor()
 End Function
 
+Rem
+bbdoc: Hides cursor.
+End Rem
 Function HideCursor()
 	bmx_raylib_HideCursor()
 End Function
 
+Rem
+bbdoc: Checks if cursor is not visible.
+End Rem
 Function IsCursorHidden:Int()
 	Return bmx_raylib_IsCursorHidden()
 End Function
 
+Rem
+bbdoc: Enables cursor (unlock cursor).
+End Rem
 Function EnableCursor()
 	bmx_raylib_EnableCursor()
 End Function
 
+Rem
+bbdoc: Disables cursor (lock cursor).
+End Rem
 Function DisableCursor()
 	bmx_raylib_DisableCursor()
 End Function
 
 ' Drawing-related functions
+Rem
+bbdoc: Sets background color (framebuffer clear color).
+End Rem
 Function ClearBackground(color:RColor)
 	bmx_raylib_ClearBackground(color)
 End Function
 
+Rem
+bbdoc: Sets up canvas (framebuffer) to start drawing.
+End Rem
 Function BeginDrawing()
 	bmx_raylib_BeginDrawing()
 End Function
 
+Rem
+bbdoc: Ends canvas drawing and swap buffers (double buffering).
+End Rem
 Function EndDrawing()
 	bmx_raylib_EndDrawing()
 End Function
 
+Rem
+bbdoc: Initializes 2D mode with custom camera (2D).
+End Rem
 Function BeginMode2D(camera:RCamera2D)
 	bmx_raylib_BeginMode2D(camera)
 End Function
 
+Rem
+bbdoc: Ends 2D mode with custom camera.
+End Rem
 Function EndMode2D()
 	bmx_raylib_EndMode2D()
 End Function
 
+Rem
+bbdoc: Initializes 3D mode with custom camera (3D).
+End Rem
 Function BeginMode3D(camera:RCamera)
 	bmx_raylib_BeginMode3D(camera)
 End Function
 
+Rem
+bbdoc: Ends 3D mode and returns to default 2D orthographic mode.
+End Rem
 Function EndMode3D()
 	bmx_raylib_EndMode3D()
 End Function
 
+Rem
+bbdoc: Initializes render texture for drawing.
+End Rem
 Function BeginTextureMode(target:RRenderTexture2D)
 	bmx_raylib_BeginTextureMode(target)
 End Function
 
+Rem
+bbdoc: Ends drawing to render texture.
+End Rem
 Function EndTextureMode()
 	bmx_raylib_EndTextureMode()
 End Function
 
+Rem
+bbdoc: Begins scissor mode (define screen area for following drawing).
+End Rem
 Function BeginScissorMode(x:Int, y:Int, width:Int, height:Int)
 	bmx_raylib_BeginScissorMode(x, y, width, height)
 End Function
 
+Rem
+bbdoc: Begins scissor mode (define screen area for following drawing).
+End Rem
 Function BeginScissorMode(x:Float, y:Float, width:Float, height:Float)
 	bmx_raylib_BeginScissorMode(Int(x), Int(y), Int(width), Int(height))
 End Function
 
+Rem
+bbdoc: Ends scissor mode.
+End Rem
 Function EndScissorMode()
 	bmx_raylib_EndScissorMode()
 End Function
 
 ' Screen-space-related functions
+Rem
+bbdoc: Returns a ray trace from mouse position.
+End Rem
 Function GetMouseRay:RRay(mousePosition:RVector2, camera:RCamera)
 	Return bmx_raylib_GetMouseRay(mousePosition, camera)
 End Function
 
+Rem
+bbdoc: Returns camera transform matrix (view matrix).
+End Rem
 Function GetCameraMatrix:RMatrix(camera:RCamera)
 	Return bmx_raylib_GetCameraMatrix(camera)
 End Function
 
+Rem
+bbdoc: Returns camera 2d transform matrix.
+End Rem
 Function GetCameraMatrix2D:RMatrix(camera:RCamera2D)
 	Return bmx_raylib_GetCameraMatrix2D(camera)
 End Function
 
+Rem
+bbdoc: Returns the screen space position for a 3d world space position.
+End Rem
 Function GetWorldToScreen:RVector2(position:RVector3, camera:RCamera)
 	Return bmx_raylib_GetWorldToScreen(position, camera)
 End Function
 
+Rem
+bbdoc: Returns size position for a 3d world space position.
+End Rem
 Function GetWorldToScreenEx:RVector2(position:RVector3, camera:RCamera, width:Int, height:Int)
 	Return bmx_raylib_GetWorldToScreenEx(position, camera, width, height)
 End Function
 
+Rem
+bbdoc: Returns the screen space position for a 2d camera world space position.
+End Rem
 Function GetWorldToScreen2D:RVector2(position:RVector2, camera:RCamera2D)
 	Return bmx_raylib_GetWorldToScreen2D(position, camera)
 End Function
 
+Rem
+bbdoc: Returns the world space position for a 2d camera screen space position.
+End Rem
 Function GetScreenToWorld2D:RVector2(position:RVector2, camera:RCamera2D)
 	Return bmx_raylib_GetScreenToWorld2D(position, camera)
 End Function
 
 
 ' Timing-related functions
+Rem
+bbdoc: Sets target FPS (maximum).
+End Rem
 Function SetTargetFPS(fps:Int)
 	bmx_raylib_SetTargetFPS(fps)
 End Function
 
+Rem
+bbdoc: Returns current FPS.
+End Rem
 Function GetFPS:Int()
 	Return bmx_raylib_GetFPS()
 End Function
 
+Rem
+bbdoc: Returns time in seconds for last frame drawn.
+End Rem
 Function GetFrameTime:Float()
 	Return bmx_raylib_GetFrameTime()
 End Function
 
+Rem
+bbdoc: Returns elapsed time in seconds since InitWindow().
+End Rem
 Function GetTime:Double()
 	Return bmx_raylib_GetTime()
 End Function
 
 ' Text Drawing functions
+Rem
+bbdoc: Shows current FPS.
+End Rem
 Function DrawFPS(posX:Int, posY:Int)
 	bmx_raylib_DrawFPS(posX, posY)
 End Function
 
+Rem
+bbdoc: Draws text (using default font).
+End Rem
 Function DrawText(txt:String, posX:Int, posY:Int, FontSize:Int, color:RColor)
 	Local t:Byte Ptr = txt.ToUTF8String()
 	bmx_raylib_DrawText(t, posX, posY, FontSize, color)
 	MemFree(t)
 End Function
 
+Rem
+bbdoc: Draws text using font and additional parameters.
+End Rem
 Function DrawTextEx(font:RFont, txt:String, position:RVector2, FontSize:Float, spacing:Float, tint:RColor)
 	Local t:Byte Ptr = txt.ToUTF8String()
 	bmx_raylib_DrawTextEx(font, t, position, FontSize, spacing, tint)
 	MemFree(t)
 End Function
 
+Rem
+bbdoc: Draw text using font inside rectangle limits.
+End Rem
 Function DrawTextRec(font:RFont, txt:String, rec:RRectangle, FontSize:Float, spacing:Float, wordWrap:Int, tint:RColor)
 	Local t:Byte Ptr = txt.ToUTF8String()
 	bmx_raylib_DrawTextRec(font, t, rec, FontSize, spacing, wordWrap, tint)
 	MemFree(t)
 End Function
 
+Rem
+bbdoc: Draws text using font inside rectangle limits with support for text selection.
+End Rem
 Function DrawTextRecEx(font:RFont, txt:String, rec:RRectangle, FontSize:Float, spacing:Float, wordWrap:Int, tint:RColor, selectStart:Int, selectLength:Int, selectTint:RColor, selectBackTint:RColor)
 	Local t:Byte Ptr = txt.ToUTF8String()
 	bmx_raylib_DrawTextRecEx(font, t, rec, FontSize, spacing, wordWrap, tint, selectStart, selectLength, selectTint, selectBackTint)
 	MemFree(t)
 End Function
 
+Rem
+bbdoc: Draws one character (codepoint).
+End Rem
 Function DrawTextCodepoint(font:RFont, codepoint:Int, position:RVector2, scale:Float, tint:RColor)
 	bmx_raylib_DrawTextCodepoint(font, codepoint, position, scale, tint)
 End Function
@@ -420,14 +522,14 @@ End Function
 
 ' Misc. functions
 Rem
-bbdoc: 
+bbdoc: Sets up window configuration flags (view FLAGS)
 End Rem
 Function SetConfigFlags(flags:UInt)
 	bmx_raylib_SetConfigFlags(flags)
 End Function
 
 Rem
-bbdoc: 
+bbdoc: Takes a screenshot of current screen (saved a .png)
 End Rem
 Function TakeScreenshot(fileName:String)
 	Local f:Byte Ptr = fileName.ToUTF8String()
@@ -436,7 +538,7 @@ Function TakeScreenshot(fileName:String)
 End Function
 
 Rem
-bbdoc: 
+bbdoc: Returns a random value between min and max (both included).
 End Rem
 Function GetRandomValue:Int(minimum:Int, maximum:Int)
 	Return bmx_raylib_GetRandomValue(minimum, maximum)
@@ -826,30 +928,52 @@ Function GetMouseWheelMove:Int()
 End Function
 
 ' Color-related functions
+Rem
+bbdoc: Returns the hexadecimal value for an #RColor.
+End Rem
 Function ColorToInt:Int(color:RColor)
 	Return bmx_raylib_ColorToInt(color)
 End Function
 
+Rem
+bbdoc: Returns @color normalized as float [0..1]
+End Rem
 Function ColorNormalize:RVector4(color:RColor)
 	Return bmx_raylib_ColorNormalize(color)
 End Function
 
+Rem
+bbdoc: Returns @color from normalized values [0..1]
+End Rem
 Function ColorFromNormalized:RColor(normalized:RVector4)
 	Return bmx_raylib_ColorFromNormalized(normalized)
 End Function
 
+Rem
+bbdoc: Returns HSV values for an #RColor.
+End Rem
 Function ColorToHSV:RVector3(color:RColor)
 	Return bmx_raylib_ColorToHSV(color)
 End Function
 
+Rem
+bbdoc: Returns an #RColor from HSV values.
+End Rem
 Function ColorFromHSV:RColor(hsv:RVector3)
 	Return bmx_raylib_ColorFromHSV(hsv)
 End Function
 
+Rem
+bbdoc: Returns an #RColor from a hexadecimal value.
+End Rem
 Function GetColor:RColor(hexValue:Int)
 	Return bmx_raylib_GetColor(hexValue)
 End Function
 
+Rem
+bbdoc: Color fade-in or fade-out.
+about: @alpha goes from 0.0 to 1.0.
+End Rem
 Function Fade:RColor(color:RColor, alpha:Float)
 	Return bmx_raylib_Fade(color, alpha)
 End Function
@@ -1164,43 +1288,73 @@ End Function
 
 
 ' Texture2D configuration functions
+Rem
+bbdoc: Generates GPU mipmaps for a texture.
+End Rem
 Function GenTextureMipmaps(texture:RTexture2D Var)
 	bmx_raylib_GenTextureMipmaps(texture)
 End Function
 
+Rem
+bbdoc: Sets texture scaling filter mode.
+End Rem
 Function SetTextureFilter(texture:RTexture2D, filterMode:Int)
 	bmx_raylib_SetTextureFilter(texture, filterMode)
 End Function
 
+Rem
+bbdoc: Sets the texture wrapping mode.
+End Rem
 Function SetTextureWrap(texture:RTexture2D, wrapMode:Int)
 	bmx_raylib_SetTextureWrap(texture, wrapMode)
 End Function
 
 ' Texture2D drawing functions
+Rem
+bbdoc: Draws an #RTexture2D.
+End Rem
 Function DrawTexture(texture:RTexture2D, posX:Int, posY:Int, tint:RColor)
 	bmx_raylib_DrawTexture(texture, posX, posY, tint)
 End Function
 
+Rem
+bbdoc: Draws an #RTexture2D with position defined as #RVector2.
+End Rem
 Function DrawTextureV(texture:RTexture2D, position:RVector2, tint:RColor)
 	bmx_raylib_DrawTextureV(texture, position, tint)
 End Function
 
+Rem
+bbdoc: Draws an #RTexture2D with extended parameters.
+End Rem
 Function DrawTextureEx(texture:RTexture2D, position:RVector2, Rotation:Float, scale:Float, tint:RColor)
 	bmx_raylib_DrawTextureEx(texture, position, Rotation, scale, tint)
 End Function
 
+Rem
+bbdoc: Draws a part of a texture defined by a rectangle.
+End Rem
 Function DrawTextureRec(texture:RTexture2D, sourceRec:RRectangle, position:RVector2, tint:RColor)
 	bmx_raylib_DrawTextureRec(texture, sourceRec, position, tint)
 End Function
 
+Rem
+bbdoc: Draws a texture quad with tiling and offset parameters.
+End Rem
 Function DrawTextureQuad(texture:RTexture2D, tiling:RVector2, offset:RVector2, quad:RRectangle, tint:RColor)
 	bmx_raylib_DrawTextureQuad(texture, tiling, offset, quad, tint)
 End Function
 
+Rem
+bbdoc: Draws a part of a texture defined by a rectangle with 'pro' parameters.
+End Rem
 Function DrawTexturePro(texture:RTexture2D, sourceRec:RRectangle, destRec:RRectangle, origin:RVector2, Rotation:Float, tint:RColor)
 	bmx_raylib_DrawTexturePro(texture, sourceRec, destRec, origin, Rotation, tint)
 End Function
 
+Rem
+bbdoc: Draws a texture (or part of it) that stretches or shrinks nicely.
+End Rem
 Function DrawTextureNPatch(texture:RTexture2D, nPatchInfo:RNPatchInfo, destRec:RRectangle, origin:RVector2, Rotation:Float, tint:RColor)
 	bmx_raylib_DrawTextureNPatch(texture, nPatchInfo, destRec, origin, Rotation, tint)
 End Function
@@ -1256,6 +1410,9 @@ Function GetGesturePinchAngle:Float()
 End Function
 
 ' Model loading/unloading functions
+Rem
+bbdoc: Loads model from files (meshes and materials)
+End Rem
 Function LoadModel:RModel(filename:String)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	Local model:RModel = bmx_raylib_LoadModel(f)
@@ -1263,10 +1420,16 @@ Function LoadModel:RModel(filename:String)
 	Return model
 End Function
 
+Rem
+bbdoc: Loads model from generated mesh (default material)
+End Rem
 Function LoadModelFromMesh:RModel(mesh:RMesh)
 	Return bmx_raylib_LoadModelFromMesh(mesh)
 End Function
 
+Rem
+bbdoc: Unloads model from memory (RAM and/or VRAM)
+End Rem
 Function UnloadModel(model:RModel)
 	bmx_raylib_UnloadModel(model)
 End Function
