@@ -2,7 +2,7 @@
 
 **ray.mod is a BlitzMax binding for raylib, the simple and easy-to-use library to enjoy videogames programming.**
 
-[raylib](https://raylib.com) is highly inspired by Borland BGI graphics lib and by XNA framework and it's specially well suited for prototyping, tooling, graphical applications, embedded systems and education.
+[raylib](https://www.raylib.com) is highly inspired by Borland BGI graphics lib and by XNA framework and it's specially well suited for prototyping, tooling, graphical applications, embedded systems and education.
 
 **ray.mod** implements the majority of raylib, and also includes [raygui](https://github.com/raysan5/raygui), the immediate-mode gui based on raylib.
 
