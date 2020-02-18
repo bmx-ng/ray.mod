@@ -114,7 +114,8 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 
 			DrawRectangle(screenWidth/2 - 112, screenHeight/2 - 112, 224, 224, Fade(RAYWHITE, alpha))
 
-			DrawText("raylib"[..lettersCount], screenWidth/2 - 44, screenHeight/2 + 48, 50, Fade(BLACK, alpha))
+			DrawText("raylib"[..lettersCount], screenWidth/2 - 44, screenHeight/2 + 8, 50, Fade(BLACK, alpha))
+			DrawText("blitzmax"[..lettersCount], screenWidth/2 - 94, screenHeight/2 + 48, 50, Fade(BLACK, alpha))
 
 		Else If state = 4 Then
 			DrawText("[R] REPLAY", 340, 200, 20, GRAY)
