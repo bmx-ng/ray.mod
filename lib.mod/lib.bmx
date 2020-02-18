@@ -419,153 +419,264 @@ End Function
 
 
 ' Misc. functions
+Rem
+bbdoc: 
+End Rem
 Function SetConfigFlags(flags:UInt)
 	bmx_raylib_SetConfigFlags(flags)
 End Function
 
+Rem
+bbdoc: 
+End Rem
 Function TakeScreenshot(fileName:String)
 	Local f:Byte Ptr = fileName.ToUTF8String()
 	bmx_raylib_TakeScreenshot(f)
 	MemFree(f)
 End Function
 
+Rem
+bbdoc: 
+End Rem
 Function GetRandomValue:Int(minimum:Int, maximum:Int)
 	Return bmx_raylib_GetRandomValue(minimum, maximum)
 End Function
 
-
+' Basic shapes drawing functions
+Rem
+bbdoc: Draws a pixel.
+End Rem
 Function DrawPixel(posX:Int, posY:Int, color:RColor)
 	bmx_raylib_DrawPixel(posX, posY, color)
 End Function
 
+Rem
+bbdoc: Draws a pixel (Vector version)
+End Rem
 Function DrawPixelV(position:RVector2, color:RColor)
 	bmx_raylib_DrawPixelV(position, color)
 End Function
 
+Rem
+bbdoc: Draws a line.
+End Rem
 Function DrawLine(startPosX:Int, startPosY:Int, endPosX:Int, endPosY:Int, color:RColor)
 	bmx_raylib_DrawLine(startPosX, startPosY, endPosX, endPosY, color)
 End Function
 
+Rem
+bbdoc: Draws a line (Vector version)
+End Rem
 Function DrawLineV(startPos:RVector2, endPos:RVector2, color:RColor)
 	bmx_raylib_DrawLineV(startPos, endPos, color)
 End Function
 
+Rem
+bbdoc: Draw a line defining thickness.
+End Rem
 Function DrawLineEx(startPos:RVector2, endPos:RVector2, thick:Float, color:RColor)
 	bmx_raylib_DrawLineEx(startPos, endPos, thick, color)
 End Function
 
+Rem
+bbdoc: Draws a line using cubic-bezier curves in-out.
+End Rem
 Function DrawLineBezier(startPos:RVector2, endPos:RVector2, thick:Float, color:RColor)
 	bmx_raylib_DrawLineBezier(startPos, endPos, thick, color)
 End Function
 
+Rem
+bbdoc: Draws lines sequence.
+End Rem
 Function DrawLineStrip(points:RVector2 Ptr, numPoints:Int, color:RColor)
 	bmx_raylib_DrawLineStrip(points, numPoints, color)
 End Function
 
+Rem
+bbdoc: Draws a color-filled circle.
+End Rem
 Function DrawCircle(centerX:Int, centerY:Int, radius:Float, color:RColor)
 	bmx_raylib_DrawCircle(centerX, centerY, radius, color)
 End Function
 
+Rem
+bbdoc: Draws a piece of a circle.
+End Rem
 Function DrawCircleSector(center:RVector2, radius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
 	bmx_raylib_DrawCircleSector(center, radius, startAngle, endAngle, segments, color)
 End Function
 
+Rem
+bbdoc: Draws circle sector outline.
+End Rem
 Function DrawCircleSectorLines(center:RVector2, radius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
 	bmx_raylib_DrawCircleSectorLines(center, radius, startAngle, endAngle, segments, color)
 End Function
 
+Rem
+bbdoc: Draws a gradient-filled circle.
+End Rem
 Function DrawCircleGradient(centerX:Int, centerY:Int, radius:Float, color1:RColor, color2:RColor)
 	bmx_raylib_DrawCircleGradient(centerX, centerY, radius, color1, color2)
 End Function
 
+Rem
+bbdoc: Draws a color-filled circle (Vector version)
+End Rem
 Function DrawCircleV(center:RVector2, radius:Float, color:RColor)
 	bmx_raylib_DrawCircleV(center, radius, color)
 End Function
 
+Rem
+bbdoc: Draws circle outline.
+End Rem
 Function DrawCircleLines(centerX:Int, centerY:Int, radius:Float, color:RColor)
 	bmx_raylib_DrawCircleLines(centerX, centerY, radius, color)
 End Function
 
+Rem
+bbdoc: Draws an ellipse.
+End Rem
 Function DrawEllipse(centerX:Int, centerY:Int, radiusH:Float, radiusV:Float, color:RColor)
 	bmx_raylib_DrawEllipse(centerX, centerY, radiusH, radiusV, color)
 End Function
 
+Rem
+bbdoc: Draws ellipse outline.
+End Rem
 Function DrawEllipseLines(centerX:Int, centerY:Int, radiusH:Float, radiusV:Float, color:RColor)
 	bmx_raylib_DrawEllipseLines(centerX, centerY, radiusH, radiusV, color)
 End Function
 
+Rem
+bbdoc: Draws a ring.
+End Rem
 Function DrawRing(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
 	bmx_raylib_DrawRing(center, innerRadius, outerRadius, startAngle, endAngle, segments, color:RColor)
 End Function
 
+Rem
+bbdoc: Draws ring outline.
+End Rem
 Function DrawRingLines(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
 	bmx_raylib_DrawRingLines(center, innerRadius, outerRadius, startAngle, endAngle, segments, color)
 End Function
 
+Rem
+bbdoc: Draws a color-filled rectangle.
+End Rem
 Function DrawRectangle(posX:Int, posY:Int, width:Int, height:Int, color:RColor)
 	bmx_raylib_DrawRectangle(posX, posY, width, height, color)
 End Function
 
+Rem
+bbdoc: Draws a color-filled rectangle (Vector version)
+End Rem
 Function DrawRectangleV(position:RVector2, size:RVector2, color:RColor)
 	bmx_raylib_DrawRectangleV(position, size, color)
 End Function
 
+Rem
+bbdoc: Draws a color-filled rectangle.
+End Rem
 Function DrawRectangleRec(rec:RRectangle, color:RColor)
 	bmx_raylib_DrawRectangleRec(rec, color)
 End Function
 
+Rem
+bbdoc: Draws a color-filled rectangle with pro parameters.
+End Rem
 Function DrawRectanglePro(rec:RRectangle, origin:RVector2, Rotation:Float, color:RColor)
 	bmx_raylib_DrawRectanglePro(rec, origin, Rotation, color)
 End Function
 
+Rem
+bbdoc: Draws a vertical-gradient-filled rectangle.
+End Rem
 Function DrawRectangleGradientV(posX:Int, posY:Int, width:Int, height:Int, color1:RColor, color2:RColor)
 	bmx_raylib_DrawRectangleGradientV(posX, posY, width, height, color1, color2)
 End Function
 
+Rem
+bbdoc: Draws a horizontal-gradient-filled rectangle.
+End Rem
 Function DrawRectangleGradientH(posX:Int, posY:Int, width:Int, height:Int, color1:RColor, color2:RColor)
 	bmx_raylib_DrawRectangleGradientH(posX, posY, width, height, color1, color2)
 End Function
 
+Rem
+bbdoc: Draws a gradient-filled rectangle with custom vertex colors.
+End Rem
 Function DrawRectangleGradientEx(rec:RRectangle, col1:RColor, col2:RColor, col3:RColor, col4:RColor)
 	bmx_raylib_DrawRectangleGradientEx(rec, col1, col2, col3, col4)
 End Function
 
+Rem
+bbdoc: Draws rectangle outline.
+End Rem
 Function DrawRectangleLines(posX:Int, posY:Int, width:Int, height:Int, color:RColor)
 	bmx_raylib_DrawRectangleLines(posX, posY, width, height, color)
 End Function
 
+Rem
+bbdoc: Draws rectangle outline with extended parameters.
+End Rem
 Function DrawRectangleLinesEx(rec:RRectangle, lineThick:Int, color:RColor)
 	bmx_raylib_DrawRectangleLinesEx(rec, lineThick, color)
 End Function
 
+Rem
+bbdoc: Draws a rectangle with rounded edges.
+End Rem
 Function DrawRectangleRounded(rec:RRectangle, roundness:Float, segments:Int, color:RColor)
 	bmx_raylib_DrawRectangleRounded(rec, roundness, segments, color)
 End Function
 
+Rem
+bbdoc: Draws a rectangle with rounded edges outline.
+End Rem
 Function DrawRectangleRoundedLines(rec:RRectangle, roundness:Float, segments:Int, lineThick:Int, color:RColor)
 	bmx_raylib_DrawRectangleRoundedLines(rec, roundness, segments, lineThick, color)
 End Function
 
+Rem
+bbdoc: Draws a color-filled triangle (vertex in counter-clockwise order!)
+End Rem
 Function DrawTriangle(v1:RVector2, v2:RVector2, v3:RVector2, color:RColor)
 	bmx_raylib_DrawTriangle(v1, v2, v3, color)
 End Function
 
+Rem
+bbdoc: Draws triangle outline (vertex in counter-clockwise order!).
+End Rem
 Function DrawTriangleLines(v1:RVector2, v2:RVector2, v3:RVector2, color:RColor)
 	bmx_raylib_DrawTriangleLines(v1, v2, v3, color)
 End Function
 
+Rem
+bbdoc: Draws a triangle fan defined by points (first vertex is the center)
+End Rem
 Function DrawTriangleFan(points:RVector2 Ptr, numPoints:Int, color:RColor)
 	bmx_raylib_DrawTriangleFan(points, numPoints, color)
 End Function
 
+Rem
+bbdoc: Draws a triangle strip defined by points.
+End Rem
 Function DrawTriangleStrip(points:RVector2 Ptr, pointsCount:Int, color:RColor)
 	bmx_raylib_DrawTriangleStrip(points, pointsCount, color)
 End Function
 
+Rem
+bbdoc: Draws a regular polygon (Vector version)
+End Rem
 Function DrawPoly(center:RVector2, sides:Int, radius:Float, Rotation:Float, color:RColor)
 	bmx_raylib_DrawPoly(center, sides, radius, Rotation, color)
 End Function
 
+Rem
+bbdoc: Draws a polygon outline of n sides.
+End Rem
 Function DrawPolyLines(center:RVector2, sides:Int, radius:Float, Rotation:Float, color:RColor)
 	bmx_raylib_DrawPolyLines(center, sides, radius, Rotation, color)
 End Function
@@ -840,6 +951,9 @@ Function DrawGizmo(position:RVector3)
 End Function
 
 ' Image/Texture2D data loading/unloading/saving functions
+Rem
+bbdoc: Loads image from file into CPU memory (RAM).
+End Rem
 Function LoadImage:RImage(filename:String)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	Local image:RImage = bmx_raylib_LoadImage(f)
@@ -847,14 +961,23 @@ Function LoadImage:RImage(filename:String)
 	Return image
 End Function
 
+Rem
+bbdoc: Loads image from Color array data (RGBA - 32bit).
+End Rem
 Function LoadImageEx:RImage(pixels:RColor Ptr, width:Int, height:Int)
 	Return bmx_raylib_LoadImageEx(pixels, width, height)
 End Function
 
+Rem
+bbdoc: Loads image from raw data with parameters.
+End Rem
 Function LoadImagePro:RImage(data:Byte Ptr, width:Int, height:Int, format:Int)
 	Return bmx_raylib_LoadImagePro(data, width, height, format)
 End Function
 
+Rem
+bbdoc: Loads image from RAW file data.
+End Rem
 Function LoadImageRaw:RImage(filename:String, width:Int, height:Int, format:Int, headerSize:Int)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	Local image:RImage = bmx_raylib_LoadImageRaw(f, width, height, format, headerSize)
@@ -862,18 +985,27 @@ Function LoadImageRaw:RImage(filename:String, width:Int, height:Int, format:Int,
 	Return image
 End Function
 
+Rem
+bbdoc: Exports image data to file.
+End Rem
 Function ExportImage(image:RImage, filename:String)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	bmx_raylib_ExportImage(image, f)
 	MemFree(f)
 End Function
 
+Rem
+bbdoc: Exports image as code file defining an array of bytes.
+End Rem
 Function ExportImageAsCode(image:RImage, filename:String)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	bmx_raylib_ExportImageAsCode(image, f)
 	MemFree(f)
 End Function
 
+Rem
+bbdoc: Loads texture from file into GPU memory (VRAM).
+End Rem
 Function LoadTexture:RTexture2D(filename:String)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	Local texture:RTexture2D = bmx_raylib_LoadTexture(f)
@@ -881,26 +1013,44 @@ Function LoadTexture:RTexture2D(filename:String)
 	Return texture
 End Function
 
+Rem
+bbdoc: Loads texture from image data.
+End Rem
 Function LoadTextureFromImage:RTexture2D(image:RImage)
 	Return bmx_raylib_LoadTextureFromImage(image)
 End Function
 
+Rem
+bbdoc: Loads cubemap from image, multiple image cubemap layouts supported.
+End Rem
 Function LoadRenderTexture:RRenderTexture2D(width:Int, height:Int)
 	Return bmx_raylib_LoadRenderTexture(width, height)
 End Function
 
+Rem
+bbdoc: Loads texture for rendering (framebuffer).
+End Rem
 Function LoadTextureCubemap:RTextureCubemap(image:RImage, layoutType:Int)
 	Return bmx_raylib_LoadTextureCubemap(image, layoutType)
 End Function
 
+Rem
+bbdoc: Unloads image from CPU memory (RAM).
+End Rem
 Function UnloadImage(image:RImage)
 	bmx_raylib_UnloadImage(image)
 End Function
 
+Rem
+bbdoc: Unloads texture from GPU memory (VRAM).
+End Rem
 Function UnloadTexture(texture:RTexture2D)
 	bmx_raylib_UnloadTexture(texture)
 End Function
 
+Rem
+bbdoc: Unloads render texture from GPU memory (VRAM).
+End Rem
 Function UnloadRenderTexture(target:RRenderTexture2D)
 	bmx_raylib_UnloadRenderTexture(target)
 End Function
@@ -913,55 +1063,95 @@ End Function
 '	Return bmx_raylib_GetImageDataNormalized(image)
 'End Function
 
+Rem
+bbdoc: Gets image alpha border rectangle.
+End Rem
 Function GetImageAlphaBorder:RRectangle(image:RImage, threshold:Float)
 	Return bmx_raylib_GetImageAlphaBorder(image, threshold)
 End Function
 
+Rem
+bbdoc: Gets pixel data size in bytes (image or texture).
+End Rem
 Function GetPixelDataSize:Int(width:Int, height:Int, format:Int)
 	Return bmx_raylib_GetPixelDataSize(width, height, format)
 End Function
 
+Rem
+bbdoc: Gets pixel data from GPU texture and return an #RImage.
+End Rem
 Function GetTextureData:RImage(texture:RTexture2D)
 	Return bmx_raylib_GetTextureData(texture)
 End Function
 
+Rem
+bbdoc: Gets pixel data from screen buffer and return an #RImage (screenshot).
+End Rem
 Function GetScreenData:RImage()
 	Return bmx_raylib_GetScreenData()
 End Function
 
+Rem
+bbdoc: Updates GPU texture with new data.
+End Rem
 Function UpdateTexture(texture:RTexture2D, pixels:Byte Ptr)
 	bmx_raylib_UpdateTexture(texture, pixels)
 End Function
 
 ' Image generation functions
+
+Rem
+bbdoc: Generates an image: plain color.
+End Rem
 Function GenImageColor:RImage(width:Int, height:Int, color:RColor)
 	Return bmx_raylib_GenImageColor(width:Int, height:Int, color:RColor)
 End Function
 
+Rem
+bbdoc: Generates an image: vertical gradient.
+End Rem
 Function GenImageGradientV:RImage(width:Int, height:Int, top:RColor, bottom:RColor)
 	Return bmx_raylib_GenImageGradientV(width:Int, height:Int, top:RColor, bottom:RColor)
 End Function
 
+Rem
+bbdoc: Generates an image: horizontal gradient.
+End Rem
 Function GenImageGradientH:RImage(width:Int, height:Int, Left:RColor, Right:RColor)
 	Return bmx_raylib_GenImageGradientH(width:Int, height:Int, Left:RColor, Right:RColor)
 End Function
 
+Rem
+bbdoc: Generates an image: radial gradient.
+End Rem
 Function GenImageGradientRadial:RImage(width:Int, height:Int, density:Float, inner:RColor, outer:RColor)
 	Return bmx_raylib_GenImageGradientRadial(width:Int, height:Int, density:Float, inner:RColor, outer:RColor)
 End Function
 
+Rem
+bbdoc: Generates an image: checked.
+End Rem
 Function GenImageChecked:RImage(width:Int, height:Int, checksX:Int, checksY:Int, col1:RColor, col2:RColor)
 	Return bmx_raylib_GenImageChecked(width:Int, height:Int, checksX:Int, checksY:Int, col1:RColor, col2:RColor)
 End Function
 
+Rem
+bbdoc: Generates an image: white noise.
+End Rem
 Function GenImageWhiteNoise:RImage(width:Int, height:Int, factor:Float)
 	Return bmx_raylib_GenImageWhiteNoise(width:Int, height:Int, factor:Float)
 End Function
 
+Rem
+bbdoc: Generates an image: perlin noise.
+End Rem
 Function GenImagePerlinNoise:RImage(width:Int, height:Int, offsetX:Int, offsetY:Int, scale:Float)
 	Return bmx_raylib_GenImagePerlinNoise(width:Int, height:Int, offsetX:Int, offsetY:Int, scale:Float)
 End Function
 
+Rem
+bbdoc: Generates an image: cellular algorithm. Bigger tileSize means bigger cells.
+End Rem
 Function GenImageCellular:RImage(width:Int, height:Int, tileSize:Int)
 	Return bmx_raylib_GenImageCellular(width:Int, height:Int, tileSize:Int)
 End Function
@@ -1315,128 +1505,222 @@ End Function
 
 
 ' Image manipulation functions
+
+Rem
+bbdoc: Creates an image duplicate (useful for transformations).
+End Rem
 Function ImageCopy:RImage(image:RImage)
 	Return bmx_raylib_ImageCopy(image)
 End Function
 
+Rem
+bbdoc: Creates an image from another image piece.
+End Rem
 Function ImageFromImage:RImage(image:RImage, rec:RRectangle)
 	Return bmx_raylib_ImageFromImage(image, rec)
 End Function
 
+Rem
+bbdoc: Converts image to POT (power-of-two).
+End Rem
 Function ImageToPOT(image:RImage Var, fillColor:RColor)
 	bmx_raylib_ImageToPOT(image, fillColor)
 End Function
 
+Rem
+bbdoc: Converts image data to desired format.
+End Rem
 Function ImageFormat(image:RImage Var, newFormat:Int)
 	bmx_raylib_ImageFormat(image, newFormat)
 End Function
 
+Rem
+bbdoc: Applys alpha mask to image.
+End Rem
 Function ImageAlphaMask(image:RImage Var, alphaMask:RImage)
 	bmx_raylib_ImageAlphaMask(image, alphaMask)
 End Function
 
+Rem
+bbdoc: Clears alpha channel to desired color.
+End Rem
 Function ImageAlphaClear(image:RImage Var, color:RColor, threshold:Float)
 	bmx_raylib_ImageAlphaClear(image, color, threshold)
 End Function
 
+Rem
+bbdoc: Crops image depending on alpha value.
+End Rem
 Function ImageAlphaCrop(image:RImage Var, threshold:Float)
 	bmx_raylib_ImageAlphaCrop(image, threshold)
 End Function
 
+Rem
+bbdoc: Premultiplies alpha channel.
+End Rem
 Function ImageAlphaPremultiply(image:RImage Var)
 	bmx_raylib_ImageAlphaPremultiply(image)
 End Function
 
+Rem
+bbdoc: Crops an image to a defined rectangle.
+End Rem
 Function ImageCrop(image:RImage Var, crop:RRectangle)
 	bmx_raylib_ImageCrop(image, crop)
 End Function
 
+Rem
+bbdoc: Resizes image (Bicubic scaling algorithm).
+End Rem
 Function ImageResize(image:RImage Var, newWidth:Int, newHeight:Int)
 	bmx_raylib_ImageResize(image, newWidth, newHeight)
 End Function
 
+Rem
+bbdoc: Resizes image (Nearest-Neighbor scaling algorithm).
+End Rem
 Function ImageResizeNN(image:RImage Var, newWidth:Int, newHeight:Int)
 	bmx_raylib_ImageResizeNN(image, newWidth, newHeight)
 End Function
 
+Rem
+bbdoc: Resizes canvas and fill with color.
+End Rem
 Function ImageResizeCanvas(image:RImage Var, newWidth:Int, newHeight:Int, offsetX:Int, offsetY:Int, color:RColor)
 	bmx_raylib_ImageResizeCanvas(image, newWidth, newHeight, offsetX, offsetY, color)
 End Function
 
+Rem
+bbdoc: Generates all mipmap levels for a provided image.
+End Rem
 Function ImageMipmaps(image:RImage Var)
 	bmx_raylib_ImageMipmaps(image)
 End Function
 
+Rem
+bbdoc: Dithers image data to 16bpp or lower (Floyd-Steinberg dithering).
+End Rem
 Function ImageDither(image:RImage Var, rBpp:Int, gBpp:Int, bBpp:Int, aBpp:Int)
 	bmx_raylib_ImageDither(image, rBpp, gBpp, bBpp, aBpp)
 End Function
 
 'Function ImageExtractPalette:RColor Ptr(image:RImage, maxPaletteSize:Int, extractCount:Int Ptr)
 
+Rem
+bbdoc: Creates an image from text (default font).
+End Rem
 Function ImageText:RImage(txt:String, FontSize:Int, color:RColor)
 	Return bmx_raylib_ImageText(txt, FontSize, color)
 End Function
 
+Rem
+bbdoc: Creates an image from text (custom sprite font).
+End Rem
 Function ImageTextEx:RImage(font:RFont, txt:String, FontSize:Float, spacing:Float, tint:RColor)
 	Return bmx_raylib_ImageTextEx(font, txt, FontSize, spacing, tint)
 End Function
 
+Rem
+bbdoc: Draws a source image within a destination image (tint applied to source).
+End Rem
 Function ImageDraw(dst:RImage Var, src:RImage, srcRec:RRectangle, dstRec:RRectangle, tint:RColor)
 	bmx_raylib_ImageDraw(dst, src, srcRec, dstRec, tint)
 End Function
 
+Rem
+bbdoc: Draws a rectangle within an image.
+End Rem
 Function ImageDrawRectangle(dst:RImage Var, rec:RRectangle, color:RColor)
 	bmx_raylib_ImageDrawRectangle(dst, rec, color)
 End Function
 
+Rem
+bbdoc: Draws rectangle lines within an image.
+End Rem
 Function ImageDrawRectangleLines(dst:RImage Var, rec:RRectangle, thick:Int, color:RColor)
 	bmx_raylib_ImageDrawRectangleLines(dst, rec, thick, color)
 End Function
 
+Rem
+bbdoc: Draws text (default font) within an image (destination).
+End Rem
 Function ImageDrawText(dst:RImage Var, position:RVector2, txt:String, FontSize:Int, color:RColor)
 	bmx_raylib_ImageDrawText(dst, position, txt, FontSize, color)
 End Function
 
+Rem
+bbdoc: Draws text (custom sprite font) within an image (destination).
+End Rem
 Function ImageDrawTextEx(dst:RImage Var, position:RVector2, font:RFont, txt:String, FontSize:Float, spacing:Float, color:RColor)
 	bmx_raylib_ImageDrawTextEx(dst, position, font, txt, FontSize, spacing, color)
 End Function
 
+Rem
+bbdoc: Flips image vertically.
+End Rem
 Function ImageFlipVertical(image:RImage Var)
 	bmx_raylib_ImageFlipVertical(image)
 End Function
 
+Rem
+bbdoc: Flips image horizontally.
+End Rem
 Function ImageFlipHorizontal(image:RImage Var)
 	bmx_raylib_ImageFlipHorizontal(image)
 End Function
 
+Rem
+bbdoc: Rotates image clockwise 90deg.
+End Rem
 Function ImageRotateCW(image:RImage Var)
 	bmx_raylib_ImageRotateCW(image)
 End Function
 
+Rem
+bbdoc: Rotates image counter-clockwise 90deg.
+End Rem
 Function ImageRotateCCW(image:RImage Var)
 	bmx_raylib_ImageRotateCCW(image)
 End Function
 
+Rem
+bbdoc: Modifies image color: tint.
+End Rem
 Function ImageColorTint(image:RImage Var, color:RColor)
 	bmx_raylib_ImageColorTint(image, color)
 End Function
 
+Rem
+bbdoc: Modifies image color: invert.
+End Rem
 Function ImageColorInvert(image:RImage Var)
 	bmx_raylib_ImageColorInvert(image)
 End Function
 
+Rem
+bbdoc: Modifies image color: grayscale.
+End Rem
 Function ImageColorGrayscale(image:RImage Var)
 	bmx_raylib_ImageColorGrayscale(image)
 End Function
 
+Rem
+bbdoc: Modifies image color: contrast (-100 to 100).
+End Rem
 Function ImageColorContrast(image:RImage Var, contrast:Float)
 	bmx_raylib_ImageColorContrast(image, contrast)
 End Function
 
+Rem
+bbdoc: Modifies image color: brightness (-255 to 255).
+End Rem
 Function ImageColorBrightness(image:RImage Var, brightness:Int)
 	bmx_raylib_ImageColorBrightness(image, brightness)
 End Function
 
+Rem
+bbdoc: Modifies image color: replace color.
+End Rem
 Function ImageColorReplace(image:RImage Var, color:RColor, Replace:RColor)
 	bmx_raylib_ImageColorReplace(image, color, Replace)
 End Function
