@@ -1313,3 +1313,130 @@ Function EaseElasticInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
 	Return bmx_raylib_EaseElasticInOut(t, b, c, d)
 End Function
 
+
+' Image manipulation functions
+Function ImageCopy:RImage(image:RImage)
+	Return bmx_raylib_ImageCopy(image)
+End Function
+
+Function ImageFromImage:RImage(image:RImage, rec:RRectangle)
+	Return bmx_raylib_ImageFromImage(image, rec)
+End Function
+
+Function ImageToPOT(image:RImage Var, fillColor:RColor)
+	bmx_raylib_ImageToPOT(image, fillColor)
+End Function
+
+Function ImageFormat(image:RImage Var, newFormat:Int)
+	bmx_raylib_ImageFormat(image, newFormat)
+End Function
+
+Function ImageAlphaMask(image:RImage Var, alphaMask:RImage)
+	bmx_raylib_ImageAlphaMask(image, alphaMask)
+End Function
+
+Function ImageAlphaClear(image:RImage Var, color:RColor, threshold:Float)
+	bmx_raylib_ImageAlphaClear(image, color, threshold)
+End Function
+
+Function ImageAlphaCrop(image:RImage Var, threshold:Float)
+	bmx_raylib_ImageAlphaCrop(image, threshold)
+End Function
+
+Function ImageAlphaPremultiply(image:RImage Var)
+	bmx_raylib_ImageAlphaPremultiply(image)
+End Function
+
+Function ImageCrop(image:RImage Var, crop:RRectangle)
+	bmx_raylib_ImageCrop(image, crop)
+End Function
+
+Function ImageResize(image:RImage Var, newWidth:Int, newHeight:Int)
+	bmx_raylib_ImageResize(image, newWidth, newHeight)
+End Function
+
+Function ImageResizeNN(image:RImage Var, newWidth:Int, newHeight:Int)
+	bmx_raylib_ImageResizeNN(image, newWidth, newHeight)
+End Function
+
+Function ImageResizeCanvas(image:RImage Var, newWidth:Int, newHeight:Int, offsetX:Int, offsetY:Int, color:RColor)
+	bmx_raylib_ImageResizeCanvas(image, newWidth, newHeight, offsetX, offsetY, color)
+End Function
+
+Function ImageMipmaps(image:RImage Var)
+	bmx_raylib_ImageMipmaps(image)
+End Function
+
+Function ImageDither(image:RImage Var, rBpp:Int, gBpp:Int, bBpp:Int, aBpp:Int)
+	bmx_raylib_ImageDither(image, rBpp, gBpp, bBpp, aBpp)
+End Function
+
+'Function ImageExtractPalette:RColor Ptr(image:RImage, maxPaletteSize:Int, extractCount:Int Ptr)
+
+Function ImageText:RImage(txt:String, FontSize:Int, color:RColor)
+	Return bmx_raylib_ImageText(txt, FontSize, color)
+End Function
+
+Function ImageTextEx:RImage(font:RFont, txt:String, FontSize:Float, spacing:Float, tint:RColor)
+	Return bmx_raylib_ImageTextEx(font, txt, FontSize, spacing, tint)
+End Function
+
+Function ImageDraw(dst:RImage Var, src:RImage, srcRec:RRectangle, dstRec:RRectangle, tint:RColor)
+	bmx_raylib_ImageDraw(dst, src, srcRec, dstRec, tint)
+End Function
+
+Function ImageDrawRectangle(dst:RImage Var, rec:RRectangle, color:RColor)
+	bmx_raylib_ImageDrawRectangle(dst, rec, color)
+End Function
+
+Function ImageDrawRectangleLines(dst:RImage Var, rec:RRectangle, thick:Int, color:RColor)
+	bmx_raylib_ImageDrawRectangleLines(dst, rec, thick, color)
+End Function
+
+Function ImageDrawText(dst:RImage Var, position:RVector2, txt:String, FontSize:Int, color:RColor)
+	bmx_raylib_ImageDrawText(dst, position, txt, FontSize, color)
+End Function
+
+Function ImageDrawTextEx(dst:RImage Var, position:RVector2, font:RFont, txt:String, FontSize:Float, spacing:Float, color:RColor)
+	bmx_raylib_ImageDrawTextEx(dst, position, font, txt, FontSize, spacing, color)
+End Function
+
+Function ImageFlipVertical(image:RImage Var)
+	bmx_raylib_ImageFlipVertical(image)
+End Function
+
+Function ImageFlipHorizontal(image:RImage Var)
+	bmx_raylib_ImageFlipHorizontal(image)
+End Function
+
+Function ImageRotateCW(image:RImage Var)
+	bmx_raylib_ImageRotateCW(image)
+End Function
+
+Function ImageRotateCCW(image:RImage Var)
+	bmx_raylib_ImageRotateCCW(image)
+End Function
+
+Function ImageColorTint(image:RImage Var, color:RColor)
+	bmx_raylib_ImageColorTint(image, color)
+End Function
+
+Function ImageColorInvert(image:RImage Var)
+	bmx_raylib_ImageColorInvert(image)
+End Function
+
+Function ImageColorGrayscale(image:RImage Var)
+	bmx_raylib_ImageColorGrayscale(image)
+End Function
+
+Function ImageColorContrast(image:RImage Var, contrast:Float)
+	bmx_raylib_ImageColorContrast(image, contrast)
+End Function
+
+Function ImageColorBrightness(image:RImage Var, brightness:Int)
+	bmx_raylib_ImageColorBrightness(image, brightness)
+End Function
+
+Function ImageColorReplace(image:RImage Var, color:RColor, Replace:RColor)
+	bmx_raylib_ImageColorReplace(image, color, Replace)
+End Function
