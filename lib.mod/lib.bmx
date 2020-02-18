@@ -1055,13 +1055,19 @@ Function UnloadRenderTexture(target:RRenderTexture2D)
 	bmx_raylib_UnloadRenderTexture(target)
 End Function
 
-'Function GetImageData:RColor Ptr(image:RImage)
-'	Return bmx_raylib_GetImageData(image)
-'End Function
+Rem
+bbdoc: Gets pixel data from image as an #RColor array.
+End Rem
+Function GetImageData:RColor Ptr(image:RImage)
+	Return bmx_raylib_GetImageData(image)
+End Function
 
-'Function GetImageDataNormalized:RVector4 Ptr(image:RImage)
-'	Return bmx_raylib_GetImageDataNormalized(image)
-'End Function
+Rem
+bbdoc: Gets pixel data from image as an RVector4 array (float normalized).
+End Rem
+Function GetImageDataNormalized:RVector4 Ptr(image:RImage)
+	Return bmx_raylib_GetImageDataNormalized(image)
+End Function
 
 Rem
 bbdoc: Gets image alpha border rectangle.
