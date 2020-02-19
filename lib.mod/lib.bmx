@@ -791,65 +791,110 @@ Function DrawPolyLines(center:RVector2, sides:Int, radius:Float, Rotation:Float,
 End Function
 
 ' Basic shapes collision detection functions
+Rem
+bbdoc: Checks collision between two rectangles.
+End Rem
 Function CheckCollisionRecs:Int(rec1:RRectangle, rec2:RRectangle)
 	Return bmx_raylib_CheckCollisionRecs(rec1, rec2)
 End Function
 
+Rem
+bbdoc: Checks collision between two circles.
+End Rem
 Function CheckCollisionCircles:Int(center1:RVector2, radius1:Float, center2:RVector2, radius2:Float)
 	Return bmx_raylib_CheckCollisionCircles(center1, radius1, center2, radius2)
 End Function
 
+Rem
+bbdoc: Checks collision between circle and rectangle.
+End Rem
 Function CheckCollisionCircleRec:Int(center:RVector2, radius:Float, rec:RRectangle)
 	Return bmx_raylib_CheckCollisionCircleRec(center, radius, rec)
 End Function
 
+Rem
+bbdoc: Gets collision rectangle for two rectangles collision.
+End Rem
 Function GetCollisionRec:RRectangle(rec1:RRectangle, rec2:RRectangle)
 	Return bmx_raylib_GetCollisionRec(rec1, rec2)
 End Function
 
+Rem
+bbdoc: Checks if point is inside rectangle.
+End Rem
 Function CheckCollisionPointRec:Int(point:RVector2, rec:RRectangle)
 	Return bmx_raylib_CheckCollisionPointRec(point, rec)
 End Function
 
+Rem
+bbdoc: Checks if point is inside circle.
+End Rem
 Function CheckCollisionPointCircle:Int(point:RVector2, center:RVector2, radius:Float)
 	Return bmx_raylib_CheckCollisionPointCircle(point, center, radius)
 End Function
 
+Rem
+bbdoc: Checks if point is inside a triangle.
+End Rem
 Function CheckCollisionPointTriangle:Int(point:RVector2, p1:RVector2, p2:RVector2, p3:RVector2)
 	Return bmx_raylib_CheckCollisionPointTriangle(point, p1, p2, p3)
 End Function
 
 
 ' Input-related functions: keyboard
+Rem
+bbdoc: Detects if a key has been pressed once.
+End Rem
 Function IsKeyPressed:Int(key:Int)
 	Return bmx_raylib_IsKeyPressed(key)
 End Function
 
+Rem
+bbdoc: Detects if a key is being pressed.
+End Rem
 Function IsKeyDown:Int(key:Int)
 	Return bmx_raylib_IsKeyDown(key)
 End Function
 
+Rem
+bbdoc: Detects if a key has been released once.
+End Rem
 Function IsKeyReleased:Int(key:Int)
 	Return bmx_raylib_IsKeyReleased(key)
 End Function
 
+Rem
+bbdoc: Detects if a key is NOT being pressed.
+End Rem
 Function IsKeyUp:Int(key:Int)
 	Return bmx_raylib_IsKeyUp(key)
 End Function
 
+Rem
+bbdoc: Sets a custom key to exit program (default is ESC).
+End Rem
 Function SetExitKey(key:Int)
 	bmx_raylib_SetExitKey(Key)
 End Function
 
+Rem
+bbdoc: Gets key pressed, call it multiple times for chars queued.
+End Rem
 Function GetKeyPressed:Int()
 	Return bmx_raylib_GetKeyPressed()
 End Function
 
 ' Input-related functions: gamepads
+Rem
+bbdoc: Detects if a gamepad is available.
+End Rem
 Function IsGamepadAvailable:Int(gamepad:Int)
 	Return bmx_raylib_IsGamepadAvailable(gamepad:Int)
 End Function
 
+Rem
+bbdoc: Checks gamepad name (if available).
+End Rem
 Function IsGamepadName:Int(gamepad:Int, name:String)
 	Local n:Byte Ptr = name.ToUTF8String()
 	Local res:Int = bmx_raylib_IsGamepadName(gamepad:Int, n)
@@ -857,34 +902,58 @@ Function IsGamepadName:Int(gamepad:Int, name:String)
 	Return res
 End Function
 
+Rem
+bbdoc: Returns gamepad internal name id.
+End Rem
 Function GetGamepadName:String(gamepad:Int)
 	Return String.FromUTF8String(bmx_raylib_GetGamepadName(gamepad:Int))
 End Function
 
+Rem
+bbdoc: Detects if a gamepad button has been pressed once.
+End Rem
 Function IsGamepadButtonPressed:Int(gamepad:Int, button:Int)
 	Return bmx_raylib_IsGamepadButtonPressed(gamepad:Int, button:Int)
 End Function
 
+Rem
+bbdoc: Detects if a gamepad button is being pressed.
+End Rem
 Function IsGamepadButtonDown:Int(gamepad:Int, button:Int)
 	Return bmx_raylib_IsGamepadButtonDown(gamepad:Int, button:Int)
 End Function
 
+Rem
+bbdoc: Detects if a gamepad button has been released once.
+End Rem
 Function IsGamepadButtonReleased:Int(gamepad:Int, button:Int)
 	Return bmx_raylib_IsGamepadButtonReleased(gamepad:Int, button:Int)
 End Function
 
+Rem
+bbdoc: Detects if a gamepad button is NOT being pressed.
+End Rem
 Function IsGamepadButtonUp:Int(gamepad:Int, button:Int)
 	Return bmx_raylib_IsGamepadButtonUp(gamepad:Int, button:Int)
 End Function
 
+Rem
+bbdoc: Gets the last gamepad button pressed.
+End Rem
 Function GetGamepadButtonPressed:Int()
 	Return bmx_raylib_GetGamepadButtonPressed()
 End Function
 
+Rem
+bbdoc: Returns gamepad axis count for a gamepad.
+End Rem
 Function GetGamepadAxisCount:Int(gamepad:Int)
 	Return bmx_raylib_GetGamepadAxisCount(gamepad:Int)
 End Function
 
+Rem
+bbdoc: Returns axis movement value for a gamepad axis.
+End Rem
 Function GetGamepadAxisMovement:Float(gamepad:Int, axis:Int)
 	Return bmx_raylib_GetGamepadAxisMovement(gamepad:Int, axis:Int)
 End Function
