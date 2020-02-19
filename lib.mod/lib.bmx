@@ -38,7 +38,6 @@ ModuleInfo "History: Initial Release."
 ModuleInfo "CC_OPTS: -std=c99"
 ModuleInfo "CC_OPTS: -DSTATIC"
 ModuleInfo "CC_OPTS: -DSUPPORT_CAMERA_SYSTEM"
-ModuleInfo "CC_OPTS: -DSUPPORT_FILEFORMAT_OGG -DSUPPORT_FILEFORMAT_XM -DSUPPORT_FILEFORMAT_MOD -DSUPPORT_FILEFORMAT_FLAC -DSUPPORT_FILEFORMAT_MP3"
 
 ?win32
 ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
@@ -55,7 +54,7 @@ ModuleInfo "CC_OPTS: -DPLATFORM_RPI"
 ModuleInfo "CC_OPTS: -D_GLFW_X11"
 ?
 
-Import "audio.bmx"
+Import "common.bmx"
 
 ' Notes -
 ' Changed definition of bool in raylib.h to always be enum.

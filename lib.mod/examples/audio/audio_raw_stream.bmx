@@ -1,6 +1,7 @@
 SuperStrict
 
 Framework Ray.Lib
+Import Ray.Audio
 Import BRL.Math
 
 Const MAX_SAMPLES:Int = 512

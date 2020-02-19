@@ -1,6 +1,7 @@
 SuperStrict
 
 Framework Ray.Lib
+Import Ray.Audio
 
 ' Initialization
 '--------------------------------------------------------------------------------------

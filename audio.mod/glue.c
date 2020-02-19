@@ -21,24 +21,7 @@
      distribution.
 */
 #include "raylib.h"
-#include "easings.h"
 
-void bmx_raylib_CloseWindow() {
-	CloseWindow();
-}
-
-void bmx_raylib_DrawText(const char *text, int posX, int posY, int fontSize, Color color) {
-	DrawText(text, posX, posY, fontSize, color);
-}
-
-void bmx_raylib_DrawTextEx(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint) {
-	DrawTextEx(font, text, position, fontSize, spacing, tint);
-}
-
-void bmx_raylib_ShowCursor() {
-	ShowCursor();
-}
-
-Image bmx_raylib_LoadImage(const char *fileName) {
-	return LoadImage(fileName);
+void bmx_raylib_PlaySound(Sound sound) {
+	PlaySound(sound);
 }

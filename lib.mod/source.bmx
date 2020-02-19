@@ -25,7 +25,6 @@ Import "raylib/src/external/glfw/include/*.h"
 
 Import "raylib/src/*.h"
 Import "raylib/src/core.c"
-Import "raylib/src/raudio.c"
 Import "raylib/src/shapes.c"
 Import "raylib/src/textures.c"
 Import "raylib/src/models.c"
