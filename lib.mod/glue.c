@@ -42,3 +42,7 @@ void bmx_raylib_ShowCursor() {
 Image bmx_raylib_LoadImage(const char *fileName) {
 	return LoadImage(fileName);
 }
+
+void bmx_raylib_PlaySound(Sound sound) {
+	PlaySound(sound);
+}

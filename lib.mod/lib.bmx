@@ -38,6 +38,7 @@ ModuleInfo "History: Initial Release."
 ModuleInfo "CC_OPTS: -std=c99"
 ModuleInfo "CC_OPTS: -DSTATIC"
 ModuleInfo "CC_OPTS: -DSUPPORT_CAMERA_SYSTEM"
+ModuleInfo "CC_OPTS: -DSUPPORT_FILEFORMAT_OGG -DSUPPORT_FILEFORMAT_XM -DSUPPORT_FILEFORMAT_MOD -DSUPPORT_FILEFORMAT_FLAC -DSUPPORT_FILEFORMAT_MP3"
 
 ?win32
 ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
@@ -54,7 +55,7 @@ ModuleInfo "CC_OPTS: -DPLATFORM_RPI"
 ModuleInfo "CC_OPTS: -D_GLFW_X11"
 ?
 
-Import "common.bmx"
+Import "audio.bmx"
 
 ' Notes -
 ' Changed definition of bool in raylib.h to always be enum.
@@ -542,6 +543,13 @@ bbdoc: Returns a random value between min and max (both included).
 End Rem
 Function GetRandomValue:Int(minimum:Int, maximum:Int)
 	Return bmx_raylib_GetRandomValue(minimum, maximum)
+End Function
+
+Rem
+bbdoc: Returns a random value between min and max (both included).
+End Rem
+Function GetRandomValue:Int(minimum:Float, maximum:Float)
+	Return bmx_raylib_GetRandomValue(Int(minimum), Int(maximum))
 End Function
 
 ' Basic shapes drawing functions

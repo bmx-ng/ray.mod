@@ -335,13 +335,13 @@ Extern
 	Function bmx_raylib_ImageResizeCanvas(image:RImage Var, newWidth:Int, newHeight:Int, offsetX:Int, offsetY:Int, color:RColor)="ImageResizeCanvas"
 	Function bmx_raylib_ImageMipmaps(image:RImage Var)="ImageMipmaps"
 	Function bmx_raylib_ImageDither(image:RImage Var, rBpp:Int, gBpp:Int, bBpp:Int, aBpp:Int)="ImageDither"
-	Function bmx_raylib_ImageText:RImage(txt:String, FontSize:Int, color:RColor)="ImageText"
-	Function bmx_raylib_ImageTextEx:RImage(font:RFont, txt:String, FontSize:Float, spacing:Float, tint:RColor)="ImageTextEx"
+	Function bmx_raylib_ImageText:RImage(txt:Byte Ptr, FontSize:Int, color:RColor)="ImageText"
+	Function bmx_raylib_ImageTextEx:RImage(font:RFont, txt:Byte Ptr, FontSize:Float, spacing:Float, tint:RColor)="ImageTextEx"
 	Function bmx_raylib_ImageDraw(dst:RImage Var, src:RImage, srcRec:RRectangle, dstRec:RRectangle, tint:RColor)="ImageDraw"
 	Function bmx_raylib_ImageDrawRectangle(dst:RImage Var, rec:RRectangle, color:RColor)="ImageDrawRectangle"
 	Function bmx_raylib_ImageDrawRectangleLines(dst:RImage Var, rec:RRectangle, thick:Int, color:RColor)="ImageDrawRectangleLines"
-	Function bmx_raylib_ImageDrawText(dst:RImage Var, position:RVector2, txt:String, FontSize:Int, color:RColor)="ImageDrawText"
-	Function bmx_raylib_ImageDrawTextEx(dst:RImage Var, position:RVector2, font:RFont, txt:String, FontSize:Float, spacing:Float, color:RColor)="ImageDrawTextEx"
+	Function bmx_raylib_ImageDrawText(dst:RImage Var, position:RVector2, txt:Byte Ptr, FontSize:Int, color:RColor)="ImageDrawText"
+	Function bmx_raylib_ImageDrawTextEx(dst:RImage Var, position:RVector2, font:RFont, txt:Byte Ptr, FontSize:Float, spacing:Float, color:RColor)="ImageDrawTextEx"
 	Function bmx_raylib_ImageFlipVertical(image:RImage Var)="ImageFlipVertical"
 	Function bmx_raylib_ImageFlipHorizontal(image:RImage Var)="ImageFlipHorizontal"
 	Function bmx_raylib_ImageRotateCW(image:RImage Var)="ImageRotateCW"
@@ -352,6 +352,62 @@ Extern
 	Function bmx_raylib_ImageColorContrast(image:RImage Var, contrast:Float)="ImageColorContrast"
 	Function bmx_raylib_ImageColorBrightness(image:RImage Var, brightness:Int)="ImageColorBrightness"
 	Function bmx_raylib_ImageColorReplace(image:RImage Var, color:RColor, Replace:RColor)="ImageColorReplace"
+
+
+	Function bmx_raylib_InitAudioDevice()="InitAudioDevice"
+	Function bmx_raylib_CloseAudioDevice()="CloseAudioDevice"
+	Function bmx_raylib_IsAudioDeviceReady:Int()="IsAudioDeviceReady"
+	Function bmx_raylib_SetMasterVolume(volume:Float)="SetMasterVolume"
+
+	Function bmx_raylib_LoadWave:RWave(fileName:Byte Ptr)="LoadWave"
+	Function bmx_raylib_LoadSound:RSound(fileName:Byte Ptr)="LoadSound"
+	Function bmx_raylib_LoadSoundFromWave:RSound(wave:RWave)="LoadSoundFromWave"
+	Function bmx_raylib_UpdateSound(sound:RSound, data:Byte Ptr, samplesCount:Int)="UpdateSound"
+	Function bmx_raylib_UnloadWave(wave:RWave)="UnloadWave"
+	Function bmx_raylib_UnloadSound(sound:RSound)="UnloadSound"
+	Function bmx_raylib_ExportWave(wave:RWave, fileName:Byte Ptr)="ExportWave"
+	Function bmx_raylib_ExportWaveAsCode(wave:RWave, fileName:Byte Ptr)="ExportWaveAsCode"
+
+	Function bmx_raylib_PlaySound(sound:RSound)
+	Function bmx_raylib_StopSound(sound:RSound)="StopSound"
+	Function bmx_raylib_PauseSound(sound:RSound)="PauseSound"
+	Function bmx_raylib_ResumeSound(sound:RSound)="ResumeSound"
+	Function bmx_raylib_PlaySoundMulti(sound:RSound)="PlaySoundMulti"
+	Function bmx_raylib_StopSoundMulti()="StopSoundMulti"
+	Function bmx_raylib_GetSoundsPlaying:Int()="GetSoundsPlaying"
+	Function bmx_raylib_IsSoundPlaying:Int(sound:RSound)="IsSoundPlaying"
+	Function bmx_raylib_SetSoundVolume(sound:RSound, volume:Float)="SetSoundVolume"
+	Function bmx_raylib_SetSoundPitch(sound:RSound, pitch:Float)="SetSoundPitch"
+	Function bmx_raylib_WaveFormat(wave:RWave Var, sampleRate:Int, sampleSize:Int, channels:Int)="WaveFormat"
+	Function bmx_raylib_WaveCopy:RWave(wave:RWave)="WaveCopy"
+	Function bmx_raylib_WaveCrop(wave:RWave Var, initSample:Int, finalSample:Int)="WaveCrop"
+	Function bmx_raylib_GetWaveData:Float Ptr(wave:RWave)="GetWaveData"
+
+	Function bmx_raylib_LoadMusicStream:RMusic(fileName:Byte Ptr)="LoadMusicStream"
+	Function bmx_raylib_UnloadMusicStream(music:RMusic)="UnloadMusicStream"
+	Function bmx_raylib_PlayMusicStream(music:RMusic)="PlayMusicStream"
+	Function bmx_raylib_UpdateMusicStream(music:RMusic)="UpdateMusicStream"
+	Function bmx_raylib_StopMusicStream(music:RMusic)="StopMusicStream"
+	Function bmx_raylib_PauseMusicStream(music:RMusic)="PauseMusicStream"
+	Function bmx_raylib_ResumeMusicStream(music:RMusic)="ResumeMusicStream"
+	Function bmx_raylib_IsMusicPlaying:Int(music:RMusic)="IsMusicPlaying"
+	Function bmx_raylib_SetMusicVolume(music:RMusic, volume:Float)="SetMusicVolume"
+	Function bmx_raylib_SetMusicPitch(music:RMusic, pitch:Float)="SetMusicPitch"
+	Function bmx_raylib_SetMusicLoopCount(music:RMusic, count:Int)="SetMusicLoopCount"
+	Function bmx_raylib_GetMusicTimeLength:Float(music:RMusic)="GetMusicTimeLength"
+	Function bmx_raylib_GetMusicTimePlayed:Float(music:RMusic)="GetMusicTimePlayed"
+
+	Function bmx_raylib_InitAudioStream:RAudioStream(sampleRate:UInt, sampleSize:UInt, channels:UInt)="InitAudioStream"
+	Function bmx_raylib_UpdateAudioStream(stream:RAudioStream, data:Byte Ptr, samplesCount:Int)="UpdateAudioStream"
+	Function bmx_raylib_CloseAudioStream(stream:RAudioStream)="CloseAudioStream"
+	Function bmx_raylib_IsAudioStreamProcessed:Int(stream:RAudioStream)="IsAudioStreamProcessed"
+	Function bmx_raylib_PlayAudioStream(stream:RAudioStream)="PlayAudioStream"
+	Function bmx_raylib_PauseAudioStream(stream:RAudioStream)="PauseAudioStream"
+	Function bmx_raylib_ResumeAudioStream(stream:RAudioStream)="ResumeAudioStream"
+	Function bmx_raylib_IsAudioStreamPlaying:Int(stream:RAudioStream)="IsAudioStreamPlaying"
+	Function bmx_raylib_StopAudioStream(stream:RAudioStream)="StopAudioStream"
+	Function bmx_raylib_SetAudioStreamVolume(stream:RAudioStream, volume:Float)="SetAudioStreamVolume"
+	Function bmx_raylib_SetAudioStreamPitch(stream:RAudioStream, pitch:Float)="SetAudioStreamPitch"
 
 End Extern
 
@@ -658,6 +714,36 @@ Struct RBoneInfo
 	Field name31:Byte
 	Field name32:Byte
 	Field parent:Int
+End Struct
+
+Struct RWave
+	Field sampleCount:UInt
+	Field sampleRate:UInt
+	Field sampleSize:UInt
+	Field channels:UInt
+	Field data:Byte Ptr
+End Struct
+
+Struct RAudioStream
+	Field sampleRate:UInt
+	Field sampleSize:UInt
+	Field channels:UInt
+	Field buffer:Byte Ptr
+End Struct
+
+Struct RSound
+	Field sampleCount:UInt
+	Field stream:RAudioStream
+End Struct
+
+Struct RMusic
+	Field ctxType:Int
+	Field ctxData:Byte Ptr
+	
+	Field sampleCount:UInt
+	Field loopCount:UInt
+	
+	Field stream:RAudioStream
 End Struct
 
 ' Alphanumeric keys
