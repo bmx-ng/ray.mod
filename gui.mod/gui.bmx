@@ -21,6 +21,9 @@
 '
 SuperStrict
 
+Rem
+bbdoc: RayGui - Simple and Easy-to-use Immediate-mode Gui
+End Rem
 Module Ray.GUI
 
 ModuleInfo "Version: 1.00"
@@ -55,57 +58,91 @@ Import "common.bmx"
 
 
 
-
+Rem
+bbdoc: Enables gui controls (global state).
+End Rem
 Function GuiEnable()
 	bmx_raygui_GuiEnable()
 End Function
 
+Rem
+bbdoc: Disables gui controls (global state).
+End Rem
 Function GuiDisable()
 	bmx_raygui_GuiDisable()
 End Function
 
+Rem
+bbdoc: Locks gui controls (global state).
+End Rem
 Function GuiLock()
 	bmx_raygui_GuiLock()
 End Function
 
+Rem
+bbdoc: Unlocks gui controls (global state).
+End Rem
 Function GuiUnlock()
 	bmx_raygui_GuiUnlock()
 End Function
 
+Rem
+bbdoc: Sets gui controls alpha (global state).
+About: @alpha goes from 0.0. to 1.0.
+End Rem
 Function GuiFade(alpha:Float)
 	bmx_raygui_GuiFade(alpha)
 End Function
 
 
+Rem
+bbdoc: Sets gui state (global state).
+End Rem
 Function GuiSetState(state:Int)
 	bmx_raygui_GuiSetState(state)
 End Function
 
+Rem
+bbdoc: Gets gui state (global state).
+End Rem
 Function GuiGetState:Int()
 	Return bmx_raygui_GuiGetState()
 End Function
 
-
+Rem
+bbdoc: Sets gui custom font (global state).
+End Rem
 Function GuiSetFont(font:RFont)
 	bmx_raygui_GuiSetFont(font)
 End Function
 
+Rem
+bbdoc: Gets gui custom font (global state).
+End Rem
 Function GuiGetFont:RFont()
 	bmx_raygui_GuiGetFont()
 End Function
 
-
 ' Style set/get functions
+Rem
+bbdoc: Sets one style property.
+End Rem
 Function GuiSetStyle(control:Int, property:Int, value:Int)
 	bmx_raygui_GuiSetStyle(control, property, value)
 End Function
 
+Rem
+bbdoc: Gets one style property.
+End Rem
 Function GuiGetStyle:Int(control:Int, property:Int)
 	bmx_raygui_GuiGetStyle(control, property)
 End Function
 
 
 ' Container/separator controls, useful for controls organization
+Rem
+bbdoc: Window Box control, shows a window that can be closed.
+End Rem
 Function GuiWindowBox:Int(bounds:RRectangle, title:String)
 	Local length:Size_T = title.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -113,6 +150,9 @@ Function GuiWindowBox:Int(bounds:RRectangle, title:String)
 	Return bmx_raygui_GuiWindowBox(bounds, t)
 End Function
 
+Rem
+bbdoc: Group Box control with text name.
+End Rem
 Function GuiGroupBox(bounds:RRectangle, txt:String)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -120,6 +160,9 @@ Function GuiGroupBox(bounds:RRectangle, txt:String)
 	bmx_raygui_GuiGroupBox(bounds, t)
 End Function
 
+Rem
+bbdoc: Line separator control, that could contain text.
+End Rem
 Function GuiLine(bounds:RRectangle, txt:String)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -127,16 +170,25 @@ Function GuiLine(bounds:RRectangle, txt:String)
 	bmx_raygui_GuiLine(bounds, t)
 End Function
 
+Rem
+bbdoc: Panel control, useful to group controls.
+End Rem
 Function GuiPanel(bounds:RRectangle)
 	bmx_raygui_GuiPanel(bounds)
 End Function
 
+Rem
+bbdoc: Scroll Panel control.
+End Rem
 Function GuiScrollPanel:RRectangle(bounds:RRectangle, content:RRectangle, scroll:RVector2 Var)
 	Return bmx_raygui_GuiScrollPanel(bounds, content, scroll)
 End Function
 
 
 ' Basic controls set
+Rem
+bbdoc: Label control, that shows text.
+End Rem
 Function GuiLabel(bounds:RRectangle, txt:String)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -144,6 +196,9 @@ Function GuiLabel(bounds:RRectangle, txt:String)
 	bmx_raygui_GuiLabel(bounds:RRectangle, t)
 End Function
 
+Rem
+bbdoc: Button control, which returns #True when clicked.
+End Rem
 Function GuiButton:Int(bounds:RRectangle, txt:String)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -151,6 +206,9 @@ Function GuiButton:Int(bounds:RRectangle, txt:String)
 	Return bmx_raygui_GuiButton(bounds:RRectangle, t)
 End Function
 
+Rem
+bbdoc: Label button control, that shows #True when clicked.
+End Rem
 Function GuiLabelButton:Int(bounds:RRectangle, txt:String)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -158,6 +216,9 @@ Function GuiLabelButton:Int(bounds:RRectangle, txt:String)
 	Return bmx_raygui_GuiLabelButton(bounds:RRectangle, t)
 End Function
 
+Rem
+bbdoc: Image button control, which returns #True when clicked.
+End Rem
 Function GuiImageButton:Int(bounds:RRectangle, txt:String, texture:RTexture2D)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -165,6 +226,9 @@ Function GuiImageButton:Int(bounds:RRectangle, txt:String, texture:RTexture2D)
 	Return bmx_raygui_GuiImageButton(bounds, t, texture)
 End Function
 
+Rem
+bbdoc: Image button extended control, which returns #True when clicked.
+End Rem
 Function GuiImageButtonEx:Int(bounds:RRectangle, txt:String, texture:RTexture2D, texSource:RRectangle)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -172,6 +236,9 @@ Function GuiImageButtonEx:Int(bounds:RRectangle, txt:String, texture:RTexture2D,
 	Return bmx_raygui_GuiImageButtonEx(bounds, t, texture, texSource)
 End Function
 
+Rem
+bbdoc: Toggle Button control, which returns #True when active.
+End Rem
 Function GuiToggle:Int(bounds:RRectangle, txt:String, active:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -179,6 +246,9 @@ Function GuiToggle:Int(bounds:RRectangle, txt:String, active:Int)
 	Return bmx_raygui_GuiToggle(bounds, t, active)
 End Function
 
+Rem
+bbdoc: Toggle Group control, which returns active toggle index.
+End Rem
 Function GuiToggleGroup:Int(bounds:RRectangle, txt:String, active:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -186,6 +256,9 @@ Function GuiToggleGroup:Int(bounds:RRectangle, txt:String, active:Int)
 	Return bmx_raygui_GuiToggleGroup(bounds, t, active)
 End Function
 
+Rem
+bbdoc: Check Box control, which returns #True when active.
+End Rem
 Function GuiCheckBox:Int(bounds:RRectangle, txt:String, checked:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -193,6 +266,9 @@ Function GuiCheckBox:Int(bounds:RRectangle, txt:String, checked:Int)
 	Return bmx_raygui_GuiCheckBox(bounds, t, checked)
 End Function
 
+Rem
+bbdoc: Combo Box control, which returns selected item index.
+End Rem
 Function GuiComboBox:Int(bounds:RRectangle, txt:String, active:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -200,6 +276,9 @@ Function GuiComboBox:Int(bounds:RRectangle, txt:String, active:Int)
 	Return bmx_raygui_GuiComboBox(bounds, t, active)
 End Function
 
+Rem
+bbdoc: Dropdown Box control, which returns selected item.
+End Rem
 Function GuiDropdownBox:Int(bounds:RRectangle, txt:String, active:Int Var, editMode:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -207,6 +286,9 @@ Function GuiDropdownBox:Int(bounds:RRectangle, txt:String, active:Int Var, editM
 	Return bmx_raygui_GuiDropdownBox(bounds, t, active, editMode)
 End Function
 
+Rem
+bbdoc: Spinner control, which returns selected value.
+End Rem
 Function GuiSpinner:Int(bounds:RRectangle, txt:String, value:Int Var, minValue:Int, maxValue:Int, editMode:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -214,6 +296,9 @@ Function GuiSpinner:Int(bounds:RRectangle, txt:String, value:Int Var, minValue:I
 	Return bmx_raygui_GuiSpinner(bounds, t, value, minValue, maxValue, editMode)
 End Function
 
+Rem
+bbdoc: Value Box control, which updates input text with numbers.
+End Rem
 Function GuiValueBox:Int(bounds:RRectangle, txt:String, value:Int Var, minValue:Int, maxValue:Int, editMode:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -221,6 +306,9 @@ Function GuiValueBox:Int(bounds:RRectangle, txt:String, value:Int Var, minValue:
 	Return bmx_raygui_GuiValueBox(bounds, t, value, minValue, maxValue, editMode)
 End Function
 
+Rem
+bbdoc: Text Box control, which updates input text.
+End Rem
 Function GuiTextBox:Int(bounds:RRectangle, txt:String Var, textSize:Int, editMode:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -230,6 +318,9 @@ Function GuiTextBox:Int(bounds:RRectangle, txt:String Var, textSize:Int, editMod
 	Return res
 End Function
 
+Rem
+bbdoc: Text Box control with multiple lines
+End Rem
 Function GuiTextBoxMulti:Int(bounds:RRectangle, txt:String Var, textSize:Int, editMode:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -239,6 +330,9 @@ Function GuiTextBoxMulti:Int(bounds:RRectangle, txt:String Var, textSize:Int, ed
 	Return res
 End Function
 
+Rem
+bbdoc: Slider control, which returns the selected value.
+End Rem
 Function GuiSlider:Float(bounds:RRectangle, txtLeft:String, txtRight:String, value:Float, minValue:Float, maxValue:Float)
 	Local length:Size_T = txtLeft.length * 3 + 1
 	Local tl:Byte Ptr = StackAlloc(length)
@@ -251,6 +345,9 @@ Function GuiSlider:Float(bounds:RRectangle, txtLeft:String, txtRight:String, val
 	Return bmx_raygui_GuiSlider(bounds, tl, tr, value, minValue, maxValue)
 End Function
 
+Rem
+bbdoc: Slider Bar control, which returns the selected value.
+End Rem
 Function GuiSliderBar:Float(bounds:RRectangle, txtLeft:String, txtRight:String, value:Float, minValue:Float, maxValue:Float)
 	Local length:Size_T = txtLeft.length * 3 + 1
 	Local tl:Byte Ptr = StackAlloc(length)
@@ -263,6 +360,9 @@ Function GuiSliderBar:Float(bounds:RRectangle, txtLeft:String, txtRight:String, 
 	Return bmx_raygui_GuiSliderBar(bounds, tl, tr, value, minValue, maxValue)
 End Function
 
+Rem
+bbdoc: Progress Bar control, which shows current progress value.
+End Rem
 Function GuiProgressBar:Float(bounds:RRectangle, txtLeft:String, txtRight:String, value:Float, minValue:Float, maxValue:Float)
 	Local length:Size_T = txtLeft.length * 3 + 1
 	Local tl:Byte Ptr = StackAlloc(length)
@@ -275,6 +375,9 @@ Function GuiProgressBar:Float(bounds:RRectangle, txtLeft:String, txtRight:String
 	Return bmx_raygui_GuiProgressBar(bounds, tl, tr, value, minValue, maxValue)
 End Function
 
+Rem
+bbdoc: Status Bar control, shows info text.
+End Rem
 Function GuiStatusBar(bounds:RRectangle, txt:String)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -282,6 +385,9 @@ Function GuiStatusBar(bounds:RRectangle, txt:String)
 	bmx_raygui_GuiStatusBar(bounds, t)
 End Function
 
+Rem
+bbdoc: Dummy control for placeholders.
+End Rem
 Function GuiDummyRec(bounds:RRectangle, txt:String)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -289,16 +395,25 @@ Function GuiDummyRec(bounds:RRectangle, txt:String)
 	bmx_raygui_GuiDummyRec(bounds, t)
 End Function
 
+Rem
+bbdoc: Scroll Bar control.
+End Rem
 Function GuiScrollBar:Int(bounds:RRectangle, value:Int, minValue:Int, maxValue:Int)
 	Return bmx_raygui_GuiScrollBar(bounds, value, minValue, maxValue)
 End Function
 
+Rem
+bbdoc: Grid control.
+End Rem
 Function GuiGrid:RVector2(bounds:RRectangle, spacing:Float, subdivs:Int)
 	Return bmx_raygui_GuiGrid(bounds:RRectangle, spacing, subdivs)
 End Function
 
 
 ' Advance controls set
+Rem
+bbdoc: List View control, which returns selected list item index.
+End Rem
 Function GuiListView:Int(bounds:RRectangle, txt:String, scrollIndex:Int Var, active:Int)
 	Local length:Size_T = txt.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -307,6 +422,9 @@ Function GuiListView:Int(bounds:RRectangle, txt:String, scrollIndex:Int Var, act
 	Return bmx_raygui_GuiListView(bounds:RRectangle, t, scrollIndex, active)
 End Function
 
+Rem
+bbdoc: List View with extended parameters.
+End Rem
 Function GuiListViewEx:Int(bounds:RRectangle, txt:String[], focus:Int Var, scrollIndex:Int Var, active:Int)
 	Local list:Size_T Ptr = MemAlloc(Size_T(txt.length * 8))
 	For Local i:Int = 0 Until txt.length
@@ -320,6 +438,9 @@ Function GuiListViewEx:Int(bounds:RRectangle, txt:String[], focus:Int Var, scrol
 	Return res
 End Function
 
+Rem
+bbdoc: Message Box control, which displays a message.
+End Rem
 Function GuiMessageBox:Int(bounds:RRectangle, title:String, message:String, buttons:String)
 	Local length:Size_T = title.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -336,10 +457,16 @@ Function GuiMessageBox:Int(bounds:RRectangle, title:String, message:String, butt
 	Return bmx_raygui_GuiMessageBox(bounds, t, m, b)
 End Function
 
+Rem
+bbdoc: Color Picker control.
+End Rem
 Function GuiColorPicker:RColor(bounds:RRectangle, color:RColor)
 	Return bmx_raygui_GuiColorPicker(bounds, color)
 End Function
 
+Rem
+bbdoc: Text Input Box control, asks for text.
+End Rem
 Function GuiTextInputBox:Int(bounds:RRectangle, title:String, message:String, buttons:String, txt:String)
 	Local length:Size_T = title.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
@@ -362,6 +489,9 @@ End Function
 
 
 ' Styles loading functions
+Rem
+bbdoc: Loads a style file (.rgs).
+End Rem
 Function GuiLoadStyle(fileName:String)
 	Local length:Size_T = fileName.length * 3 + 1
 	Local f:Byte Ptr = StackAlloc(length)
@@ -370,6 +500,9 @@ Function GuiLoadStyle(fileName:String)
 	bmx_raygui_GuiLoadStyle(f)
 End Function
 
+Rem
+bbdoc: Loads style default over global style.
+End Rem
 Function GuiLoadStyleDefault()
 	bmx_raygui_GuiLoadStyleDefault()
 End Function
