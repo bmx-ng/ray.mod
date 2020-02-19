@@ -1360,51 +1360,87 @@ Function DrawTextureNPatch(texture:RTexture2D, nPatchInfo:RNPatchInfo, destRec:R
 End Function
 
 ' Input-related functions: touch
+Rem
+bbdoc: Returns touch position X for touch point 0 (relative to screen size).
+End Rem
 Function GetTouchX:Int()
 	Return bmx_raylib_GetTouchX()
 End Function
 
+Rem
+bbdoc: Returns touch position Y for touch point 0 (relative to screen size).
+End Rem
 Function GetTouchY:Int()
 	Return bmx_raylib_GetTouchY()
 End Function
 
+Rem
+bbdoc: Returns touch position XY for a touch point index (relative to screen size).
+End Rem
 Function GetTouchPosition:RVector2(index:Int)
 	Return bmx_raylib_GetTouchPosition(index)
 End Function
 
 ' Gestures and Touch Handling Functions (Module: gestures)
+Rem
+bbdoc: Enables a set of gestures using flags.
+End Rem
 Function SetGesturesEnabled(gestureFlags:UInt)
 	bmx_raylib_SetGesturesEnabled(gestureFlags)
 End Function
 
+Rem
+bbdoc: Checks if a gesture have been detected.
+End Rem
 Function IsGestureDetected:Int(gesture:Int)
 	Return bmx_raylib_IsGestureDetected(gesture)
 End Function
 
+Rem
+bbdoc: Gets latest detected gesture.
+End Rem
 Function GetGestureDetected:Int()
 	Return bmx_raylib_GetGestureDetected()
 End Function
 
+Rem
+bbdoc: Gets touch points count.
+End Rem
 Function GetTouchPointsCount:Int()
 	Return bmx_raylib_GetTouchPointsCount()
 End Function
 
+Rem
+bbdoc: Gets gesture hold time in milliseconds.
+End Rem
 Function GetGestureHoldDuration:Float()
 	Return bmx_raylib_GetGestureHoldDuration()
 End Function
 
+Rem
+bbdoc: Gets gesture drag vector.
+End Rem
 Function GetGestureDragVector:RVector2()
 	Return bmx_raylib_GetGestureDragVector()
 End Function
 
+Rem
+bbdoc: Gets gesture drag angle.
+End Rem
 Function GetGestureDragAngle:Float()
 	Return bmx_raylib_GetGestureDragAngle()
 End Function
 
+Rem
+bbdoc: Gets gesture pinch delta.
+End Rem
 Function GetGesturePinchVector:RVector2()
 	Return bmx_raylib_GetGesturePinchVector()
 End Function
 
+Rem
+bbdoc: Gets gesture pinch angle.
+End Rem
 Function GetGesturePinchAngle:Float()
 	Return bmx_raylib_GetGesturePinchAngle()
 End Function
@@ -1435,42 +1471,72 @@ Function UnloadModel(model:RModel)
 End Function
 
 ' Mesh generation functions
+Rem
+bbdoc: Generates polygonal mesh.
+End Rem
 Function GenMeshPoly:RMesh(sides:Int, radius:Float)
 	Return bmx_raylib_GenMeshPoly(sides, radius)
 End Function
 
+Rem
+bbdoc: Generates plane mesh (with subdivisions).
+End Rem
 Function GenMeshPlane:RMesh(width:Float, length:Float, resX:Int, resZ:Int)
 	Return bmx_raylib_GenMeshPlane(width, length, resX, resZ)
 End Function
 
+Rem
+bbdoc: Generates cuboid mesh.
+End Rem
 Function GenMeshCube:RMesh(width:Float, height:Float, length:Float)
 	Return bmx_raylib_GenMeshCube(width, height, length)
 End Function
 
+Rem
+bbdoc: Generates sphere mesh (standard sphere).
+End Rem
 Function GenMeshSphere:RMesh(radius:Float, rings:Int, slices:Int)
 	Return bmx_raylib_GenMeshSphere(radius, rings, slices)
 End Function
 
+Rem
+bbdoc: Generates half-sphere mesh (no bottom cap).
+End Rem
 Function GenMeshHemiSphere:RMesh(radius:Float, rings:Int, slices:Int)
 	Return bmx_raylib_GenMeshHemiSphere(radius, rings, slices)
 End Function
 
+Rem
+bbdoc: Generates cylinder mesh.
+End Rem
 Function GenMeshCylinder:RMesh(radius:Float, height:Float, slices:Int)
 	Return bmx_raylib_GenMeshCylinder(radius, height, slices)
 End Function
 
+Rem
+bbdoc: Generates torus mesh.
+End Rem
 Function GenMeshTorus:RMesh(radius:Float, size:Float, radSeg:Int, sides:Int)
 	Return bmx_raylib_GenMeshTorus(radius, size, radSeg, sides)
 End Function
 
+Rem
+bbdoc: Generates trefoil knot mesh.
+End Rem
 Function GenMeshKnot:RMesh(radius:Float, size:Float, radSeg:Int, sides:Int)
 	Return bmx_raylib_GenMeshKnot(radius, size, radSeg, sides)
 End Function
 
+Rem
+bbdoc: Generates heightmap mesh from image data.
+End Rem
 Function GenMeshHeightmap:RMesh(heightmap:RImage, size:RVector3)
 	Return bmx_raylib_GenMeshHeightmap(heightmap, size)
 End Function
 
+Rem
+bbdoc: Generates cubes-based map mesh from image data.
+End Rem
 Function GenMeshCubicmap:RMesh(cubicmap:RImage, cubeSize:RVector3)
 	Return bmx_raylib_GenMeshCubicmap(cubicmap, cubeSize)
 End Function
