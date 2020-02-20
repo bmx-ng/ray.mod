@@ -353,6 +353,51 @@ Extern
 	Function bmx_raylib_ImageColorBrightness(image:RImage Var, brightness:Int)="ImageColorBrightness"
 	Function bmx_raylib_ImageColorReplace(image:RImage Var, color:RColor, Replace:RColor)="ImageColorReplace"
 
+	Function bmx_raylib_LoadMeshes:RMesh Ptr(filename:Byte Ptr, meshCount:Int Var)="LoadMeshes"
+	Function bmx_raylib_ExportMesh(mesh:RMesh, filename:Byte Ptr)="ExportMesh"
+	Function bmx_raylib_UnloadMesh(mesh:RMesh)="UnloadMesh"
+
+	Function bmx_raylib_LoadMaterials:RMaterial Ptr(filename:Byte Ptr, materialCount:Int Var)="LoadMaterials"
+	Function bmx_raylib_LoadMaterialDefault:RMaterial()="LoadMaterialDefault"
+	Function bmx_raylib_UnloadMaterial(material:RMaterial)="UnloadMaterial"
+	Function bmx_raylib_SetMaterialTexture(material:RMaterial Var, mapType:Int, texture:RTexture2D)="SetMaterialTexture"
+	Function bmx_raylib_SetModelMeshMaterial(model:RModel Var, meshId:Int, materialId:Int)="SetModelMeshMaterial"
+
+	Function bmx_raylib_LoadModelAnimations:RModelAnimation Ptr(filename:Byte Ptr, animsCount:Int Var)="LoadModelAnimations"
+	Function bmx_raylib_UpdateModelAnimation(model:RModel, anim:RModelAnimation, frame:Int)="UpdateModelAnimation"
+	Function bmx_raylib_UnloadModelAnimation(anim:RModelAnimation)="UnloadModelAnimation"
+	Function bmx_raylib_IsModelAnimationValid:Int(model:RModel, anim:RModelAnimation)="IsModelAnimationValid"
+
+	Function bmx_raylib_LoadShader:RShader(vsFilename:Byte Ptr, fsFilename:Byte Ptr)="LoadShader"
+	Function bmx_raylib_LoadShaderCode:RShader(vsCode:Byte Ptr, fsCode:Byte Ptr)="LoadShaderCode"
+	Function bmx_raylib_UnloadShader(shader:RShader)="UnloadShader"
+
+	Function bmx_raylib_GetShaderDefault:RShader()="GetShaderDefault"
+	Function bmx_raylib_GetTextureDefault:RTexture2D()="GetTextureDefault"
+	Function bmx_raylib_GetShapesTexture:RTexture2D()="GetShapesTexture"
+	Function bmx_raylib_GetShapesTextureRec:RRectangle()="GetShapesTextureRec"
+	Function bmx_raylib_SetShapesTexture(texture:RTexture2D, source:RRectangle)="SetShapesTexture"
+
+	Function bmx_raylib_GetShaderLocation:Int(shader:RShader, uniformName:Byte Ptr)="GetShaderLocation"
+	Function bmx_raylib_SetShaderValue(shader:RShader, uniformLoc:Int, value:Byte Ptr, uniformType:Int)="SetShaderValue"
+	Function bmx_raylib_SetShaderValueV(shader:RShader, uniformLoc:Int, value:Byte Ptr, uniformType:Int, count:Int)="SetShaderValueV"
+	Function bmx_raylib_SetShaderValueMatrix(shader:RShader, uniformLoc:Int, mat:RMatrix)="SetShaderValueMatrix"
+	Function bmx_raylib_SetShaderValueTexture(shader:RShader, uniformLoc:Int, texture:RTexture2D)="SetShaderValueTexture"
+	Function bmx_raylib_SetMatrixProjection(proj:RMatrix)="SetMatrixProjection"
+	Function bmx_raylib_SetMatrixModelview(view:RMatrix)="SetMatrixModelview"
+	Function bmx_raylib_GetMatrixModelview:RMatrix()="GetMatrixModelview"
+	Function bmx_raylib_GetMatrixProjection:RMatrix()="GetMatrixProjection"
+
+	Function bmx_raylib_GenTextureCubemap:RTexture2D(shader:RShader, map:RTexture2D, size:Int)="GenTextureCubemap"
+	Function bmx_raylib_GenTextureIrradiance:RTexture2D(shader:RShader, cubemap:RTexture2D, size:Int)="GenTextureIrradiance"
+	Function bmx_raylib_GenTexturePrefilter:RTexture2D(shader:RShader, cubemap:RTexture2D, size:Int)="GenTexturePrefilter"
+	Function bmx_raylib_GenTextureBRDF:RTexture2D(shader:RShader, size:Int)="GenTextureBRDF"
+
+	Function bmx_raylib_BeginShaderMode(shader:RShader)="BeginShaderMode"
+	Function bmx_raylib_EndShaderMode()="EndShaderMode"
+	Function bmx_raylib_BeginBlendMode(Mode:Int)="BeginBlendMode"
+	Function bmx_raylib_EndBlendMode()="EndBlendMode"
+
 End Extern
 
 
@@ -658,6 +703,13 @@ Struct RBoneInfo
 	Field name31:Byte
 	Field name32:Byte
 	Field parent:Int
+End Struct
+
+Struct RModelAnimation
+	Field boneCount:Int
+	Field bones:RBoneInfo Ptr
+	Field frameCount:Int
+	Field framePoses:RTransform Ptr Ptr
 End Struct
 
 ' Alphanumeric keys

@@ -1648,6 +1648,66 @@ Function UnloadModel(model:RModel)
 	bmx_raylib_UnloadModel(model)
 End Function
 
+' Mesh loading/unloading functions
+Function LoadMeshes:RMesh Ptr(filename:String, meshCount:Int Var)
+	Local f:Byte Ptr = filename.ToUTF8String()
+	Local meshes:RMesh Ptr = bmx_raylib_LoadMeshes(f, meshCount)
+	MemFree(f)
+	Return meshes
+End Function
+
+Function ExportMesh(mesh:RMesh, filename:String)
+	bmx_raylib_ExportMesh(mesh, filename)
+End Function
+
+Function UnloadMesh(mesh:RMesh)
+	bmx_raylib_UnloadMesh(mesh)
+End Function
+
+' Material loading/unloading functions
+Function LoadMaterials:RMaterial Ptr(filename:String, materialCount:Int Var)
+	Local f:Byte Ptr = filename.ToUTF8String()
+	Local materials:RMaterial Ptr = bmx_raylib_LoadMaterials(f, materialCount)
+	MemFree(f)
+	Return materials
+End Function
+
+Function LoadMaterialDefault:RMaterial()
+	Return bmx_raylib_LoadMaterialDefault()
+End Function
+
+Function UnloadMaterial(material:RMaterial)
+	bmx_raylib_UnloadMaterial(material:RMaterial)
+End Function
+
+Function SetMaterialTexture(material:RMaterial Var, mapType:Int, texture:RTexture2D)
+	bmx_raylib_SetMaterialTexture(material, mapType, texture)
+End Function
+
+Function SetModelMeshMaterial(model:RModel Var, meshId:Int, materialId:Int)
+	bmx_raylib_SetModelMeshMaterial(model, meshId, materialId)
+End Function
+
+' Model animations loading/unloading functions
+Function LoadModelAnimations:RModelAnimation Ptr(filename:String, animsCount:Int Var)
+	Local f:Byte Ptr = filename.ToUTF8String()
+	Local animations:RModelAnimation Ptr = bmx_raylib_LoadModelAnimations(f, animsCount)
+	MemFree(f)
+	Return animations
+End Function
+
+Function UpdateModelAnimation(model:RModel, anim:RModelAnimation, frame:Int)
+	bmx_raylib_UpdateModelAnimation(model, anim, frame)
+End Function
+
+Function UnloadModelAnimation(anim:RModelAnimation)
+	bmx_raylib_UnloadModelAnimation(anim)
+End Function
+
+Function IsModelAnimationValid:Int(model:RModel, anim:RModelAnimation)
+	Return bmx_raylib_IsModelAnimationValid(model, anim)
+End Function
+
 ' Mesh generation functions
 Rem
 bbdoc: Generates polygonal mesh.
@@ -2175,4 +2235,122 @@ bbdoc: Modifies image color: replace color.
 End Rem
 Function ImageColorReplace(image:RImage Var, color:RColor, Replace:RColor)
 	bmx_raylib_ImageColorReplace(image, color, Replace)
+End Function
+
+' Shader loading/unloading functions
+Function LoadShader:RShader(vsFilename:String, fsFilename:String)
+	Local v:Byte Ptr = vsFilename.ToUTF8String()
+	Local f:Byte Ptr = fsFilename.ToUTF8String()
+	Local shader:RShader = bmx_raylib_LoadShader(v, f)
+	MemFree(f)
+	MemFree(v)
+	Return shader
+End Function
+
+Function LoadShaderCode:RShader(vsCode:String, fsCode:String)
+	Local v:Byte Ptr = vsCode.ToUTF8String()
+	Local f:Byte Ptr = fsCode.ToUTF8String()
+	Local shader:RShader = bmx_raylib_LoadShaderCode(v, f)
+	MemFree(f)
+	MemFree(v)
+	Return shader
+End Function
+
+Function UnloadShader(shader:RShader)
+	bmx_raylib_UnloadShader(shader)
+End Function
+
+Function GetShaderDefault:RShader()
+	Return bmx_raylib_GetShaderDefault()
+End Function
+
+Function GetTextureDefault:RTexture2D()
+	Return bmx_raylib_GetTextureDefault()
+End Function
+
+Function GetShapesTexture:RTexture2D()
+	Return bmx_raylib_GetShapesTexture()
+End Function
+
+Function GetShapesTextureRec:RRectangle()
+	Return bmx_raylib_GetShapesTextureRec()
+End Function
+
+Function SetShapesTexture(texture:RTexture2D, source:RRectangle)
+	bmx_raylib_SetShapesTexture(texture, source)
+End Function
+
+' Shader configuration functions
+Function GetShaderLocation:Int(shader:RShader, uniformName:String)
+	Local u:Byte Ptr = uniformName.ToUTF8String()
+	Local res:Int = bmx_raylib_GetShaderLocation(shader, u)
+	MemFree(u)
+	Return res
+End Function
+
+Function SetShaderValue(shader:RShader, uniformLoc:Int, value:Byte Ptr, uniformType:Int)
+	bmx_raylib_SetShaderValue(shader, uniformLoc, value, uniformType)
+End Function
+
+Function SetShaderValueV(shader:RShader, uniformLoc:Int, value:Byte Ptr, uniformType:Int, count:Int)
+	bmx_raylib_SetShaderValueV(shader, uniformLoc, value, uniformType, count)
+End Function
+
+Function SetShaderValueMatrix(shader:RShader, uniformLoc:Int, mat:RMatrix)
+	bmx_raylib_SetShaderValueMatrix(shader, uniformLoc, mat)
+End Function
+
+Function SetShaderValueTexture(shader:RShader, uniformLoc:Int, texture:RTexture2D)
+	bmx_raylib_SetShaderValueTexture(shader, uniformLoc, texture)
+End Function
+
+Function SetMatrixProjection(proj:RMatrix)
+	bmx_raylib_SetMatrixProjection(proj)
+End Function
+
+Function SetMatrixModelview(view:RMatrix)
+	bmx_raylib_SetMatrixModelview(view)
+End Function
+
+Function GetMatrixModelview:RMatrix()
+	Return bmx_raylib_GetMatrixModelview()
+End Function
+
+Function GetMatrixProjection:RMatrix()
+	Return bmx_raylib_GetMatrixProjection()
+End Function
+
+' Texture maps generation (PBR)
+' NOTE: Required shaders should be provided
+Function GenTextureCubemap:RTexture2D(shader:RShader, map:RTexture2D, size:Int)
+	Return bmx_raylib_GenTextureCubemap(shader, map, size)
+End Function
+
+Function GenTextureIrradiance:RTexture2D(shader:RShader, cubemap:RTexture2D, size:Int)
+	Return bmx_raylib_GenTextureIrradiance(shader, cubemap, size)
+End Function
+
+Function GenTexturePrefilter:RTexture2D(shader:RShader, cubemap:RTexture2D, size:Int)
+	Return bmx_raylib_GenTexturePrefilter(shader, cubemap, size)
+End Function
+
+Function GenTextureBRDF:RTexture2D(shader:RShader, size:Int)
+	Return bmx_raylib_GenTextureBRDF(shader, size)
+End Function
+
+' Shading begin/end functions
+Function BeginShaderMode(shader:RShader)
+	bmx_raylib_BeginShaderMode(shader)
+End Function
+
+Function EndShaderMode()
+	bmx_raylib_EndShaderMode()
+End Function
+
+Function BeginBlendMode(Mode:Int)
+	bmx_raylib_BeginBlendMode(Mode)
+End Function
+
+Function EndBlendMode()
+	bmx_raylib_EndBlendMode()
 End Function
