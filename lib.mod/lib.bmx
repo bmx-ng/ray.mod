@@ -1649,6 +1649,9 @@ Function UnloadModel(model:RModel)
 End Function
 
 ' Mesh loading/unloading functions
+Rem
+bbdoc: Loads meshes from model file.
+End Rem
 Function LoadMeshes:RMesh Ptr(filename:String, meshCount:Int Var)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	Local meshes:RMesh Ptr = bmx_raylib_LoadMeshes(f, meshCount)
@@ -1656,15 +1659,24 @@ Function LoadMeshes:RMesh Ptr(filename:String, meshCount:Int Var)
 	Return meshes
 End Function
 
+Rem
+bbdoc: Exports mesh data to file.
+End Rem
 Function ExportMesh(mesh:RMesh, filename:String)
 	bmx_raylib_ExportMesh(mesh, filename)
 End Function
 
+Rem
+bbdoc: Unloads mesh from memory (RAM and/or VRAM).
+End Rem
 Function UnloadMesh(mesh:RMesh)
 	bmx_raylib_UnloadMesh(mesh)
 End Function
 
 ' Material loading/unloading functions
+Rem
+bbdoc: Loads materials from model file.
+End Rem
 Function LoadMaterials:RMaterial Ptr(filename:String, materialCount:Int Var)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	Local materials:RMaterial Ptr = bmx_raylib_LoadMaterials(f, materialCount)
@@ -1672,23 +1684,38 @@ Function LoadMaterials:RMaterial Ptr(filename:String, materialCount:Int Var)
 	Return materials
 End Function
 
+Rem
+bbdoc: Loads default material (Supports: DIFFUSE, SPECULAR, NORMAL maps).
+End Rem
 Function LoadMaterialDefault:RMaterial()
 	Return bmx_raylib_LoadMaterialDefault()
 End Function
 
+Rem
+bbdoc: Unloads material from GPU memory (VRAM).
+End Rem
 Function UnloadMaterial(material:RMaterial)
 	bmx_raylib_UnloadMaterial(material:RMaterial)
 End Function
 
+Rem
+bbdoc: Sets texture for a material map type (MAP_DIFFUSE, MAP_SPECULAR...).
+End Rem
 Function SetMaterialTexture(material:RMaterial Var, mapType:Int, texture:RTexture2D)
 	bmx_raylib_SetMaterialTexture(material, mapType, texture)
 End Function
 
+Rem
+bbdoc: Sets material for a mesh.
+End Rem
 Function SetModelMeshMaterial(model:RModel Var, meshId:Int, materialId:Int)
 	bmx_raylib_SetModelMeshMaterial(model, meshId, materialId)
 End Function
 
 ' Model animations loading/unloading functions
+Rem
+bbdoc: Loads model animations from file.
+End Rem
 Function LoadModelAnimations:RModelAnimation Ptr(filename:String, animsCount:Int Var)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	Local animations:RModelAnimation Ptr = bmx_raylib_LoadModelAnimations(f, animsCount)
@@ -1696,14 +1723,23 @@ Function LoadModelAnimations:RModelAnimation Ptr(filename:String, animsCount:Int
 	Return animations
 End Function
 
+Rem
+bbdoc: Updates model animation pose.
+End Rem
 Function UpdateModelAnimation(model:RModel, anim:RModelAnimation, frame:Int)
 	bmx_raylib_UpdateModelAnimation(model, anim, frame)
 End Function
 
+Rem
+bbdoc: Unloads animation data.
+End Rem
 Function UnloadModelAnimation(anim:RModelAnimation)
 	bmx_raylib_UnloadModelAnimation(anim)
 End Function
 
+Rem
+bbdoc: Checks model animation skeleton match.
+End Rem
 Function IsModelAnimationValid:Int(model:RModel, anim:RModelAnimation)
 	Return bmx_raylib_IsModelAnimationValid(model, anim)
 End Function
@@ -1851,6 +1887,70 @@ bbdoc: Draws a billboard texture defined by sourceRec.
 End Rem
 Function DrawBillboardRec(camera:RCamera, texture:RTexture2D, sourceRec:RRectangle, center:RVector3, size:Float, tint:RColor)
 	bmx_raylib_DrawBillboardRec(camera, texture, sourceRec, center, size, tint)
+End Function
+
+' Collision detection functions
+Rem
+bbdoc: Detects collision between two spheres.
+End Rem
+Function CheckCollisionSpheres:Int(centerA:RVector3, radiusA:Float, centerB:RVector3, radiusB:Float)
+	Return bmx_raylib_CheckCollisionSpheres(centerA, radiusA, centerB, radiusB)
+End Function
+
+Rem
+bbdoc: Detects collision between two bounding boxes.
+End Rem
+Function CheckCollisionBoxes:Int(box1:RBoundingBox, box2:RBoundingBox)
+	Return bmx_raylib_CheckCollisionBoxes(box1, box2)
+End Function
+
+Rem
+bbdoc: Detects collision between box and sphere.
+End Rem
+Function CheckCollisionBoxSphere:Int(box:RBoundingBox, center:RVector3, radius:Float)
+	Return bmx_raylib_CheckCollisionBoxSphere(box, center, radius)
+End Function
+
+Rem
+bbdoc: Detects collision between ray and sphere.
+End Rem
+Function CheckCollisionRaySphere:Int(ray:RRay, center:RVector3, radius:Float)
+	Return bmx_raylib_CheckCollisionRaySphere(ray, center, radius)
+End Function
+
+Rem
+bbdoc: Detects collision between ray and sphere, returns collision point.
+End Rem
+Function CheckCollisionRaySphereEx:Int(ray:RRay, center:RVector3, radius:Float, collisionPoint:RVector3 Var)
+	Return bmx_raylib_CheckCollisionRaySphereEx(ray, center, radius, collisionPoint)
+End Function
+
+Rem
+bbdoc: Detects collision between ray and box.
+End Rem
+Function CheckCollisionRayBox:Int(ray:RRay, box:RBoundingBox)
+	Return bmx_raylib_CheckCollisionRayBox(ray, box)
+End Function
+
+Rem
+bbdoc: Gets collision info between ray and model.
+End Rem
+Function GetCollisionRayModel:RRayHitInfo(ray:RRay, model:RModel)
+	Return bmx_raylib_GetCollisionRayModel(ray, model)
+End Function
+
+Rem
+bbdoc: Gets collision info between ray and triangle.
+End Rem
+Function GetCollisionRayTriangle:RRayHitInfo(ray:RRay, p1:RVector3, p2:RVector3, p3:RVector3)
+	Return bmx_raylib_GetCollisionRayTriangle(ray, p1, p2, p3)
+End Function
+
+Rem
+bbdoc: Gets collision info between ray and ground plane (Y-normal plane).
+End Rem
+Function GetCollisionRayGround:RRayHitInfo(ray:RRay, groundHeight:Float)
+	Return bmx_raylib_GetCollisionRayGround(ray, groundHeight)
 End Function
 
 ' Text misc. functions
@@ -2238,6 +2338,9 @@ Function ImageColorReplace(image:RImage Var, color:RColor, Replace:RColor)
 End Function
 
 ' Shader loading/unloading functions
+Rem
+bbdoc: Loads shader from files and binds default locations.
+End Rem
 Function LoadShader:RShader(vsFilename:String, fsFilename:String)
 	Local v:Byte Ptr = vsFilename.ToUTF8String()
 	Local f:Byte Ptr = fsFilename.ToUTF8String()
@@ -2247,6 +2350,9 @@ Function LoadShader:RShader(vsFilename:String, fsFilename:String)
 	Return shader
 End Function
 
+Rem
+bbdoc: Loads shader from code strings and binds default locations.
+End Rem
 Function LoadShaderCode:RShader(vsCode:String, fsCode:String)
 	Local v:Byte Ptr = vsCode.ToUTF8String()
 	Local f:Byte Ptr = fsCode.ToUTF8String()
@@ -2256,31 +2362,52 @@ Function LoadShaderCode:RShader(vsCode:String, fsCode:String)
 	Return shader
 End Function
 
+Rem
+bbdoc: Unloads shader from GPU memory (VRAM).
+End Rem
 Function UnloadShader(shader:RShader)
 	bmx_raylib_UnloadShader(shader)
 End Function
 
+Rem
+bbdoc: Gets default shader.
+End Rem
 Function GetShaderDefault:RShader()
 	Return bmx_raylib_GetShaderDefault()
 End Function
 
+Rem
+bbdoc: Gets default texture.
+End Rem
 Function GetTextureDefault:RTexture2D()
 	Return bmx_raylib_GetTextureDefault()
 End Function
 
+Rem
+bbdoc: Gets texture to draw shapes.
+End Rem
 Function GetShapesTexture:RTexture2D()
 	Return bmx_raylib_GetShapesTexture()
 End Function
 
+Rem
+bbdoc: Gets texture rectangle to draw shapes.
+End Rem
 Function GetShapesTextureRec:RRectangle()
 	Return bmx_raylib_GetShapesTextureRec()
 End Function
 
+Rem
+bbdoc: Defines default texture used to draw shapes.
+End Rem
 Function SetShapesTexture(texture:RTexture2D, source:RRectangle)
 	bmx_raylib_SetShapesTexture(texture, source)
 End Function
 
 ' Shader configuration functions
+Rem
+bbdoc: Gets shader uniform location.
+End Rem
 Function GetShaderLocation:Int(shader:RShader, uniformName:String)
 	Local u:Byte Ptr = uniformName.ToUTF8String()
 	Local res:Int = bmx_raylib_GetShaderLocation(shader, u)
@@ -2288,69 +2415,117 @@ Function GetShaderLocation:Int(shader:RShader, uniformName:String)
 	Return res
 End Function
 
+Rem
+bbdoc: Sets shader uniform value.
+End Rem
 Function SetShaderValue(shader:RShader, uniformLoc:Int, value:Byte Ptr, uniformType:Int)
 	bmx_raylib_SetShaderValue(shader, uniformLoc, value, uniformType)
 End Function
 
+Rem
+bbdoc: Sets shader uniform value vector.
+End Rem
 Function SetShaderValueV(shader:RShader, uniformLoc:Int, value:Byte Ptr, uniformType:Int, count:Int)
 	bmx_raylib_SetShaderValueV(shader, uniformLoc, value, uniformType, count)
 End Function
 
+Rem
+bbdoc: Sets shader uniform value (matrix 4x4).
+End Rem
 Function SetShaderValueMatrix(shader:RShader, uniformLoc:Int, mat:RMatrix)
 	bmx_raylib_SetShaderValueMatrix(shader, uniformLoc, mat)
 End Function
 
+Rem
+bbdoc: Sets shader uniform value for texture.
+End Rem
 Function SetShaderValueTexture(shader:RShader, uniformLoc:Int, texture:RTexture2D)
 	bmx_raylib_SetShaderValueTexture(shader, uniformLoc, texture)
 End Function
 
+Rem
+bbdoc: Sets a custom projection matrix (replaces internal projection matrix).
+End Rem
 Function SetMatrixProjection(proj:RMatrix)
 	bmx_raylib_SetMatrixProjection(proj)
 End Function
 
+Rem
+bbdoc: Sets a custom modelview matrix (replaces internal modelview matrix).
+End Rem
 Function SetMatrixModelview(view:RMatrix)
 	bmx_raylib_SetMatrixModelview(view)
 End Function
 
+Rem
+bbdoc: Gets internal modelview matrix.
+End Rem
 Function GetMatrixModelview:RMatrix()
 	Return bmx_raylib_GetMatrixModelview()
 End Function
 
+Rem
+bbdoc: Gets internal projection matrix.
+End Rem
 Function GetMatrixProjection:RMatrix()
 	Return bmx_raylib_GetMatrixProjection()
 End Function
 
 ' Texture maps generation (PBR)
 ' NOTE: Required shaders should be provided
+Rem
+bbdoc: Generates cubemap texture from 2D texture.
+End Rem
 Function GenTextureCubemap:RTexture2D(shader:RShader, map:RTexture2D, size:Int)
 	Return bmx_raylib_GenTextureCubemap(shader, map, size)
 End Function
 
+Rem
+bbdoc: Generates irradiance texture using cubemap data.
+End Rem
 Function GenTextureIrradiance:RTexture2D(shader:RShader, cubemap:RTexture2D, size:Int)
 	Return bmx_raylib_GenTextureIrradiance(shader, cubemap, size)
 End Function
 
+Rem
+bbdoc: Generates prefilter texture using cubemap data.
+End Rem
 Function GenTexturePrefilter:RTexture2D(shader:RShader, cubemap:RTexture2D, size:Int)
 	Return bmx_raylib_GenTexturePrefilter(shader, cubemap, size)
 End Function
 
+Rem
+bbdoc: Generates BRDF texture.
+End Rem
 Function GenTextureBRDF:RTexture2D(shader:RShader, size:Int)
 	Return bmx_raylib_GenTextureBRDF(shader, size)
 End Function
 
 ' Shading begin/end functions
+Rem
+bbdoc: Begins custom shader drawing.
+End Rem
 Function BeginShaderMode(shader:RShader)
 	bmx_raylib_BeginShaderMode(shader)
 End Function
 
+Rem
+bbdoc: Ends custom shader drawing (use default shader).
+End Rem
 Function EndShaderMode()
 	bmx_raylib_EndShaderMode()
 End Function
 
+Rem
+bbdoc: Begins blending mode (alpha, additive, multiplied).
+End Rem
 Function BeginBlendMode(Mode:Int)
 	bmx_raylib_BeginBlendMode(Mode)
 End Function
 
+Rem
+bbdoc: Ends blending mode (reset to default: alpha blending).
+End Rem
 Function EndBlendMode()
 	bmx_raylib_EndBlendMode()
 End Function

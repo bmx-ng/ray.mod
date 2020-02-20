@@ -398,6 +398,16 @@ Extern
 	Function bmx_raylib_BeginBlendMode(Mode:Int)="BeginBlendMode"
 	Function bmx_raylib_EndBlendMode()="EndBlendMode"
 
+	Function bmx_raylib_CheckCollisionSpheres:Int(centerA:RVector3, radiusA:Float, centerB:RVector3, radiusB:Float)="CheckCollisionSpheres"
+	Function bmx_raylib_CheckCollisionBoxes:Int(box1:RBoundingBox, box2:RBoundingBox)="CheckCollisionBoxes"
+	Function bmx_raylib_CheckCollisionBoxSphere:Int(box:RBoundingBox, center:RVector3, radius:Float)="CheckCollisionBoxSphere"
+	Function bmx_raylib_CheckCollisionRaySphere:Int(ray:RRay, center:RVector3, radius:Float)="CheckCollisionRaySphere"
+	Function bmx_raylib_CheckCollisionRaySphereEx:Int(ray:RRay, center:RVector3, radius:Float, collisionPoint:RVector3 Var)="CheckCollisionRaySphereEx"
+	Function bmx_raylib_CheckCollisionRayBox:Int(ray:RRay, box:RBoundingBox)="CheckCollisionRayBox"
+	Function bmx_raylib_GetCollisionRayModel:RRayHitInfo(ray:RRay, model:RModel)="GetCollisionRayModel"
+	Function bmx_raylib_GetCollisionRayTriangle:RRayHitInfo(ray:RRay, p1:RVector3, p2:RVector3, p3:RVector3)="GetCollisionRayTriangle"
+	Function bmx_raylib_GetCollisionRayGround:RRayHitInfo(ray:RRay, groundHeight:Float)="GetCollisionRayGround"
+
 End Extern
 
 
