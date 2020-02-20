@@ -562,6 +562,14 @@ Struct RCamera
 	Field up:RVector3
 	Field fovy:Float
 	Field cameraType:Int
+	
+	Method New(position:RVector3, target:RVector3, up:RVector3, fovy:Float, cameraType:Int)
+		Self.position = position
+		Self.target = target
+		Self.up = up
+		Self.fovy = fovy
+		Self.cameraType = cameraType
+	End Method
 End Struct
 
 Struct RCamera2D
@@ -614,13 +622,13 @@ Struct RNPatchInfo
 End Struct
 
 Struct RModel
-	Field transform:RTransform
+	Field transform:RMatrix
 	
 	Field meshCount:Int
 	Field meshes:RMesh Ptr
 	
 	Field materialCount:Int
-	Field meterials:RMaterial Ptr
+	Field materials:RMaterial Ptr
 	Field meshMaterial:Int Ptr
 	
 	Field boneCount:Int
@@ -664,7 +672,7 @@ End Struct
 
 Struct RMaterial
 	Field shader:RShader
-	Field map:RMaterialMap
+	Field maps:RMaterialMap Ptr
 	Field params:Float Ptr
 End Struct
 
@@ -868,3 +876,18 @@ Const FILTER_ANISOTROPIC_16X:Int = 5
 Const MOUSE_LEFT_BUTTON:Int   = 0
 Const MOUSE_RIGHT_BUTTON:Int  = 1
 Const MOUSE_MIDDLE_BUTTON:Int = 2
+
+Const MAP_ALBEDO:Int = 0       ' MAP_DIFFUSE
+Const MAP_METALNESS:Int = 1       ' MAP_SPECULAR
+Const MAP_NORMAL:Int = 2
+Const MAP_ROUGHNESS:Int = 3
+Const MAP_OCCLUSION:Int = 4
+Const MAP_EMISSION:Int = 5
+Const MAP_HEIGHT:Int = 6
+Const MAP_CUBEMAP:Int = 7             ' NOTE: Uses GL_TEXTURE_CUBE_MAP
+Const MAP_IRRADIANCE:Int = 8          ' NOTE: Uses GL_TEXTURE_CUBE_MAP
+Const MAP_PREFILTER:Int = 9           ' NOTE: Uses GL_TEXTURE_CUBE_MAP
+Const MAP_BRDF:Int = 10
+
+Const MAP_DIFFUSE:Int = MAP_ALBEDO
+Const MAP_SPECULAR:Int = MAP_METALNESS
