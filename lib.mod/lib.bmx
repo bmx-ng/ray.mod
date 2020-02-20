@@ -959,46 +959,79 @@ Function GetGamepadAxisMovement:Float(gamepad:Int, axis:Int)
 End Function
 
 ' Input-related functions: mouse
+Rem
+bbdoc: Detects if a mouse button has been pressed once.
+End Rem
 Function IsMouseButtonPressed:Int(button:Int)
 	Return bmx_raylib_IsMouseButtonPressed(button:Int)
 End Function
 
+Rem
+bbdoc: Detects if a mouse button is being pressed.
+End Rem
 Function IsMouseButtonDown:Int(button:Int)
 	Return bmx_raylib_IsMouseButtonDown(button:Int)
 End Function
 
+Rem
+bbdoc: Detects if a mouse button has been released once.
+End Rem
 Function IsMouseButtonReleased:Int(button:Int)
 	Return bmx_raylib_IsMouseButtonReleased(button:Int)
 End Function
 
+Rem
+bbdoc: Detects if a mouse button is NOT being pressed.
+End Rem
 Function IsMouseButtonUp:Int(button:Int)
 	Return bmx_raylib_IsMouseButtonUp(button:Int)
 End Function
 
+Rem
+bbdoc: Returns mouse position X.
+End Rem
 Function GetMouseX:Int()
 	Return bmx_raylib_GetMouseX()
 End Function
 
+Rem
+bbdoc: Returns mouse position Y.
+End Rem
 Function GetMouseY:Int()
 	Return bmx_raylib_GetMouseY()
 End Function
 
+Rem
+bbdoc: Returns mouse position XY.
+End Rem
 Function GetMousePosition:RVector2()
 	Return bmx_raylib_GetMousePosition()
 End Function
 
+Rem
+bbdoc: Sets mouse position XY.
+End Rem
 Function SetMousePosition(x:Int, y:Int)
 	bmx_raylib_SetMousePosition(x:Int, y:Int)
 End Function
 
+Rem
+bbdoc: Sets mouse offset.
+End Rem
 Function SetMouseOffset(offsetX:Int, offsetY:Int)
 	bmx_raylib_SetMouseOffset(offsetX:Int, offsetY:Int)
 End Function
 
+Rem
+bbdoc: Sets mouse scaling.
+End Rem
 Function SetMouseScale(scaleX:Float, scaleY:Float)
 	bmx_raylib_SetMouseScale(scaleX:Float, scaleY:Float)
 End Function
 
+Rem
+bbdoc: Returns mouse wheel movement Y.
+End Rem
 Function GetMouseWheelMove:Int()
 	Return bmx_raylib_GetMouseWheelMove()
 End Function
@@ -1057,95 +1090,164 @@ End Function
 
 
 ' Camera System Functions (Module: camera)
+Rem
+bbdoc: Sets camera mode (multiple camera modes available).
+End Rem
 Function SetCameraMode(camera:RCamera, Mode:Int)
 	bmx_raylib_SetCameraMode(camera, Mode)
 End Function
 
+Rem
+bbdoc: Updates camera position for selected mode.
+End Rem
 Function UpdateCamera(camera:RCamera Var)
 	bmx_raylib_UpdateCamera(camera)
 End Function
 
+Rem
+bbdoc: Sets camera pan key to combine with mouse movement (free camera).
+End Rem
 Function SetCameraPanControl(panKey:Int)
 	bmx_raylib_SetCameraPanControl(panKey)
 End Function
 
+Rem
+bbdoc: Sets camera alt key to combine with mouse movement (free camera).
+End Rem
 Function SetCameraAltControl(altKey:Int)
 	bmx_raylib_SetCameraAltControl(altKey)
 End Function
 
+Rem
+bbdoc: Sets camera smooth zoom key to combine with mouse (free camera).
+End Rem
 Function SetCameraSmoothZoomControl(szKey:Int)
 	bmx_raylib_SetCameraSmoothZoomControl(szKey)
 End Function
 
+Rem
+bbdoc: Set camera move controls (1st person and 3rd person cameras).
+End Rem
 Function SetCameraMoveControls(frontKey:Int, backKey:Int, rightKey:Int, leftKey:Int, upKey:Int, downKey:Int)
 	bmx_raylib_SetCameraMoveControls(frontKey, backKey, rightKey, leftKey, upKey, downKey)
 End Function
 
 ' Basic geometric 3D shapes drawing functions
+Rem
+bbdoc: Draws a line in 3D world space.
+End Rem
 Function DrawLine3D(startPos:RVector3, endPos:RVector3, color:RColor)
 	bmx_raylib_DrawLine3D(startPos, endPos, color)
 End Function
 
+Rem
+bbdoc: Draws a point in 3D space, actually a small line.
+End Rem
 Function DrawPoint3D(position:RVector3, color:RColor)
 	bmx_raylib_DrawPoint3D(position, color)
 End Function
 
+Rem
+bbdoc: Draws a circle in 3D world space.
+End Rem
 Function DrawCircle3D(center:RVector3, radius:Float, rotationAxis:RVector3, rotationAngle:Float, color:RColor)
 	bmx_raylib_DrawCircle3D(center, radius, rotationAxis, rotationAngle, color)
 End Function
 
+Rem
+bbdoc: Draws a cube.
+End Rem
 Function DrawCube(position:RVector3, width:Float, height:Float, length:Float, color:RColor)
 	bmx_raylib_DrawCube(position, width, height, length, color)
 End Function
 
+Rem
+bbdoc: Draws a cube (Vector version).
+End Rem
 Function DrawCubeV(position:RVector3, size:RVector3, color:RColor)
 	bmx_raylib_DrawCubeV(position, size, color)
 End Function
 
+Rem
+bbdoc: Draws cube wires.
+End Rem
 Function DrawCubeWires(position:RVector3, width:Float, height:Float, length:Float, color:RColor)
 	bmx_raylib_DrawCubeWires(position, width, height, length, color)
 End Function
 
+Rem
+bbdoc: Draws cube wires (Vector version).
+End Rem
 Function DrawCubeWiresV(position:RVector3, size:RVector3, color:RColor)
 	bmx_raylib_DrawCubeWiresV(position, size, color)
 End Function
 
+Rem
+bbdoc: Draws a textured cube.
+End Rem
 Function DrawCubeTexture(texture:RTexture2D, position:RVector3, width:Float, height:Float, length:Float, color:RColor)
 	bmx_raylib_DrawCubeTexture(texture, position, width, height, length, color)
 End Function
 
+Rem
+bbdoc: Draws a sphere.
+End Rem
 Function DrawSphere(centerPos:RVector3, radius:Float, color:RColor)
 	bmx_raylib_DrawSphere(centerPos, radius, color)
 End Function
 
+Rem
+bbdoc: Draws a sphere with extended parameters.
+End Rem
 Function DrawSphereEx(centerPos:RVector3, radius:Float, rings:Int, slices:Int, color:RColor)
 	bmx_raylib_DrawSphereEx(centerPos, radius, rings, slices, color)
 End Function
 
+Rem
+bbdoc: Draws sphere wires.
+End Rem
 Function DrawSphereWires(centerPos:RVector3, radius:Float, rings:Int, slices:Int, color:RColor)
 	bmx_raylib_DrawSphereWires(centerPos, radius, rings, slices, color)
 End Function
 
+Rem
+bbdoc: Draws a cylinder/cone.
+End Rem
 Function DrawCylinder(position:RVector3, radiusTop:Float, radiusBottom:Float, height:Float, slices:Int, color:RColor)
 	bmx_raylib_DrawCylinder(position, radiusTop, radiusBottom, height, slices, color)
 End Function
 
+Rem
+bbdoc: Draws a cylinder/cone wires.
+End Rem
 Function DrawCylinderWires(position:RVector3, radiusTop:Float, radiusBottom:Float, height:Float, slices:Int, color:RColor)
 	bmx_raylib_DrawCylinderWires(position, radiusTop, radiusBottom, height, slices, color)
 End Function
 
+Rem
+bbdoc: Draws a plane XZ.
+End Rem
 Function DrawPlane(centerPos:RVector3, size:RVector2, color:RColor)
 	bmx_raylib_DrawPlane(centerPos, size, color)
 End Function
 
+Rem
+bbdoc: Draws a ray line.
+End Rem
 Function DrawRay(ray:RRay, color:RColor)
 	bmx_raylib_DrawRay(ray, color)
 End Function
 
+Rem
+bbdoc: Draws a grid (centered at (0, 0, 0)).
+End Rem
 Function DrawGrid(slices:Int, spacing:Float)
 	bmx_raylib_DrawGrid(slices, spacing)
 End Function
 
+Rem
+bbdoc: Draws a simple gizmo.
+End Rem
 Function DrawGizmo(position:RVector3)
 	bmx_raylib_DrawGizmo(position)
 End Function
@@ -1619,49 +1721,82 @@ End Function
 
 
 ' Mesh manipulation functions
+Rem
+bbdoc: Computes mesh bounding box limits.
+End Rem
 Function MeshBoundingBox:RBoundingBox(mesh:RMesh)
 	Return bmx_raylib_MeshBoundingBox(mesh)
 End Function
 
+Rem
+bbdoc: Computes mesh tangents.
+End Rem
 Function MeshTangents(mesh:RMesh Var)
 	bmx_raylib_MeshTangents(mesh)
 End Function
 
+Rem
+bbdoc: Computes mesh binormals.
+End Rem
 Function MeshBinormals(mesh:RMesh Var)
 	bmx_raylib_MeshBinormals(mesh)
 End Function
 
 
 ' Model drawing functions
+Rem
+bbdoc: Draws a model (with texture if set).
+End Rem
 Function DrawModel(model:RModel, position:RVector3, scale:Float, tint:RColor)
 	bmx_raylib_DrawModel(model, position, scale, tint)
 End Function
 
+Rem
+bbdoc: Draws a model with extended parameters.
+End Rem
 Function DrawModelEx(model:RModel, position:RVector3, rotationAxis:RVector3, rotationAngle:Float, scale:RVector3, tint:RColor)
 	bmx_raylib_DrawModelEx(model, position, rotationAxis, rotationAngle, scale, tint)
 End Function
 
+Rem
+bbdoc: Draws a model wires (with texture if set).
+End Rem
 Function DrawModelWires(model:RModel, position:RVector3, scale:Float, tint:RColor)
 	bmx_raylib_DrawModelWires(model, position, scale, tint)
 End Function
 
+Rem
+bbdoc: Draws a model wires (with texture if set) with extended parameters.
+End Rem
 Function DrawModelWiresEx(model:RModel, position:RVector3, rotationAxis:RVector3, rotationAngle:Float, scale:RVector3, tint:RColor)
 	bmx_raylib_DrawModelWiresEx(model, position, rotationAxis, rotationAngle, scale, tint)
 End Function
 
+Rem
+bbdoc: Draws a bounding box (wires).
+End Rem
 Function DrawBoundingBox(box:RBoundingBox, color:RColor)
 	bmx_raylib_DrawBoundingBox(box, color)
 End Function
 
+Rem
+bbdoc: Draws a billboard texture.
+End Rem
 Function DrawBillboard(camera:RCamera, texture:RTexture2D, center:RVector3, size:Float, tint:RColor)
 	bmx_raylib_DrawBillboard(camera, texture, center, size, tint)
 End Function
 
+Rem
+bbdoc: Draws a billboard texture defined by sourceRec.
+End Rem
 Function DrawBillboardRec(camera:RCamera, texture:RTexture2D, sourceRec:RRectangle, center:RVector3, size:Float, tint:RColor)
 	bmx_raylib_DrawBillboardRec(camera, texture, sourceRec, center, size, tint)
 End Function
 
 ' Text misc. functions
+Rem
+bbdoc: Measures #String width for default font.
+End Rem
 Function MeasureText:Int(txt:String, FontSize:Int)
 	Local t:Byte Ptr = txt.ToUTF8String()
 	Local res:Int = bmx_raylib_MeasureText(t, FontSize)
@@ -1669,6 +1804,9 @@ Function MeasureText:Int(txt:String, FontSize:Int)
 	Return res
 End Function
 
+Rem
+bbdoc: Measures #String size for Font.
+End Rem
 Function MeasureTextEx:RVector2(font:RFont, txt:String, FontSize:Float, spacing:Float)
 	Local t:Byte Ptr = txt.ToUTF8String()
 	Local res:RVector2 = bmx_raylib_MeasureTextEx(font, txt, FontSize, spacing)
@@ -1676,6 +1814,9 @@ Function MeasureTextEx:RVector2(font:RFont, txt:String, FontSize:Float, spacing:
 	Return res
 End Function
 
+Rem
+bbdoc: Gets index position for a unicode character on font.
+End Rem
 Function GetGlyphIndex:Int(font:RFont, codepoint:Int)
 	Return bmx_raylib_GetGlyphIndex(font, codepoint)
 End Function
