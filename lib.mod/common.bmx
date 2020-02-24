@@ -408,6 +408,7 @@ Extern
 	Function bmx_raylib_GetCollisionRayTriangle:RRayHitInfo(ray:RRay, p1:RVector3, p2:RVector3, p3:RVector3)="GetCollisionRayTriangle"
 	Function bmx_raylib_GetCollisionRayGround:RRayHitInfo(ray:RRay, groundHeight:Float)="GetCollisionRayGround"
 
+	Function bmx_raylib_RLFree(obj:Byte Ptr)
 End Extern
 
 
@@ -594,6 +595,11 @@ End Struct
 Struct RBoundingBox
 	Field minimum:RVector3
 	Field maximum:RVector3
+	
+	Method New(minimum:RVector3, maximum:RVector3)
+		Self.minimum = minimum
+		Self.maximum = maximum
+	End Method
 End Struct
 
 Struct RCharInfo

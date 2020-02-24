@@ -2530,3 +2530,10 @@ End Rem
 Function EndBlendMode()
 	bmx_raylib_EndBlendMode()
 End Function
+
+Rem
+bbdoc: Frees previously allocated raylib structure.
+End Rem
+Function RLFree(obj:Byte Ptr)
+	bmx_raylib_RLFree(obj)
+End Function
