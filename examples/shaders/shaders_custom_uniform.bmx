@@ -25,15 +25,15 @@ camera.up = New RVector3(0.0, 1.0, 0.0)
 camera.fovy = 45.0
 camera.cameraType = CAMERA_PERSPECTIVE
 
-Local model:RModel = LoadModel("../../raylib/examples/shaders/resources/models/barracks.obj")                   ' Load OBJ model
-Local texture:RTexture2D = LoadTexture("../../raylib/examples/shaders/resources/models/barracks_diffuse.png")   ' Load model texture (diffuse map)
+Local model:RModel = LoadModel("../../lib.mod/raylib/examples/shaders/resources/models/barracks.obj")                   ' Load OBJ model
+Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/models/barracks_diffuse.png")   ' Load model texture (diffuse map)
 model.materials[0].maps[MAP_DIFFUSE].texture = texture                     ' Set model diffuse texture
 
 Local position:RVector3                                    ' Set model position
 
 ' Load postprocessing shader
 ' NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-Local shader:RShader = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/swirl.fs")
+Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/swirl.fs")
 
 ' Get variable (uniform) location on the shader to connect with the program
 ' NOTE: If uniform variable could not be found in the shader, function returns -1

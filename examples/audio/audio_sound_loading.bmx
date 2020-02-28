@@ -12,8 +12,8 @@ InitWindow(screenWidth, screenHeight, "raylib [audio] example - sound loading an
 
 InitAudioDevice()      ' Initialize audio device
 
-Local fxWav:RSound = LoadSound("../../raylib/examples/audio/resources/sound.wav")         ' Load WAV audio file
-Local fxOgg:RSound = LoadSound("../../raylib/examples/audio/resources/tanatana.ogg")      ' Load OGG audio file
+Local fxWav:RSound = LoadSound("../../lib.mod/raylib/examples/audio/resources/sound.wav")         ' Load WAV audio file
+Local fxOgg:RSound = LoadSound("../../lib.mod/raylib/examples/audio/resources/tanatana.ogg")      ' Load OGG audio file
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------

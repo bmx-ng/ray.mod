@@ -20,7 +20,7 @@ Local texture:RTexture2D = LoadTextureFromImage(imBlank)  ' Load blank texture t
 UnloadImage(imBlank)
 
 ' NOTE: Using GLSL 330 shader version, on OpenGL ES 2.0 use GLSL 100 shader version
-Local shader:RShader = LoadShader(0,"../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/cubes_panning.fs")
+Local shader:RShader = LoadShader(0,"../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/cubes_panning.fs")
 
 Local time:Float = 0.0
 Local timeLoc:Int = GetShaderLocation(shader, "uTime")

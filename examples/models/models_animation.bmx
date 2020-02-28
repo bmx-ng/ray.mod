@@ -18,15 +18,15 @@ camera.fovy = 45.0                                ' Camera field-of-view Y
 camera.cameraType = CAMERA_PERSPECTIVE                   ' Camera mode type
 
 
-Local model:RModel = LoadModel("../../raylib/examples/models/resources/guy/guy.iqm")               ' Load the animated model mesh and basic data
-Local texture:RTexture2D = LoadTexture("../../raylib/examples/models/resources/guy/guytex.png")    ' Load model texture and set material
+Local model:RModel = LoadModel("../../lib.mod/raylib/examples/models/resources/guy/guy.iqm")               ' Load the animated model mesh and basic data
+Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/models/resources/guy/guytex.png")    ' Load model texture and set material
 SetMaterialTexture(model.materials[0], MAP_DIFFUSE, texture)  ' Set model material map texture
 
 Local position:RVector3            ' Set model position
 
 ' Load animation data
 Local animsCount:Int = 0
-Local anims:RModelAnimation Ptr = LoadModelAnimations("../../raylib/examples/models/resources/guy/guyanim.iqm", animsCount)
+Local anims:RModelAnimation Ptr = LoadModelAnimations("../../lib.mod/raylib/examples/models/resources/guy/guyanim.iqm", animsCount)
 Local animFrameCounter:Int = 0
 
 SetCameraMode(camera, CAMERA_FREE) ' Set free camera mode

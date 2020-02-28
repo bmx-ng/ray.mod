@@ -30,17 +30,17 @@ Local sphere:RMesh = GenMeshSphere(1, 16, 16)
 Local model3:RModel = LoadModelFromMesh(sphere)
 
 ' Load the shader
-Local shader:RShader = LoadShader("../../raylib/examples/shaders/resources/shaders/glsl330/mask.vs", "../../raylib/examples/shaders/resources/shaders/glsl330/mask.fs")
+Local shader:RShader = LoadShader("../../lib.mod/raylib/examples/shaders/resources/shaders/glsl330/mask.vs", "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl330/mask.fs")
 
 ' Load and apply the diffuse texture (colour map)
-Local texDiffuse:RTexture2D = LoadTexture("../../raylib/examples/shaders/resources/plasma.png")
+Local texDiffuse:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/plasma.png")
 model1.materials[0].maps[MAP_DIFFUSE].texture = texDiffuse
 model2.materials[0].maps[MAP_DIFFUSE].texture = texDiffuse
 
 ' Using MAP_EMISSION as a spare slot to use for 2nd texture
 ' NOTE: Don't use MAP_IRRADIANCE, MAP_PREFILTER or  MAP_CUBEMAP
 ' as they are bound as cube maps
-Local texMask:RTexture2D = LoadTexture("../../raylib/examples/shaders/resources/mask.png")
+Local texMask:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/mask.png")
 model1.materials[0].maps[MAP_EMISSION].texture = texMask
 model2.materials[0].maps[MAP_EMISSION].texture = texMask
 shader.locs[LOC_MAP_EMISSION] = GetShaderLocation(shader, "mask")

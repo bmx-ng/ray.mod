@@ -12,8 +12,8 @@ InitWindow(screenWidth, screenHeight, "raylib [audio] example - Multichannel sou
 
 InitAudioDevice()      ' Initialize audio device
 
-Local fxWav:RSound = LoadSound("../../raylib/examples/audio/resources/sound.wav")         ' Load WAV audio file
-Local fxOgg:RSound = LoadSound("../../raylib/examples/audio/resources/tanatana.ogg")      ' Load OGG audio file
+Local fxWav:RSound = LoadSound("../../lib.mod/raylib/examples/audio/resources/sound.wav")         ' Load WAV audio file
+Local fxOgg:RSound = LoadSound("../../lib.mod/raylib/examples/audio/resources/tanatana.ogg")      ' Load OGG audio file
 
 SetSoundVolume(fxWav, 0.2)
 

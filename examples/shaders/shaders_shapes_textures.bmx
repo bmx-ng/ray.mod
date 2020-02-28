@@ -15,12 +15,12 @@ Const screenHeight:Int = 450
 
 InitWindow(screenWidth, screenHeight, "raylib [shaders] example - shapes and texture shaders")
 
-Local fudesumi:RTexture2D = LoadTexture("../../raylib/examples/shaders/resources/fudesumi.png")
+Local fudesumi:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/fudesumi.png")
 
 ' Load shader to be used on some parts drawing
 ' NOTE 1: Using GLSL 330 shader version, on OpenGL ES 2.0 use GLSL 100 shader version
 ' NOTE 2: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-Local shader:RShader = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/grayscale.fs")
+Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/grayscale.fs")
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------

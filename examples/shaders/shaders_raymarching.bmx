@@ -26,7 +26,7 @@ SetCameraMode(camera, CAMERA_FREE)                 ' Set camera mode
 
 ' Load raymarching shader
 ' NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-Local shader:RShader = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/raymarching.fs")
+Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/raymarching.fs")
 
 ' Get shader locations for required uniforms
 Local viewEyeLoc:Int = GetShaderLocation(shader, "viewEye")

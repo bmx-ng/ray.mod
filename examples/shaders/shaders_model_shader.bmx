@@ -25,12 +25,12 @@ camera.up = New RVector3(0.0, 1.0, 0.0)
 camera.fovy = 45.0
 camera.cameraType = CAMERA_PERSPECTIVE
 
-Local model:RModel = LoadModel("../../raylib/examples/shaders/resources/models/watermill.obj")                   ' Load OBJ model
-Local texture:RTexture2D = LoadTexture("../../raylib/examples/shaders/resources/models/watermill_diffuse.png")   ' Load model texture
+Local model:RModel = LoadModel("../../lib.mod/raylib/examples/shaders/resources/models/watermill.obj")                   ' Load OBJ model
+Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/models/watermill_diffuse.png")   ' Load model texture
 
 ' Load shader for model
 ' NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-Local shader:RShader = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl"  + GLSL_VERSION + "/grayscale.fs")
+Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl"  + GLSL_VERSION + "/grayscale.fs")
 
 model.materials[0].shader = shader                     ' Set shader effect to 3d model
 model.materials[0].maps[MAP_DIFFUSE].texture = texture ' Bind texture to model

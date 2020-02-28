@@ -26,7 +26,7 @@ InitWindow(screenWidth, screenHeight, "raylib [shaders] example - julia sets")
 
 ' Load julia set shader
 ' NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-Local shader:RShader = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/julia_set.fs")
+Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/julia_set.fs")
 
 ' c constant to use in z^2 + c
 Local c:Float[] = [POINTS_OF_INTEREST[0], POINTS_OF_INTEREST[1]]

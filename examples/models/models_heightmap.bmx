@@ -12,7 +12,7 @@ InitWindow(screenWidth, screenHeight, "raylib [models] example - heightmap loadi
 ' Define our custom camera to look into our 3d world
 Local camera:RCamera = New RCamera(New RVector3(18.0, 18.0, 18.0), New RVector3(0.0, 0.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, 0)
 
-Local image:RImage = LoadImage("../../raylib/examples/models/resources/heightmap.png")             ' Load heightmap image (RAM)
+Local image:RImage = LoadImage("../../lib.mod/raylib/examples/models/resources/heightmap.png")             ' Load heightmap image (RAM)
 Local texture:RTexture2D = LoadTextureFromImage(image)                ' Convert image to texture (VRAM)
 
 Local mesh:RMesh = GenMeshHeightmap(image, New RVector3(16, 8, 16))    ' Generate heightmap mesh (RAM and VRAM)

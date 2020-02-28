@@ -39,8 +39,8 @@ InitWindow(screenWidth, screenHeight, "raylib [shaders] example - postprocessing
 ' Define the camera to look into our 3d world
 Local camera:RCamera = New RCamera(New RVector3(2.0, 3.0, 2.0), New RVector3(0.0, 1.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, 0)
 
-Local model:RModel = LoadModel("../../raylib/examples/shaders/resources/models/church.obj")                 ' Load OBJ model
-Local texture:RTexture2D = LoadTexture("../../raylib/examples/shaders/resources/models/church_diffuse.png") ' Load model texture (diffuse map)
+Local model:RModel = LoadModel("../../lib.mod/raylib/examples/shaders/resources/models/church.obj")                 ' Load OBJ model
+Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/models/church_diffuse.png") ' Load model texture (diffuse map)
 model.materials[0].maps[MAP_DIFFUSE].texture = texture                     ' Set model diffuse texture
 
 Local position:RVector3 = New RVector3(0.0, 0.0, 0.0)                             ' Set model position
@@ -51,18 +51,18 @@ Local position:RVector3 = New RVector3(0.0, 0.0, 0.0)                           
 Local shaders:RShader[MAX_POSTPRO_SHADERS]
 
 ' NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-shaders[FX_GRAYSCALE] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/grayscale.fs")
-shaders[FX_POSTERIZATION] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/posterization.fs")
-shaders[FX_DREAM_VISION] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/dream_vision.fs")
-shaders[FX_PIXELIZER] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/pixelizer.fs")
-shaders[FX_CROSS_HATCHING] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/cross_hatching.fs")
-shaders[FX_CROSS_STITCHING] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/cross_stitching.fs")
-shaders[FX_PREDATOR_VIEW] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/predator.fs")
-shaders[FX_SCANLINES] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/scanlines.fs")
-shaders[FX_FISHEYE] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/fisheye.fs")
-shaders[FX_SOBEL] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/sobel.fs")
-shaders[FX_BLOOM] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/bloom.fs")
-shaders[FX_BLUR] = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/blur.fs")
+shaders[FX_GRAYSCALE] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/grayscale.fs")
+shaders[FX_POSTERIZATION] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/posterization.fs")
+shaders[FX_DREAM_VISION] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/dream_vision.fs")
+shaders[FX_PIXELIZER] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/pixelizer.fs")
+shaders[FX_CROSS_HATCHING] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/cross_hatching.fs")
+shaders[FX_CROSS_STITCHING] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/cross_stitching.fs")
+shaders[FX_PREDATOR_VIEW] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/predator.fs")
+shaders[FX_SCANLINES] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/scanlines.fs")
+shaders[FX_FISHEYE] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/fisheye.fs")
+shaders[FX_SOBEL] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/sobel.fs")
+shaders[FX_BLOOM] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/bloom.fs")
+shaders[FX_BLUR] = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/blur.fs")
 
 Local currentShader:Int = FX_GRAYSCALE
 

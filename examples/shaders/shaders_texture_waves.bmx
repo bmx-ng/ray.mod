@@ -16,10 +16,10 @@ Const screenHeight:Int = 450
 InitWindow(screenWidth, screenHeight, "raylib [shaders] example - texture waves")
 
 ' Load texture texture to apply shaders
-Local texture:RTexture2D = LoadTexture("../../raylib/examples/shaders/resources/space.png")
+Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/space.png")
 
 ' Load shader and setup location points and values
-Local shader:RShader = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/wave.fs")
+Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/wave.fs")
 
 Local secondsLoc:Int = GetShaderLocation(shader, "secondes")
 Local freqXLoc:Int = GetShaderLocation(shader, "freqX")

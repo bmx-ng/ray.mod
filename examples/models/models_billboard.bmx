@@ -17,7 +17,7 @@ camera.up = New RVector3(0.0, 1.0, 0.0)
 camera.fovy = 45.0
 camera.cameraType = CAMERA_PERSPECTIVE
 
-Local bill:RTexture2D = LoadTexture("../../raylib/examples/models/resources/billboard.png")     ' Our texture billboard
+Local bill:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/models/resources/billboard.png")     ' Our texture billboard
 Local billPosition:RVector3 = New RVector3(0.0, 2.0, 0.0)                 ' Position where draw billboard
 
 SetCameraMode(camera, CAMERA_ORBITAL)  ' Set an orbital camera mode

@@ -13,16 +13,16 @@ Const screenHeight:Int = 450
 
 InitWindow(screenWidth, screenHeight, "raylib [models] example - plane rotations (yaw, pitch, roll)")
 
-Local texAngleGauge:RTexture2D = LoadTexture("../../raylib/examples/models/resources/angle_gauge.png")
-Local texBackground:RTexture2D = LoadTexture("../../raylib/examples/models/resources/background.png")
-Local texPitch:RTexture2D = LoadTexture("../../raylib/examples/models/resources/pitch.png")
-Local texPlane:RTexture2D = LoadTexture("../../raylib/examples/models/resources/plane.png")
+Local texAngleGauge:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/models/resources/angle_gauge.png")
+Local texBackground:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/models/resources/background.png")
+Local texPitch:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/models/resources/pitch.png")
+Local texPlane:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/models/resources/plane.png")
 
 Local framebuffer:RRenderTexture2D = LoadRenderTexture(192, 192)
 
 ' Model loading
-Local model:RModel = LoadModel("../../raylib/examples/models/resources/plane.obj")     ' Load OBJ model
-model.materials[0].maps[MAP_DIFFUSE].texture = LoadTexture("../../raylib/examples/models/resources/plane_diffuse.png") ' Set map diffuse texture
+Local model:RModel = LoadModel("../../lib.mod/raylib/examples/models/resources/plane.obj")     ' Load OBJ model
+model.materials[0].maps[MAP_DIFFUSE].texture = LoadTexture("../../lib.mod/raylib/examples/models/resources/plane_diffuse.png") ' Set map diffuse texture
 
 GenTextureMipmaps(model.materials[0].maps[MAP_DIFFUSE].texture)
 

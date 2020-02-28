@@ -34,7 +34,7 @@ While i >= 0
 	i :- 1
 Wend
 
-Local music:RMusic = LoadMusicStream("../../raylib/examples/audio/resources/mini1111.xm")
+Local music:RMusic = LoadMusicStream("../../lib.mod/raylib/examples/audio/resources/mini1111.xm")
 
 PlayMusicStream(music)
 

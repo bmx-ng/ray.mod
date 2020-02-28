@@ -62,7 +62,7 @@ InitWindow(screenWidth, screenHeight, "raylib [shaders] example - color palette 
 ' Load shader to be used on some parts drawing
 ' NOTE 1: Using GLSL 330 shader version, on OpenGL ES 2.0 use GLSL 100 shader version
 ' NOTE 2: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-Local shader:RShader = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/palette_switch.fs")
+Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/palette_switch.fs")
 
 ' Get variable (uniform) location on the shader to connect with the program
 ' NOTE: If uniform variable could not be found in the shader, function returns -1

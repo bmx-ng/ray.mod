@@ -19,7 +19,7 @@ Local target:RRenderTexture2D = LoadRenderTexture(screenWidth, screenHeight)
 
 ' Load Eratosthenes shader
 ' NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-Local shader:RShader = LoadShader(0, "../../raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/eratosthenes.fs")
+Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/eratosthenes.fs")
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------

@@ -12,7 +12,7 @@ InitWindow(screenWidth, screenHeight, "raylib [audio] example - music playing (s
 
 InitAudioDevice()              ' Initialize audio device
 
-Local music:RMusic = LoadMusicStream("../../raylib/examples/audio/resources/guitar_noodling.ogg")
+Local music:RMusic = LoadMusicStream("../../lib.mod/raylib/examples/audio/resources/guitar_noodling.ogg")
 
 PlayMusicStream(music)
 
