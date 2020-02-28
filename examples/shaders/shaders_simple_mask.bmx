@@ -3,7 +3,6 @@ SuperStrict
 Framework Ray.Lib
 Import Ray.Math
 
-
 ' Initialization
 '--------------------------------------------------------------------------------------
 Const screenWidth:Int = 800
