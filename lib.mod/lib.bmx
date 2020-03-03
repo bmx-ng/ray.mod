@@ -2537,3 +2537,53 @@ End Rem
 Function RLFree(obj:Byte Ptr)
 	bmx_raylib_RLFree(obj)
 End Function
+
+' Font loading/unloading functions
+Rem
+bbdoc: Gets the default Font.
+End Rem
+Function GetFontDefault:RFont()
+	Return bmx_raylib_GetFontDefault()
+End Function
+
+Rem
+bbdoc: Loads font from file into GPU memory (VRAM).
+End Rem
+Function LoadFont:RFont(filename:String)
+	Return bmx_raylib_LoadFont(filename)
+End Function
+
+Rem
+bbdoc: Loads font from file with extended parameters.
+End Rem
+Function LoadFontEx:RFont(filename:String, FontSize:Int, fontChars:Int Ptr, charsCount:Int)
+	Return bmx_raylib_LoadFontEx(filename, FontSize, fontChars, charsCount)
+End Function
+
+Rem
+bbdoc: Loads font from Image (XNA style).
+End Rem
+Function LoadFontFromImage:RFont(image:RImage, key:RColor, firstChar:Int)
+	Return bmx_raylib_LoadFontFromImage(image, key, firstChar)
+End Function
+
+Rem
+bbdoc: Loads font data for further use.
+End Rem
+Function LoadFontData:RCharInfo Ptr(filename:String, FontSize:Int, fontChars:Int Ptr, charsCount:Int, fontType:Int)
+	Return bmx_raylib_LoadFontData(filename, FontSize, fontChars, charsCount, fontType)
+End Function
+
+Rem
+bbdoc: Generates image font atlas using chars info.
+End Rem
+Function GenImageFontAtlas:RImage(chars:RCharInfo Ptr, recs:RRectangle Ptr Ptr, charsCount:Int, FontSize:Int, padding:Int, packMethod:Int)
+	Return bmx_raylib_GenImageFontAtlas(chars, recs, charsCount, FontSize, padding, packMethod)
+End Function
+
+Rem
+bbdoc: Unloads Font from GPU memory (VRAM).
+End Rem
+Function UnloadFont(font:RFont)
+	bmx_raylib_UnloadFont(font)
+End Function

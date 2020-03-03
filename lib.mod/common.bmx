@@ -409,6 +409,15 @@ Extern
 	Function bmx_raylib_GetCollisionRayGround:RRayHitInfo(ray:RRay, groundHeight:Float)="GetCollisionRayGround"
 
 	Function bmx_raylib_RLFree(obj:Byte Ptr)
+
+	Function bmx_raylib_GetFontDefault:RFont()="GetFontDefault"
+	Function bmx_raylib_LoadFont:RFont(filename:Byte Ptr)="LoadFont"
+	Function bmx_raylib_LoadFontEx:RFont(filename:Byte Ptr, FontSize:Int, fontChars:Int Ptr, charsCount:Int)="LoadFontEx"
+	Function bmx_raylib_LoadFontFromImage:RFont(image:RImage, key:RColor, firstChar:Int)="LoadFontFromImage"
+	Function bmx_raylib_LoadFontData:RCharInfo Ptr(filename:Byte Ptr, FontSize:Int, fontChars:Int Ptr, charsCount:Int, fontType:Int)="LoadFontData"
+	Function bmx_raylib_GenImageFontAtlas:RImage(chars:RCharInfo Ptr, recs:RRectangle Ptr Ptr, charsCount:Int, FontSize:Int, padding:Int, packMethod:Int)="GenImageFontAtlas"
+	Function bmx_raylib_UnloadFont(font:RFont)="UnloadFont"
+
 End Extern
 
 
@@ -933,3 +942,7 @@ Const LOC_MAP_CUBEMAP:Int = 21
 Const LOC_MAP_IRRADIANCE:Int = 22
 Const LOC_MAP_PREFILTER:Int = 23
 Const LOC_MAP_BRDF:Int = 24
+
+Const FONT_DEFAULT:Int = 0
+Const FONT_BITMAP:Int = 1
+Const FONT_SDF:Int = 2
