@@ -2587,3 +2587,31 @@ End Rem
 Function UnloadFont(font:RFont)
 	bmx_raylib_UnloadFont(font)
 End Function
+
+Rem
+bbdoc: Checks if a file has been dropped into window.
+End Rem
+Function IsFileDropped:Int()
+	Return bmx_raylib_IsFileDropped()
+End Function
+
+Rem
+bbdoc: Gets dropped files names.
+End Rem
+Function GetDroppedFiles:String[]()
+	Local count:Int
+	Local fptr:Byte Ptr Ptr = bmx_raylib_GetDroppedFiles(count)
+	If count = 0 Then
+		Return Null
+	End If
+	
+	Local files:String[count]
+	For Local i:Int = 0 Until count
+		files[i] = String.FromUTF8String(fptr[i])
+	Next
+	
+	bmx_raylib_ClearDroppedFiles()
+	
+	Return files
+End Function
+

@@ -418,6 +418,10 @@ Extern
 	Function bmx_raylib_GenImageFontAtlas:RImage(chars:RCharInfo Ptr, recs:RRectangle Ptr Ptr, charsCount:Int, FontSize:Int, padding:Int, packMethod:Int)="GenImageFontAtlas"
 	Function bmx_raylib_UnloadFont(font:RFont)="UnloadFont"
 
+	Function bmx_raylib_IsFileDropped:Int()="IsFileDropped"
+	Function bmx_raylib_GetDroppedFiles:Byte Ptr Ptr(count:Int Var)="GetDroppedFiles"
+	Function bmx_raylib_ClearDroppedFiles()="ClearDroppedFiles"
+
 End Extern
 
 
