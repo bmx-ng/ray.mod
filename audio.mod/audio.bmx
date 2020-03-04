@@ -426,3 +426,10 @@ End Rem
 Function SetAudioStreamPitch(stream:RAudioStream, pitch:Float)
 	bmx_raylib_SetAudioStreamPitch(stream, pitch)
 End Function
+
+Rem
+bbdoc: Sets the default buffer size for new audio streams.
+End Rem
+Function SetAudioStreamBufferSizeDefault(size:Int)
+	bmx_raylib_SetAudioStreamBufferSizeDefault(size)
+End Function

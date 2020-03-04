@@ -44,6 +44,7 @@ Extern
 	Function bmx_raymath_Vector2DivideV:RVector2(v1:RVector2, v2:RVector2)="Vector2DivideV"
 	Function bmx_raymath_Vector2Normalize:RVector2(v:RVector2)="Vector2Normalize"
 	Function bmx_raymath_Vector2Lerp:RVector2(v1:RVector2, v2:RVector2, amount:Float)="Vector2Lerp"
+	Function bmx_raymath_Vector2Rotate:RVector2(v:RVector2, degs:Float)="Vector2Rotate"
 
 	Function bmx_raymath_Vector3Zero:RVector3()="Vector3Zero"
 	Function bmx_raymath_Vector3One:RVector3()="Vector3One"

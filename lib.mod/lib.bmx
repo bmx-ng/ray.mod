@@ -26,11 +26,13 @@ bbdoc: Raylib - Simple Games Programming
 End Rem
 Module Ray.Lib
 
-ModuleInfo "Version: 1.00"
+ModuleInfo "Version: 1.01"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2020 Bruce A Henderson"
 ModuleInfo "Copyright: raylib - 2013-2020 Ramon Santamaria"
 
+ModuleInfo "History: 1.01"
+ModuleInfo "History: Updated to raylib 3.0.cb4c676."
 ModuleInfo "History: 1.00"
 ModuleInfo "History: Initial Release."
 
@@ -62,6 +64,8 @@ Import "common.bmx"
 ' Fixes issue where we use Int in BlitzMax to represent bools.
 '
 ' Changed easings.h to not use static inline.
+'
+' Changed config.h to include more image/audio formats.
 '
 
 Rem

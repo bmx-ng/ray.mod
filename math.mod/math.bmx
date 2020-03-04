@@ -177,6 +177,12 @@ Function Vector2Lerp:RVector2(v1:RVector2, v2:RVector2, amount:Float)
 	Return bmx_raymath_Vector2Lerp(v1, v2, amount)
 End Function
 
+Rem
+bbdoc: Rotates Vector by float in Degrees.
+End Rem
+Function Vector2Rotate:RVector2(v:RVector2, degs:Float)
+	Return bmx_raymath_Vector2Rotate(v, degs)
+End Function
 
 Rem
 bbdoc: #RVector3 with components value 0.0.

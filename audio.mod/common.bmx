@@ -80,6 +80,7 @@ Extern
 	Function bmx_raylib_StopAudioStream(stream:RAudioStream)="StopAudioStream"
 	Function bmx_raylib_SetAudioStreamVolume(stream:RAudioStream, volume:Float)="SetAudioStreamVolume"
 	Function bmx_raylib_SetAudioStreamPitch(stream:RAudioStream, pitch:Float)="SetAudioStreamPitch"
+	Function bmx_raylib_SetAudioStreamBufferSizeDefault(size:Int)="SetAudioStreamBufferSizeDefault"
 
 End Extern
 

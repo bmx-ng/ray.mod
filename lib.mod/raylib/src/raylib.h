@@ -107,10 +107,10 @@
     #define RL_CALLOC(n,sz)     calloc(n,sz)
 #endif
 #ifndef RL_REALLOC
-    #define RL_REALLOC(n,sz)    realloc(n,sz)
+    #define RL_REALLOC(ptr,sz)  realloc(ptr,sz)
 #endif
 #ifndef RL_FREE
-    #define RL_FREE(p)          free(p)
+    #define RL_FREE(ptr)        free(ptr)
 #endif
 
 // NOTE: MSC C++ compiler does not support compound literals (C99 feature)
@@ -156,6 +156,7 @@
 #define FormatText  TextFormat
 #define SubText     TextSubtext
 #define ShowWindow  UnhideWindow
+#define LoadText    LoadFileText
 
 //----------------------------------------------------------------------------------
 // Structures Definition
@@ -949,6 +950,10 @@ RLAPI void TakeScreenshot(const char *fileName);                  // Takes a scr
 RLAPI int GetRandomValue(int min, int max);                       // Returns a random value between min and max (both included)
 
 // Files management functions
+RLAPI unsigned char *LoadFileData(const char *fileName, int *bytesRead);     // Load file data as byte array (read)
+RLAPI void SaveFileData(const char *fileName, void *data, int bytesToWrite); // Save data to file from byte array (write)
+RLAPI char *LoadFileText(const char *fileName);                   // Load text data from file (read), returns a '\0' terminated string
+RLAPI void SaveFileText(const char *fileName, char *text);        // Save text data to file (write), string must be '\0' terminated
 RLAPI bool FileExists(const char *fileName);                      // Check if file exists
 RLAPI bool IsFileExtension(const char *fileName, const char *ext);// Check file extension
 RLAPI bool DirectoryExists(const char *dirPath);                  // Check if a directory path exists
@@ -970,8 +975,8 @@ RLAPI unsigned char *CompressData(unsigned char *data, int dataLength, int *comp
 RLAPI unsigned char *DecompressData(unsigned char *compData, int compDataLength, int *dataLength);  // Decompress data (DEFLATE algorythm)
 
 // Persistent storage management
-RLAPI void StorageSaveValue(int position, int value);             // Save integer value to storage file (to defined position)
-RLAPI int StorageLoadValue(int position);                         // Load integer value from storage file (from defined position)
+RLAPI void SaveStorageValue(int position, int value);             // Save integer value to storage file (to defined position)
+RLAPI int LoadStorageValue(int position);                         // Load integer value from storage file (from defined position)
 
 RLAPI void OpenURL(const char *url);                              // Open URL with default system browser (if available)
 
@@ -1320,9 +1325,8 @@ RLAPI RayHitInfo GetCollisionRayGround(Ray ray, float groundHeight);            
 //------------------------------------------------------------------------------------
 
 // Shader loading/unloading functions
-RLAPI char *LoadText(const char *fileName);                               // Load chars array from text file
 RLAPI Shader LoadShader(const char *vsFileName, const char *fsFileName);  // Load shader from files and bind default locations
-RLAPI Shader LoadShaderCode(const char *vsCode, const char *fsCode);                  // Load shader from code strings and bind default locations
+RLAPI Shader LoadShaderCode(const char *vsCode, const char *fsCode);      // Load shader from code strings and bind default locations
 RLAPI void UnloadShader(Shader shader);                                   // Unload shader from GPU memory (VRAM)
 
 RLAPI Shader GetShaderDefault(void);                                      // Get default shader
@@ -1428,6 +1432,7 @@ RLAPI bool IsAudioStreamPlaying(AudioStream stream);                  // Check i
 RLAPI void StopAudioStream(AudioStream stream);                       // Stop audio stream
 RLAPI void SetAudioStreamVolume(AudioStream stream, float volume);    // Set volume for audio stream (1.0 is max level)
 RLAPI void SetAudioStreamPitch(AudioStream stream, float pitch);      // Set pitch for audio stream (1.0 is base level)
+RLAPI void SetAudioStreamBufferSizeDefault(int size);                 // Default size for new audio streams
 
 //------------------------------------------------------------------------------------
 // Network (Module: network)

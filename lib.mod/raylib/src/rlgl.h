@@ -76,15 +76,7 @@
     #endif
 
     // Support TRACELOG macros
-    #if defined(RLGL_SUPPORT_TRACELOG)
-        #define TRACELOG(level, ...) TraceLog(level, __VA_ARGS__)
-
-        #if defined(RLGL_SUPPORT_TRACELOG_DEBUG)
-            #define TRACELOGD(...) TraceLog(LOG_DEBUG, __VA_ARGS__)
-        #else
-            #define TRACELOGD(...) (void)0
-        #endif
-    #else
+    #if !defined(TRACELOG)
         #define TRACELOG(level, ...) (void)0
         #define TRACELOGD(...) (void)0
     #endif
@@ -554,9 +546,8 @@ RLAPI void rlUnloadMesh(Mesh mesh);                                       // Unl
 // NOTE: This functions are useless when using OpenGL 1.1
 //------------------------------------------------------------------------------------
 // Shader loading/unloading functions
-RLAPI char *LoadText(const char *fileName);                               // Load chars array from text file
 RLAPI Shader LoadShader(const char *vsFileName, const char *fsFileName);  // Load shader from files and bind default locations
-RLAPI Shader LoadShaderCode(const char *vsCode, const char *fsCode);                  // Load shader from code strings and bind default locations
+RLAPI Shader LoadShaderCode(const char *vsCode, const char *fsCode);      // Load shader from code strings and bind default locations
 RLAPI void UnloadShader(Shader shader);                                   // Unload shader from GPU memory (VRAM)
 
 RLAPI Shader GetShaderDefault(void);                                      // Get default shader
@@ -596,7 +587,7 @@ RLAPI void ToggleVrMode(void);                          // Enable/Disable VR exp
 RLAPI void BeginVrDrawing(void);                        // Begin VR simulator stereo rendering
 RLAPI void EndVrDrawing(void);                          // End VR simulator stereo rendering
 
-RLAPI void TRACELOG(int msgType, const char *text, ...);      // Show trace log messages (LOG_INFO, LOG_WARNING, LOG_ERROR, LOG_DEBUG)
+RLAPI char *LoadFileText(const char *fileName);         // Load chars array from text file
 RLAPI int GetPixelDataSize(int width, int height, int format);// Get pixel data size in bytes (image or texture)
 #endif
 
@@ -614,21 +605,19 @@ RLAPI int GetPixelDataSize(int width, int height, int format);// Get pixel data 
 
 #if defined(RLGL_IMPLEMENTATION)
 
-#if !defined(RLGL_STANDALONE)
+#if defined(RLGL_STANDALONE)
+    #include <stdio.h>              // Required for: fopen(), fseek(), fread(), fclose() [LoadFileText]
+#else
     // Check if config flags have been externally provided on compilation line
     #if !defined(EXTERNAL_CONFIG_FLAGS)
         #include "config.h"         // Defines module configuration flags
     #endif
-#endif
-
-#include <stdlib.h>                 // Required for: malloc(), free(), fabs()
-#include <stdio.h>                  // Required for: fopen(), fseek(), fread(), fclose() [LoadText]
-#include <string.h>                 // Required for: strcmp(), strlen() [Used in rlglInit(), on extensions loading]
-#include <math.h>                   // Required for: atan2f()
-
-#if !defined(RLGL_STANDALONE)
     #include "raymath.h"            // Required for: Vector3 and Matrix functions
 #endif
+
+#include <stdlib.h>                 // Required for: malloc(), free()
+#include <string.h>                 // Required for: strcmp(), strlen() [Used in rlglInit(), on extensions loading]
+#include <math.h>                   // Required for: atan2f(), fabs()
 
 #if defined(GRAPHICS_API_OPENGL_11)
     #if defined(__APPLE__)
@@ -674,10 +663,6 @@ RLAPI int GetPixelDataSize(int width, int height, int format);// Get pixel data 
     #include <EGL/egl.h>                // EGL library
     #include <GLES2/gl2.h>              // OpenGL ES 2.0 library
     #include <GLES2/gl2ext.h>           // OpenGL ES 2.0 extensions library
-#endif
-
-#if defined(RLGL_STANDALONE)
-    #include <stdarg.h>                 // Required for: va_list, va_start(), vfprintf(), va_end() [Used in TraceLog()]
 #endif
 
 //----------------------------------------------------------------------------------
@@ -2997,38 +2982,6 @@ Shader GetShaderDefault(void)
 #endif
 }
 
-// Load text data from file
-// NOTE: text chars array should be freed manually
-char *LoadText(const char *fileName)
-{
-    FILE *textFile = NULL;
-    char *text = NULL;
-
-    if (fileName != NULL)
-    {
-        textFile = fopen(fileName,"rt");
-
-        if (textFile != NULL)
-        {
-            fseek(textFile, 0, SEEK_END);
-            int size = ftell(textFile);
-            fseek(textFile, 0, SEEK_SET);
-
-            if (size > 0)
-            {
-                text = (char *)RL_MALLOC(sizeof(char)*(size + 1));
-                int count = fread(text, sizeof(char), size, textFile);
-                text[count] = '\0';
-            }
-
-            fclose(textFile);
-        }
-        else TRACELOG(LOG_WARNING, "[%s] Text file could not be opened", fileName);
-    }
-
-    return text;
-}
-
 // Load shader from files and bind default locations
 // NOTE: If shader string is NULL, using default vertex/fragment shaders
 Shader LoadShader(const char *vsFileName, const char *fsFileName)
@@ -3040,8 +2993,8 @@ Shader LoadShader(const char *vsFileName, const char *fsFileName)
     char *vShaderStr = NULL;
     char *fShaderStr = NULL;
 
-    if (vsFileName != NULL) vShaderStr = LoadText(vsFileName);
-    if (fsFileName != NULL) fShaderStr = LoadText(fsFileName);
+    if (vsFileName != NULL) vShaderStr = LoadFileText(vsFileName);
+    if (fsFileName != NULL) fShaderStr = LoadFileText(fsFileName);
 
     shader = LoadShaderCode(vShaderStr, fShaderStr);
 
@@ -3664,7 +3617,7 @@ void SetVrConfiguration(VrDeviceInfo hmd, Shader distortion)
 
     // Compute distortion scale parameters
     // NOTE: To get lens max radius, lensShift must be normalized to [-1..1]
-    float lensRadius = (float)fabs(-1.0f - 4.0f*lensShift);
+    float lensRadius = fabsf(-1.0f - 4.0f*lensShift);
     float lensRadiusSq = lensRadius*lensRadius;
     float distortionScale = hmd.lensDistortionValues[0] +
                             hmd.lensDistortionValues[1]*lensRadiusSq +
@@ -4645,27 +4598,48 @@ static Color *GenNextMipmap(Color *srcData, int srcWidth, int srcHeight)
 #endif
 
 #if defined(RLGL_STANDALONE)
-// Show trace log messages (LOG_INFO, LOG_WARNING, LOG_ERROR, LOG_DEBUG)
-void TraceLog(int msgType, const char *text, ...)
+// Load text data from file, returns a '\0' terminated string
+// NOTE: text chars array should be freed manually
+char *LoadFileText(const char *fileName)
 {
-    va_list args;
-    va_start(args, text);
+    char *text = NULL;
 
-    switch (msgType)
+    if (fileName != NULL)
     {
-        case LOG_INFO: fprintf(stdout, "INFO: "); break;
-        case LOG_ERROR: fprintf(stdout, "ERROR: "); break;
-        case LOG_WARNING: fprintf(stdout, "WARNING: "); break;
-        case LOG_DEBUG: fprintf(stdout, "DEBUG: "); break;
-        default: break;
+        FILE *textFile = fopen(fileName, "rt");
+
+        if (textFile != NULL)
+        {
+            // WARNING: When reading a file as 'text' file,
+            // text mode causes carriage return-linefeed translation...
+            // ...but using fseek() should return correct byte-offset
+            fseek(textFile, 0, SEEK_END);
+            int size = ftell(textFile);
+            fseek(textFile, 0, SEEK_SET);
+
+            if (size > 0)
+            {
+                text = (char *)RL_MALLOC(sizeof(char)*(size + 1));
+                int count = fread(text, sizeof(char), size, textFile);
+
+                // WARNING: \r\n is converted to \n on reading, so,
+                // read bytes count gets reduced by the number of lines
+                if (count < size) text = RL_REALLOC(text, count + 1);
+
+                // Zero-terminate the string
+                text[count] = '\0';
+                
+                TRACELOG(LOG_INFO, "[%s] Text file loaded successfully", fileName);
+            }
+            else TRACELOG(LOG_WARNING, "[%s] Text file could not be read", fileName);
+
+            fclose(textFile);
+        }
+        else TRACELOG(LOG_WARNING, "[%s] Text file could not be opened", fileName);
     }
+    else TRACELOG(LOG_WARNING, "File name provided is not valid");
 
-    vfprintf(stdout, text, args);
-    fprintf(stdout, "\n");
-
-    va_end(args);
-
-    if (msgType == LOG_ERROR) exit(1);
+    return text;
 }
 
 // Get pixel data size in bytes (image or texture)

@@ -99,7 +99,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		EndTextureMode()
 	End If
 
-	If IsMouseButtonDown(MOUSE_LEFT_BUTTON) Then
+	If IsMouseButtonDown(MOUSE_LEFT_BUTTON) Or (GetGestureDetected() = GESTURE_DRAG) Then
 		' Paint circle into render texture
 		' NOTE: To avoid discontinuous circles, we could store
 		' previous-next mouse points and just draw a line using brush size
@@ -162,7 +162,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		' Draw drawing circle for reference
 		If mousePos.y > 50 Then
 			If IsMouseButtonDown(MOUSE_RIGHT_BUTTON) Then
-				DrawCircleLines(mousePos.x, mousePos.y, brushSize, colors[colorSelected])
+				DrawCircleLines(mousePos.x, mousePos.y, brushSize, GRAY)
 			Else
 				DrawCircle(GetMouseX(), GetMouseY(), brushSize, colors[colorSelected])
 			End If
