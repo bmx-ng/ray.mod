@@ -105,7 +105,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		' previous-next mouse points and just draw a line using brush size
 		BeginTextureMode(target)
 		If mousePos.y > 50 Then
-			DrawCircle(mousePos.x, mousePos.y, brushSize, colors[colorSelected])
+			DrawCircle(Int(mousePos.x), Int(mousePos.y), brushSize, colors[colorSelected])
 		End If
 		EndTextureMode()
 	End If
@@ -116,7 +116,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		' Erase circle from render texture
 		BeginTextureMode(target)
 		If mousePos.y > 50 Then
-			DrawCircle(mousePos.x, mousePos.y, brushSize, colors[0])
+			DrawCircle(Int(mousePos.x), Int(mousePos.y), brushSize, colors[0])
 		End If
 		EndTextureMode()
 	Else
@@ -162,7 +162,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		' Draw drawing circle for reference
 		If mousePos.y > 50 Then
 			If IsMouseButtonDown(MOUSE_RIGHT_BUTTON) Then
-				DrawCircleLines(mousePos.x, mousePos.y, brushSize, GRAY)
+				DrawCircleLines(Int(mousePos.x), Int(mousePos.y), brushSize, GRAY)
 			Else
 				DrawCircle(GetMouseX(), GetMouseY(), brushSize, colors[colorSelected])
 			End If
