@@ -638,6 +638,15 @@ Struct RNPatchInfo
 	Field Right:Int
 	Field bottom:Int
 	Field patchType:Int
+	
+	Method New(sourceRec:RRectangle, Left:Int, top:Int, Right:Int, bottom:Int, patchType:Int)
+		Self.sourceRec = sourceRec
+		Self.Left = Left
+		Self.top = top
+		Self.Right = Right
+		Self.bottom = bottom
+		Self.patchType = patchType
+	End Method
 End Struct
 
 Struct RModel
@@ -984,3 +993,7 @@ Const GESTURE_SWIPE_UP:Int = 64
 Const GESTURE_SWIPE_DOWN:Int = 128
 Const GESTURE_PINCH_IN:Int = 256
 Const GESTURE_PINCH_OUT:Int = 512
+
+Const NPT_9PATCH:Int = 0
+Const NPT_3PATCH_VERTICAL:Int = 1
+Const NPT_3PATCH_HORIZONTAL:Int = 2
