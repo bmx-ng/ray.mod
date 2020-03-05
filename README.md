@@ -18,7 +18,7 @@ Installation
 
 Download or clone the **ray.mod** repository, and extract the contents into your `BlitzMax/mod` folder.
 
-* `raylib` examples can be found in `ray.mod/lib.mod/examples`.
+* `raylib` examples can be found in `ray.mod/examples`.
 * `raygui` examples can be found in `ray.mod/gui.mod/examples`.
 
 
