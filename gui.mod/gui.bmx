@@ -120,7 +120,7 @@ Rem
 bbdoc: Gets gui custom font (global state).
 End Rem
 Function GuiGetFont:RFont()
-	bmx_raygui_GuiGetFont()
+	Return bmx_raygui_GuiGetFont()
 End Function
 
 ' Style set/get functions
@@ -135,7 +135,7 @@ Rem
 bbdoc: Gets one style property.
 End Rem
 Function GuiGetStyle:Int(control:Int, property:Int)
-	bmx_raygui_GuiGetStyle(control, property)
+	Return bmx_raygui_GuiGetStyle(control, property)
 End Function
 
 
