@@ -358,7 +358,7 @@ End Rem
 Function GuiTextBox:Int(bounds:RRectangle, txt:String Var, textSize:Int, editMode:Int)
 	Local length:Size_T = Min(textSize, txt.length * 3 + 1)
 	Local t:Byte Ptr = StackAlloc(textSize)
-	MemClear(t, textSize)
+	MemClear(t, Size_T(textSize))
 	txt.ToUTF8StringBuffer(t, length)
 	Local res:Int = bmx_raygui_GuiTextBox(bounds, t, textSize, editMode)
 	txt = String.FromUTF8String(t)
