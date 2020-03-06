@@ -353,12 +353,14 @@ End Function
 
 Rem
 bbdoc: Text Box control, which updates input text.
+about: @textSize is the maximum number of UTF-8 characters.
 End Rem
 Function GuiTextBox:Int(bounds:RRectangle, txt:String Var, textSize:Int, editMode:Int)
-	Local length:Size_T = Max(textSize, txt.length * 3 + 1)
-	Local t:Byte Ptr = StackAlloc(length)
+	Local length:Size_T = Min(textSize, txt.length * 3 + 1)
+	Local t:Byte Ptr = StackAlloc(textSize)
+	MemClear(t, textSize)
 	txt.ToUTF8StringBuffer(t, length)
-	Local res:Int = bmx_raygui_GuiTextBox(bounds, t, Int(length), editMode)
+	Local res:Int = bmx_raygui_GuiTextBox(bounds, t, textSize, editMode)
 	txt = String.FromUTF8String(t)
 	Return res
 End Function
@@ -367,10 +369,11 @@ Rem
 bbdoc: Text Box control with multiple lines
 End Rem
 Function GuiTextBoxMulti:Int(bounds:RRectangle, txt:String Var, textSize:Int, editMode:Int)
-	Local length:Size_T = Max(textSize, txt.length * 3 + 1)
-	Local t:Byte Ptr = StackAlloc(length)
+	Local length:Size_T = Min(textSize, txt.length * 3 + 1)
+	Local t:Byte Ptr = StackAlloc(textSize)
+	MemClear(t, Size_T(textSize))
 	txt.ToUTF8StringBuffer(t, length)
-	Local res:Int = bmx_raygui_GuiTextBoxMulti(bounds, t, Int(length), editMode)
+	Local res:Int = bmx_raygui_GuiTextBoxMulti(bounds, t, textSize, editMode)
 	txt = String.FromUTF8String(t)
 	Return res
 End Function
@@ -486,15 +489,14 @@ Rem
 bbdoc: List View with extended parameters.
 End Rem
 Function GuiListViewEx:Int(bounds:RRectangle, txt:String[], focus:Int Var, scrollIndex:Int Var, active:Int)
-	Local list:Size_T Ptr = MemAlloc(Size_T(txt.length * 8))
+	Local list:Byte Ptr Ptr = StackAlloc(Size_T(txt.length * 8))
 	For Local i:Int = 0 Until txt.length
-		list[i] = Size_T(txt[i].ToUTF8String())
+		list[i] = txt[i].ToUTF8String()
 	Next
-	Local res:Int = bmx_raygui_GuiListViewEx(bounds, list, focus, scrollIndex, active)
+	Local res:Int = bmx_raygui_GuiListViewEx(bounds, list, txt.length, focus, scrollIndex, active)
 	For Local i:Int = 0 Until txt.length
-		MemFree(Byte Ptr(list[i]))
+		MemFree(list[i])
 	Next
-	MemFree(list)
 	Return res
 End Function
 
@@ -527,7 +529,7 @@ End Function
 Rem
 bbdoc: Text Input Box control, asks for text.
 End Rem
-Function GuiTextInputBox:Int(bounds:RRectangle, title:String, message:String, buttons:String, txt:String)
+Function GuiTextInputBox:Int(bounds:RRectangle, title:String, message:String, buttons:String, txt:String Var)
 	Local length:Size_T = title.length * 3 + 1
 	Local t:Byte Ptr = StackAlloc(length)
 	title.ToUTF8StringBuffer(t, length)
@@ -540,9 +542,15 @@ Function GuiTextInputBox:Int(bounds:RRectangle, title:String, message:String, bu
 	Local b:Byte Ptr = StackAlloc(length)
 	buttons.ToUTF8StringBuffer(b, length)
 
-	Local t2:Byte Ptr = txt.ToUTF8String()
+	Local t2:Byte Ptr = StackAlloc(256)
+	If txt Then
+		length = txt.length * 3 + 1
+		txt.ToUTF8StringBuffer(t2, length)
+	Else
+		t2[0] = 0
+	End If
 	Local res:Int = bmx_raygui_GuiTextInputBox(bounds, t, m, b, t2)
-	MemFree(t2)
+	txt = String.FromUTF8String(t2)
 	
 	Return res
 End Function
@@ -567,3 +575,39 @@ Function GuiLoadStyleDefault()
 	bmx_raygui_GuiLoadStyleDefault()
 End Function
 
+Rem
+bbdoc: Gets text with icon id prepended.
+about: Useful to add icons by name id (enum) instead of a number that can change between ricon versions
+End Rem
+Function GuiIconText:String(iconId:Int, txt:String)
+	Local t:Byte Ptr
+	If txt Then
+		Local length:Size_T = txt.length * 3 + 1
+		t = StackAlloc(length)
+		txt.ToUTF8StringBuffer(t, length)
+	End If
+	Return String.FromUTF8String(bmx_raygui_GuiIconText(iconId, t))
+End Function
+
+Rem
+bbdoc: Draws a an icon.
+End Rem
+Function GuiDrawIcon(iconId:Int, position:RVector2, pixelSize:Int, color:RColor)
+	bmx_raygui_GuiDrawIcon(iconId, position, pixelSize, color)
+End Function
+
+Rem
+bbdoc: Color Bar Alpha control.
+about: Returns alpha value normalized `[0..1]`.
+End Rem
+Function GuiColorBarAlpha:Float(bounds:RRectangle, alpha:Float)
+	Return bmx_raygui_GuiColorBarAlpha(bounds, alpha)
+End Function
+
+Rem
+bbdoc: Color Bar Hue control.
+about: Returns hue value normalized `[0..1]`.
+End Rem
+Function GuiColorBarHue:Float(bounds:RRectangle, value:Float)
+	Return bmx_raygui_GuiColorBarHue(bounds, value)
+End Function
