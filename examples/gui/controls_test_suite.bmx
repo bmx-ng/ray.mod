@@ -219,7 +219,7 @@ While Not exitWindow    ' Detect window close button or ESC key
 				textInput = Null
 			End If
 		End If
-'End Rem
+
 		GuiUnlock()
 		'----------------------------------------------------------------------------------
 
