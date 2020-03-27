@@ -716,38 +716,7 @@ Struct RShader
 End Struct
 
 Struct RBoneInfo
-	Field name00:Byte
-	Field name01:Byte
-	Field name02:Byte
-	Field name03:Byte
-	Field name04:Byte
-	Field name05:Byte
-	Field name06:Byte
-	Field name07:Byte
-	Field name08:Byte
-	Field name09:Byte
-	Field name10:Byte
-	Field name12:Byte
-	Field name13:Byte
-	Field name14:Byte
-	Field name15:Byte
-	Field name16:Byte
-	Field name17:Byte
-	Field name18:Byte
-	Field name19:Byte
-	Field name20:Byte
-	Field name21:Byte
-	Field name22:Byte
-	Field name23:Byte
-	Field name24:Byte
-	Field name25:Byte
-	Field name26:Byte
-	Field name27:Byte
-	Field name28:Byte
-	Field name29:Byte
-	Field name30:Byte
-	Field name31:Byte
-	Field name32:Byte
+	Field StaticArray name:Byte[32]
 	Field parent:Int
 End Struct
 
