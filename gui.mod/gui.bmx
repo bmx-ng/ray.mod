@@ -26,11 +26,13 @@ bbdoc: RayGui - Simple and Easy-to-use Immediate-mode Gui
 End Rem
 Module Ray.GUI
 
-ModuleInfo "Version: 1.00"
+ModuleInfo "Version: 1.01"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2020 Bruce A Henderson"
 ModuleInfo "Copyright: raylib - 2013-2020 Ramon Santamaria"
 
+ModuleInfo "History: 1.01"
+ModuleInfo "History: Update to latest raygui.b2974f3."
 ModuleInfo "History: 1.00"
 ModuleInfo "History: Initial Release."
 
