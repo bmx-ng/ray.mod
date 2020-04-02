@@ -26,11 +26,13 @@ bbdoc: Raylib - Simple Games Programming
 End Rem
 Module Ray.Lib
 
-ModuleInfo "Version: 1.01"
+ModuleInfo "Version: 1.02"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2020 Bruce A Henderson"
 ModuleInfo "Copyright: raylib - 2013-2020 Ramon Santamaria"
 
+ModuleInfo "History: 1.02"
+ModuleInfo "History: Updated to raylib 3.0.7ef114d."
 ModuleInfo "History: 1.01"
 ModuleInfo "History: Updated to raylib 3.0.cb4c676."
 ModuleInfo "History: 1.00"
@@ -117,6 +119,13 @@ bbdoc: Checks if window is currently hidden.
 End Rem
 Function IsWindowHidden:Int()
 	Return bmx_raylib_IsWindowHidden()
+End Function
+
+Rem
+bbdoc: Checks if window is currently fullscreen
+End Rem
+Function IsWindowFullscreen:Int()
+	Return bmx_raylib_IsWindowFullscreen()
 End Function
 
 Rem
@@ -2247,8 +2256,8 @@ End Function
 Rem
 bbdoc: Draws a rectangle within an image.
 End Rem
-Function ImageDrawRectangle(dst:RImage Var, rec:RRectangle, color:RColor)
-	bmx_raylib_ImageDrawRectangle(dst, rec, color)
+Function ImageDrawRectangle(dst:RImage Var, posX:Int, posY:Int, width:Int, height:Int, color:RColor)
+	bmx_raylib_ImageDrawRectangle(dst, posX, posY, width, height, color)
 End Function
 
 Rem
@@ -2619,3 +2628,68 @@ Function GetDroppedFiles:String[]()
 	Return files
 End Function
 
+' Image drawing functions
+' NOTE: Image software-rendering functions (CPU)
+
+Rem
+bbdoc: Clears image background with given color.
+End Rem
+Function ImageClearBackground(dst:RImage, color:RColor)
+	bmx_raylib_ImageClearBackground(dst, color)
+End Function
+
+Rem
+bbdoc: Draws pixel within an image.
+End Rem
+Function ImageDrawPixel(dst:RImage, posX:Int, posY:Int, color:RColor)
+	bmx_raylib_ImageDrawPixel(dst, posX, posY, color)
+End Function
+
+Rem
+bbdoc: Draws pixel within an image (Vector version).
+End Rem
+Function ImageDrawPixelV(dst:RImage, position:RVector2, color:RColor)
+	bmx_raylib_ImageDrawPixelV(dst, position, color)
+End Function
+
+Rem
+bbdoc: Draws line within an image.
+End Rem
+Function ImageDrawLine(dst:RImage, startPosX:Int, startPosY:Int, endPosX:Int, endPosY:Int, color:RColor)
+	bmx_raylib_ImageDrawLine(dst, startPosX, startPosY, endPosX, endPosY, color)
+End Function
+
+Rem
+bbdoc: Draws line within an image (Vector version).
+End Rem
+Function ImageDrawLineV(dst:RImage, lineStart:RVector2, lineEnd:RVector2, color:RColor)
+	bmx_raylib_ImageDrawLineV(dst, lineStart, lineEnd, color)
+End Function
+
+Rem
+bbdoc: Draws circle within an image.
+End Rem
+Function ImageDrawCircle(dst:RImage, centerX:Int, centerY:Int, radius:Int, color:RColor)
+	bmx_raylib_ImageDrawCircle(dst, centerX, centerY, radius, color)
+End Function
+
+Rem
+bbdoc: Draws circle within an image (Vector version).
+End Rem
+Function ImageDrawCircleV(dst:RImage, center:RVector2, radius:Int, color:RColor)
+	bmx_raylib_ImageDrawCircleV(dst, center, radius, color)
+End Function
+
+Rem
+bbdoc: Draws rectangle within an image (Vector version).
+End Rem
+Function ImageDrawRectangleV(dst:RImage, position:RVector2, size:RVector2, color:RColor)
+	bmx_raylib_ImageDrawRectangleV(dst, position, size, color)
+End Function
+
+Rem
+bbdoc: Draws rectangle within an image.
+End Rem
+Function ImageDrawRectangleRec(dst:RImage, rec:RRectangle, color:RColor)
+	bmx_raylib_ImageDrawRectangleRec(dst, rec, color)
+End Function

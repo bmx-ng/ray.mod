@@ -45,6 +45,7 @@ Extern
 	Function bmx_raylib_IsWindowMinimized:Int()="IsWindowMinimized"
 	Function bmx_raylib_IsWindowResized:Int()="IsWindowResized"
 	Function bmx_raylib_IsWindowHidden:Int()="IsWindowHidden"
+	Function bmx_raylib_IsWindowFullscreen:Int()="IsWindowFullscreen"
 	Function bmx_raylib_ToggleFullscreen()="ToggleFullscreen"
 	Function bmx_raylib_UnhideWindow()="UnhideWindow"
 	Function bmx_raylib_HideWindow()="HideWindow"
@@ -338,7 +339,7 @@ Extern
 	Function bmx_raylib_ImageText:RImage(txt:Byte Ptr, FontSize:Int, color:RColor)="ImageText"
 	Function bmx_raylib_ImageTextEx:RImage(font:RFont, txt:Byte Ptr, FontSize:Float, spacing:Float, tint:RColor)="ImageTextEx"
 	Function bmx_raylib_ImageDraw(dst:RImage Var, src:RImage, srcRec:RRectangle, dstRec:RRectangle, tint:RColor)="ImageDraw"
-	Function bmx_raylib_ImageDrawRectangle(dst:RImage Var, rec:RRectangle, color:RColor)="ImageDrawRectangle"
+	Function bmx_raylib_ImageDrawRectangle(dst:RImage Var, posX:Int, posY:Int, width:Int, height:Int, color:RColor)="ImageDrawRectangle"
 	Function bmx_raylib_ImageDrawRectangleLines(dst:RImage Var, rec:RRectangle, thick:Int, color:RColor)="ImageDrawRectangleLines"
 	Function bmx_raylib_ImageDrawText(dst:RImage Var, position:RVector2, txt:Byte Ptr, FontSize:Int, color:RColor)="ImageDrawText"
 	Function bmx_raylib_ImageDrawTextEx(dst:RImage Var, position:RVector2, font:RFont, txt:Byte Ptr, FontSize:Float, spacing:Float, color:RColor)="ImageDrawTextEx"
@@ -421,6 +422,16 @@ Extern
 	Function bmx_raylib_IsFileDropped:Int()="IsFileDropped"
 	Function bmx_raylib_GetDroppedFiles:Byte Ptr Ptr(count:Int Var)="GetDroppedFiles"
 	Function bmx_raylib_ClearDroppedFiles()="ClearDroppedFiles"
+
+	Function bmx_raylib_ImageClearBackground(dst:RImage, color:RColor)="ImageClearBackground"
+	Function bmx_raylib_ImageDrawPixel(dst:RImage, posX:Int, posY:Int, color:RColor)="ImageDrawPixel"
+	Function bmx_raylib_ImageDrawPixelV(dst:RImage, position:RVector2, color:RColor)="ImageDrawPixelV"
+	Function bmx_raylib_ImageDrawLine(dst:RImage, startPosX:Int, startPosY:Int, endPosX:Int, endPosY:Int, color:RColor)="ImageDrawLine"
+	Function bmx_raylib_ImageDrawLineV(dst:RImage, lineStart:RVector2, lineEnd:RVector2, color:RColor)="ImageDrawLineV"
+	Function bmx_raylib_ImageDrawCircle(dst:RImage, centerX:Int, centerY:Int, radius:Int, color:RColor)="ImageDrawCircle"
+	Function bmx_raylib_ImageDrawCircleV(dst:RImage, center:RVector2, radius:Int, color:RColor)="ImageDrawCircleV"
+	Function bmx_raylib_ImageDrawRectangleV(dst:RImage, position:RVector2, size:RVector2, color:RColor)="ImageDrawRectangleV"
+	Function bmx_raylib_ImageDrawRectangleRec(dst:RImage, rec:RRectangle, color:RColor)="ImageDrawRectangleRec"
 
 End Extern
 

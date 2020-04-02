@@ -22,6 +22,11 @@ Local parrots:RImage = LoadImage("../../lib.mod/raylib/examples/textures/resourc
 ImageDraw(parrots, cat, New RRectangle(0, 0, cat.width, cat.height), New RRectangle(30, 40, cat.width*1.5, cat.height*1.5), WHITE)
 ImageCrop(parrots, New RRectangle(0, 50, parrots.width, parrots.height - 100)) ' Crop resulting image
 
+' Draw on the image with a few image draw methods
+ImageDrawPixel(parrots, 10, 10, RAYWHITE)
+ImageDrawCircle(parrots, 10, 10, 5, RAYWHITE)
+ImageDrawRectangle(parrots, 5, 20, 10, 10, RAYWHITE)
+
 UnloadImage(cat)       ' Unload image from RAM
 
 ' Load custom font for frawing on image

@@ -65,6 +65,7 @@ static TraceLogCallback logCallback = NULL;             // Log callback function
 
 #if defined(PLATFORM_ANDROID)
 static AAssetManager *assetManager = NULL;              // Android assets manager pointer
+static const char *internalDataPath = NULL;             // Android internal data path
 #endif
 
 #if defined(PLATFORM_UWP)
@@ -164,7 +165,7 @@ void TraceLog(int logType, const char *text, ...)
 }
 
 // Load data from file into a buffer
-unsigned char *LoadFileData(const char *fileName, int *bytesRead)
+unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead)
 {
     unsigned char *data = NULL;
     *bytesRead = 0;
@@ -186,25 +187,25 @@ unsigned char *LoadFileData(const char *fileName, int *bytesRead)
                 data = (unsigned char *)RL_MALLOC(sizeof(unsigned char)*size);
 
                 // NOTE: fread() returns number of read elements instead of bytes, so we read [1 byte, size elements]
-                int count = fread(data, sizeof(unsigned char), size, file);
+                unsigned int count = fread(data, sizeof(unsigned char), size, file);
                 *bytesRead = count;
 
-                if (count != size) TRACELOG(LOG_WARNING, "[%s] File partially loaded", fileName);
-                else TRACELOG(LOG_INFO, "[%s] File loaded successfully", fileName);
+                if (count != size) TRACELOG(LOG_WARNING, "FILEIO: [%s] File partially loaded", fileName);
+                else TRACELOG(LOG_INFO, "FILEIO: [%s] File loaded successfully", fileName);
             }
-            else TRACELOG(LOG_WARNING, "[%s] File could not be read", fileName);
+            else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to read file", fileName);
 
             fclose(file);
         }
-        else TRACELOG(LOG_WARNING, "[%s] File could not be opened", fileName);
+        else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file", fileName);
     }
-    else TRACELOG(LOG_WARNING, "File name provided is not valid");
+    else TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
 
     return data;
 }
 
 // Save data to file from buffer
-void SaveFileData(const char *fileName, void *data, int bytesToWrite)
+void SaveFileData(const char *fileName, void *data, unsigned int bytesToWrite)
 {
     if (fileName != NULL)
     {
@@ -212,17 +213,17 @@ void SaveFileData(const char *fileName, void *data, int bytesToWrite)
 
         if (file != NULL)
         {
-            int count = fwrite(data, sizeof(unsigned char), bytesToWrite, file);
+            unsigned int count = fwrite(data, sizeof(unsigned char), bytesToWrite, file);
 
-            if (count == 0) TRACELOG(LOG_WARNING, "[%s] File could not be written", fileName);
-            else if (count != bytesToWrite) TRACELOG(LOG_WARNING, "[%s] File partially written", fileName);
-            else TRACELOG(LOG_INFO, "[%s] File successfully saved", fileName);
+            if (count == 0) TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to write file", fileName);
+            else if (count != bytesToWrite) TRACELOG(LOG_WARNING, "FILEIO: [%s] File partially written", fileName);
+            else TRACELOG(LOG_INFO, "FILEIO: [%s] File saved successfully", fileName);
 
             fclose(file);
         }
-        else TRACELOG(LOG_WARNING, "[%s] File could not be opened", fileName);
+        else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file", fileName);
     }
-    else TRACELOG(LOG_WARNING, "File name provided is not valid");
+    else TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
 }
 
 // Load text data from file, returns a '\0' terminated string
@@ -255,16 +256,16 @@ char *LoadFileText(const char *fileName)
 
                 // Zero-terminate the string
                 text[count] = '\0';
-                
-                TRACELOG(LOG_INFO, "[%s] Text file loaded successfully", fileName);
+
+                TRACELOG(LOG_INFO, "FILEIO: [%s] Text file loaded successfully", fileName);
             }
-            else TRACELOG(LOG_WARNING, "[%s] Text file could not be read", fileName);
+            else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to read text file", fileName);
 
             fclose(textFile);
         }
-        else TRACELOG(LOG_WARNING, "[%s] Text file could not be opened", fileName);
+        else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open text file", fileName);
     }
-    else TRACELOG(LOG_WARNING, "File name provided is not valid");
+    else TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
 
     return text;
 }
@@ -280,33 +281,46 @@ void SaveFileText(const char *fileName, char *text)
         {
             int count = fprintf(file, "%s", text);
 
-            if (count == 0) TRACELOG(LOG_WARNING, "[%s] Text file could not be written", fileName);
-            else TRACELOG(LOG_INFO, "[%s] Text file successfully saved", fileName);
+            if (count == 0) TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to write text file", fileName);
+            else TRACELOG(LOG_INFO, "FILEIO: [%s] Text file saved successfully", fileName);
 
             fclose(file);
         }
-        else TRACELOG(LOG_WARNING, "[%s] Text file could not be opened", fileName);
+        else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open text file", fileName);
     }
-    else TRACELOG(LOG_WARNING, "File name provided is not valid");
+    else TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
 }
 
 #if defined(PLATFORM_ANDROID)
 // Initialize asset manager from android app
-void InitAssetManager(AAssetManager *manager)
+void InitAssetManager(AAssetManager *manager, const char *dataPath)
 {
     assetManager = manager;
+    internalDataPath = dataPath;
 }
 
 // Replacement for fopen
+// Ref: https://developer.android.com/ndk/reference/group/asset
 FILE *android_fopen(const char *fileName, const char *mode)
 {
-    if (mode[0] == 'w') return NULL;
+    if (mode[0] == 'w')     // TODO: Test!
+    {
+        // TODO: fopen() is mapped to android_fopen() that only grants read access
+        // to assets directory through AAssetManager but we want to also be able to
+        // write data when required using the standard stdio FILE access functions
+        // Ref: https://stackoverflow.com/questions/11294487/android-writing-saving-files-from-native-code-only
+        #undef fopen
+        return fopen(TextFormat("%s/%s", internalDataPath, fileName), mode);
+        #define fopen(name, mode) android_fopen(name, mode)
+    }
+    else
+    {
+        // NOTE: AAsset provides access to read-only asset
+        AAsset *asset = AAssetManager_open(assetManager, fileName, AASSET_MODE_UNKNOWN);
 
-    AAsset *asset = AAssetManager_open(assetManager, fileName, 0);
-
-    if (!asset) return NULL;
-
-    return funopen(asset, android_read, android_write, android_seek, android_close);
+        if (asset != NULL) return funopen(asset, android_read, android_write, android_seek, android_close);
+        else return NULL;
+    }
 }
 #endif  // PLATFORM_ANDROID
 
@@ -321,7 +335,7 @@ static int android_read(void *cookie, char *buf, int size)
 
 static int android_write(void *cookie, const char *buf, int size)
 {
-    TRACELOG(LOG_ERROR, "Can't provide write access to the APK");
+    TRACELOG(LOG_WARNING, "ANDROID: Failed to provide write access to APK");
 
     return EACCES;
 }
@@ -378,7 +392,7 @@ void UWPSendMessage(UWPMessage *msg)
         UWPInMessageId++;
         UWPInMessages[UWPInMessageId] = msg;
     }
-    else TRACELOG(LOG_WARNING, "[UWP Messaging] Not enough array space to register new UWP inbound Message.");
+    else TRACELOG(LOG_WARNING, "UWP: Not enough array space to register new inbound message");
 }
 
 void SendMessageToUWP(UWPMessage *msg)
@@ -388,7 +402,7 @@ void SendMessageToUWP(UWPMessage *msg)
         UWPOutMessageId++;
         UWPOutMessages[UWPOutMessageId] = msg;
     }
-    else TRACELOG(LOG_WARNING, "[UWP Messaging] Not enough array space to register new UWP outward Message.");
+    else TRACELOG(LOG_WARNING, "UWP: Not enough array space to register new outward message");
 }
 
 bool HasMessageFromUWP(void)
