@@ -33,7 +33,12 @@ Import "raylib/src/text.c"
 Import "raylib/src/utils.c"
 
 ?macos
+Import "raylib/src/external/glfw/src/cocoa_init.m"
+Import "raylib/src/external/glfw/src/cocoa_joystick.m"
+Import "raylib/src/external/glfw/src/cocoa_monitor.m"
 Import "raylib/src/external/glfw/src/cocoa_time.c"
+Import "raylib/src/external/glfw/src/cocoa_window.m"
+Import "raylib/src/external/glfw/src/nsgl_context.m"
 ?
 Import "raylib/src/external/glfw/src/context.c"
 Import "raylib/src/external/glfw/src/egl_context.c"
@@ -44,6 +49,7 @@ Import "raylib/src/external/glfw/src/init.c"
 Import "raylib/src/external/glfw/src/input.c"
 ?linux
 Import "raylib/src/external/glfw/src/linux_joystick.c"
+Import "raylib/src/external/glfw/src/posix_time.c"
 ?
 Import "raylib/src/external/glfw/src/monitor.c"
 'Import "raylib/src/external/glfw/src/null_init.c"
@@ -53,7 +59,6 @@ Import "raylib/src/external/glfw/src/monitor.c"
 'Import "raylib/src/external/glfw/src/osmesa_context.c"
 ?linux Or macos
 Import "raylib/src/external/glfw/src/posix_thread.c"
-Import "raylib/src/external/glfw/src/posix_time.c"
 ?
 Import "raylib/src/external/glfw/src/vulkan.c"
 ?win32
