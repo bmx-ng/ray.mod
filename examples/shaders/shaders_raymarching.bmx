@@ -2,9 +2,9 @@ SuperStrict
 
 Framework Ray.Lib
 
-?win32
+?Not opengles
 Const GLSL_VERSION:Int = 330
-?raspberrypi
+?opengles
 Const GLSL_VERSION:Int = 100
 ?
 
