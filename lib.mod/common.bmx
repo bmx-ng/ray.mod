@@ -423,15 +423,15 @@ Extern
 	Function bmx_raylib_GetDroppedFiles:Byte Ptr Ptr(count:Int Var)="GetDroppedFiles"
 	Function bmx_raylib_ClearDroppedFiles()="ClearDroppedFiles"
 
-	Function bmx_raylib_ImageClearBackground(dst:RImage, color:RColor)="ImageClearBackground"
-	Function bmx_raylib_ImageDrawPixel(dst:RImage, posX:Int, posY:Int, color:RColor)="ImageDrawPixel"
-	Function bmx_raylib_ImageDrawPixelV(dst:RImage, position:RVector2, color:RColor)="ImageDrawPixelV"
-	Function bmx_raylib_ImageDrawLine(dst:RImage, startPosX:Int, startPosY:Int, endPosX:Int, endPosY:Int, color:RColor)="ImageDrawLine"
-	Function bmx_raylib_ImageDrawLineV(dst:RImage, lineStart:RVector2, lineEnd:RVector2, color:RColor)="ImageDrawLineV"
-	Function bmx_raylib_ImageDrawCircle(dst:RImage, centerX:Int, centerY:Int, radius:Int, color:RColor)="ImageDrawCircle"
-	Function bmx_raylib_ImageDrawCircleV(dst:RImage, center:RVector2, radius:Int, color:RColor)="ImageDrawCircleV"
-	Function bmx_raylib_ImageDrawRectangleV(dst:RImage, position:RVector2, size:RVector2, color:RColor)="ImageDrawRectangleV"
-	Function bmx_raylib_ImageDrawRectangleRec(dst:RImage, rec:RRectangle, color:RColor)="ImageDrawRectangleRec"
+	Function bmx_raylib_ImageClearBackground(dst:RImage Var, color:RColor)="ImageClearBackground"
+	Function bmx_raylib_ImageDrawPixel(dst:RImage Var, posX:Int, posY:Int, color:RColor)="ImageDrawPixel"
+	Function bmx_raylib_ImageDrawPixelV(dst:RImage Var, position:RVector2, color:RColor)="ImageDrawPixelV"
+	Function bmx_raylib_ImageDrawLine(dst:RImage Var, startPosX:Int, startPosY:Int, endPosX:Int, endPosY:Int, color:RColor)="ImageDrawLine"
+	Function bmx_raylib_ImageDrawLineV(dst:RImage Var, lineStart:RVector2, lineEnd:RVector2, color:RColor)="ImageDrawLineV"
+	Function bmx_raylib_ImageDrawCircle(dst:RImage Var, centerX:Int, centerY:Int, radius:Int, color:RColor)="ImageDrawCircle"
+	Function bmx_raylib_ImageDrawCircleV(dst:RImage Var, center:RVector2, radius:Int, color:RColor)="ImageDrawCircleV"
+	Function bmx_raylib_ImageDrawRectangleV(dst:RImage Var, position:RVector2, size:RVector2, color:RColor)="ImageDrawRectangleV"
+	Function bmx_raylib_ImageDrawRectangleRec(dst:RImage Var, rec:RRectangle, color:RColor)="ImageDrawRectangleRec"
 
 End Extern
 
