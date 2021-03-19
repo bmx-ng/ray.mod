@@ -108,13 +108,13 @@
 #endif
 
 #if defined(__APPLE__)
-    #include "external/glfw/src/cocoa_init.m"
-    #include "external/glfw/src/cocoa_joystick.m"
-    #include "external/glfw/src/cocoa_monitor.m"
-    #include "external/glfw/src/cocoa_window.m"
+//    #include "external/glfw/src/cocoa_init.m"
+//    #include "external/glfw/src/cocoa_joystick.m"
+//    #include "external/glfw/src/cocoa_monitor.m"
+//    #include "external/glfw/src/cocoa_window.m"
     #include "external/glfw/src/cocoa_time.c"
     #include "external/glfw/src/posix_thread.c"
-    #include "external/glfw/src/nsgl_context.m"
+//    #include "external/glfw/src/nsgl_context.m"
     #include "external/glfw/src/egl_context.c"
     #include "external/glfw/src/osmesa_context.c"
 #endif

@@ -47,7 +47,7 @@ ModuleInfo "CC_OPTS: -DSUPPORT_FILEFORMAT_OBJ -DSUPPORT_FILEFORMAT_IQM -DSUPPORT
 ?win32
 ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
 ModuleInfo "CC_OPTS: -D_GLFW_WIN32"
-?osx
+?macos
 ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
 ModuleInfo "CC_OPTS: -D_GLFW_COCOA"
 ?linux And Not raspberrypi

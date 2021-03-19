@@ -32,6 +32,9 @@ Import "-lXext"
 Import "-lGLdispatch"
 Import "-lXau"
 Import "-lXdmcp"
+?macos
+Import "-framework IOKit"
+Import "-framework OpenGL"
 ?
 
 Import "source.bmx"
