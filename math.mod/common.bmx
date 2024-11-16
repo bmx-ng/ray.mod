@@ -1,4 +1,4 @@
-' Copyright (c) 2020 Bruce A Henderson
+' Copyright (c) 2024 Bruce A Henderson
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -29,22 +29,41 @@ Extern
 
 	Function bmx_raymath_Clamp:Float(value:Float, minimum:Float, maximum:Float)="Clamp"
 	Function bmx_raymath_Lerp:Float(s:Float, e:Float, amount:Float)="Lerp"
+	Function bmx_raymath_Normalize:Float(value:Float, s:Float, e:Float)="Normalize"
+	Function bmx_raymath_Remap:Float(value:Float, inputStart:Float, inputEnd:Float, outputStart:Float, outputEnd:Float)="Remap"
+	Function bmx_raymath_Wrap:Float(value:Float, minimum:Float, maximum:Float)="Wrap"
+	Function bmx_raymath_FloatEquals:Int(x:Float, y:Float)="FloatEquals"
 	Function bmx_raymath_Vector2Zero:RVector2()="Vector2Zero"
 	Function bmx_raymath_Vector2One:RVector2()="Vector2One"
 	Function bmx_raymath_Vector2Add:RVector2(v1:RVector2, v2:RVector2)="Vector2Add"
+	Function bmx_raymath_Vector2AddValue:RVector2(v:RVector2, add:Float)="Vector2AddValue"
 	Function bmx_raymath_Vector2Subtract:RVector2(v1:RVector2, v2:RVector2)="Vector2Subtract"
+	Function bmx_raymath_Vector2SubtractValue:RVector2(v:RVector2, sub:Float)="Vector2SubtractValue"
 	Function bmx_raymath_Vector2Length:Float(v:RVector2)="Vector2Length"
+	Function bmx_raymath_Vector2LengthSqr:Float(v:RVector2)="Vector2LengthSqr"
 	Function bmx_raymath_Vector2DotProduct:Float(v1:RVector2, v2:RVector2)="Vector2DotProduct"
 	Function bmx_raymath_Vector2Distance:Float(v1:RVector2, v2:RVector2)="Vector2Distance"
+	Function bmx_raymath_Vector2DistanceSqr:Float(v1:RVector2, v2:RVector2)="Vector2DistanceSqr"
 	Function bmx_raymath_Vector2Angle:Float(v1:RVector2, v2:RVector2)="Vector2Angle"
+	Function bmx_raymath_Vector2LineAngle:Float(v1:RVector2, v2:RVector2)="Vector2LineAngle"
 	Function bmx_raymath_Vector2Scale:RVector2(v:RVector2, scale:Float)="Vector2Scale"
 	Function bmx_raymath_Vector2MultiplyV:RVector2(v1:RVector2, v2:RVector2)="Vector2MultiplyV"
 	Function bmx_raymath_Vector2Negate:RVector2(v:RVector2)="Vector2Negate"
 	Function bmx_raymath_Vector2Divide:RVector2(v:RVector2, div:Float)="Vector2Divide"
-	Function bmx_raymath_Vector2DivideV:RVector2(v1:RVector2, v2:RVector2)="Vector2DivideV"
+	' Function bmx_raymath_Vector2DivideV:RVector2(v1:RVector2, v2:RVector2)="Vector2DivideV"
 	Function bmx_raymath_Vector2Normalize:RVector2(v:RVector2)="Vector2Normalize"
+	Function bmx_raymath_Vector2Transform:RVector2(v:RVector2, mat:RMatrix)="Vector2Transform"
 	Function bmx_raymath_Vector2Lerp:RVector2(v1:RVector2, v2:RVector2, amount:Float)="Vector2Lerp"
+	Function bmx_raymath_Vector2Reflect:RVector2(v:RVector2, normal:RVector2)="Vector2Reflect"
+	Function bmx_raymath_Vector2Min:RVector2(v1:RVector2, v2:RVector2)="Vector2Min"
+	Function bmx_raymath_Vector2Max:RVector2(v1:RVector2, v2:RVector2)="Vector2Max"
 	Function bmx_raymath_Vector2Rotate:RVector2(v:RVector2, degs:Float)="Vector2Rotate"
+	Function bmx_raymath_Vector2MoveTowards:RVector2(v:RVector2, target:RVector2, maxDistance:Float)="Vector2MoveTowards"
+	Function bmx_raymath_Vector2Invert:RVector2(v:RVector2)="Vector2Invert"
+	Function bmx_raymath_Vector2Clamp:RVector2(v:RVector2, minimum:RVector2, maximum:RVector2)="Vector2Clamp"
+	Function bmx_raymath_Vector2ClampValue:RVector2(v:RVector2, minimum:Float, maximum:Float)="Vector2ClampValue"
+	Function bmx_raymath_Vector2Equals:Int(v1:RVector2, v2:RVector2)="Vector2Equals"
+	Function bmx_raymath_Vector2Refract:RVector2(v:RVector2, n:RVector2, r:Float)="Vector2Refract"
 
 	Function bmx_raymath_Vector3Zero:RVector3()="Vector3Zero"
 	Function bmx_raymath_Vector3One:RVector3()="Vector3One"

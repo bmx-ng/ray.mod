@@ -3,29 +3,27 @@
 *   raygui - image exporter
 *
 *   DEPENDENCIES:
-*       raylib 2.1  - Windowing/input management and drawing.
-*       raygui 2.0  - Immediate-mode GUI controls.
+*       raylib 4.0  - Windowing/input management and drawing.
+*       raygui 3.0  - Immediate-mode GUI controls.
 *
 *   COMPILATION (Windows - MinGW):
 *       gcc -o $(NAME_PART).exe $(FILE_NAME) -I../../src -lraylib -lopengl32 -lgdi32 -std=c99
 *
 *   LICENSE: zlib/libpng
 *
-*   Copyright (c) 2019 raylib technologies (@raylibtech)
+*   Copyright (c) 2015-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
 #define RAYGUI_IMPLEMENTATION
-#define RAYGUI_SUPPORT_RICONS
 #include "../../src/raygui.h"
-
 
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
-int main(int argc, char *argv[0])
+int main(int argc, char *argv[])
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -46,7 +44,7 @@ int main(int argc, char *argv[0])
     const char *pixelFormatTextList[7] = { "GRAYSCALE", "GRAY ALPHA", "R5G6B5", "R8G8B8", "R5G5B5A1", "R4G4B4A4", "R8G8B8A8" };
 
     bool textBoxEditMode = false;
-    char fileName[32] = "untitled";
+    char fileName[64] = "untitled";
     //--------------------------------------------------------------------------------------
     
     Image image = { 0 };
@@ -54,9 +52,9 @@ int main(int argc, char *argv[0])
     
     bool imageLoaded = false;
     float imageScale = 1.0f;
-    Rectangle imageRec = { 0.0f };
+    Rectangle imageRec = { 0 };
     
-    bool btnExport = false;
+    bool btnExportPressed = false;
 
     SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
@@ -68,12 +66,11 @@ int main(int argc, char *argv[0])
         //----------------------------------------------------------------------------------
         if (IsFileDropped())
         {
-            int fileCount = 0;
-            char **droppedFiles = GetDroppedFiles(&fileCount);
+            FilePathList droppedFiles = LoadDroppedFiles();
 
-            if (fileCount == 1)
+            if (droppedFiles.count == 1)
             {
-                Image imTemp = LoadImage(droppedFiles[0]);
+                Image imTemp = LoadImage(droppedFiles.paths[0]);
                 
                 if (imTemp.data != NULL)
                 {
@@ -91,10 +88,10 @@ int main(int argc, char *argv[0])
                 }
             }
 
-            ClearDroppedFiles();
+            UnloadDroppedFiles(droppedFiles);
         }
     
-        if (btnExport)
+        if (btnExportPressed)
         {
             if (imageLoaded)
             {
@@ -102,17 +99,17 @@ int main(int argc, char *argv[0])
                 
                 if (fileFormatActive == 0)        // PNG
                 {
-                    if ((GetExtension(fileName) == NULL) || (!IsFileExtension(fileName, ".png"))) strcat(fileName, ".png\0");     // No extension provided
+                    if ((GetFileExtension(fileName) == NULL) || (!IsFileExtension(fileName, ".png"))) strcat(fileName, ".png\0");     // No extension provided
                     ExportImage(image, fileName);
                 }
                 else if (fileFormatActive == 1)   // RAW
                 {
-                    if ((GetExtension(fileName) == NULL) || (!IsFileExtension(fileName, ".raw"))) strcat(fileName, ".raw\0");     // No extension provided
+                    if ((GetFileExtension(fileName) == NULL) || (!IsFileExtension(fileName, ".raw"))) strcat(fileName, ".raw\0");     // No extension provided
                     
                     int dataSize = GetPixelDataSize(image.width, image.height, image.format);
                     
                     FILE *rawFile = fopen(fileName, "wb");  
-                    fwrite(image.data, dataSize, 1, rawFile);
+                    fwrite(image.data, 1, dataSize, rawFile);
                     fclose(rawFile);
                 }
                 else if (fileFormatActive == 2)   // CODE
@@ -147,7 +144,7 @@ int main(int argc, char *argv[0])
                 DrawTextureEx(texture, (Vector2){ screenWidth/2 - (float)texture.width*imageScale/2, screenHeight/2 - (float)texture.height*imageScale/2 }, 0.0f, imageScale, WHITE);
                 
                 DrawRectangleLinesEx(imageRec, 1, CheckCollisionPointRec(GetMousePosition(), imageRec) ? RED : DARKGRAY); 
-                DrawText(FormatText("SCALE: %.2f%%", imageScale*100.0f), 20, screenHeight - 40, 20, GetColor(GuiGetStyle(DEFAULT, LINE_COLOR)));
+                DrawText(TextFormat("SCALE: %.2f%%", imageScale*100.0f), 20, screenHeight - 40, 20, GetColor(GuiGetStyle(DEFAULT, LINE_COLOR)));
             }
             else
             {
@@ -166,17 +163,17 @@ int main(int argc, char *argv[0])
                 windowBoxActive = !GuiWindowBox((Rectangle){ windowBoxRec.x, windowBoxRec.y, 220, 190 }, "Image Export Options");
             
                 GuiLabel((Rectangle){ windowBoxRec.x + 10, windowBoxRec.y + 35, 60, 25 }, "File format:");
-                fileFormatActive = GuiComboBox((Rectangle){ windowBoxRec.x + 80, windowBoxRec.y + 35, 130, 25 }, TextJoin(fileFormatTextList, 3, ";"), fileFormatActive); 
+                GuiComboBox((Rectangle){ windowBoxRec.x + 80, windowBoxRec.y + 35, 130, 25 }, TextJoin(fileFormatTextList, 3, ";"), &fileFormatActive); 
                 GuiLabel((Rectangle){ windowBoxRec.x + 10, windowBoxRec.y + 70, 63, 25 }, "Pixel format:");
-                pixelFormatActive = GuiComboBox((Rectangle){ windowBoxRec.x + 80, windowBoxRec.y + 70, 130, 25 }, TextJoin(pixelFormatTextList, 7, ";"), pixelFormatActive); 
+                GuiComboBox((Rectangle){ windowBoxRec.x + 80, windowBoxRec.y + 70, 130, 25 }, TextJoin(pixelFormatTextList, 7, ";"), &pixelFormatActive); 
                 GuiLabel((Rectangle){ windowBoxRec.x + 10, windowBoxRec.y + 105, 50, 25 }, "File name:");
                 if (GuiTextBox((Rectangle){ windowBoxRec.x + 80, windowBoxRec.y + 105, 130, 25 }, fileName, 64, textBoxEditMode)) textBoxEditMode = !textBoxEditMode;
 
-                btnExport = GuiButton((Rectangle){ windowBoxRec.x + 10, windowBoxRec.y + 145, 200, 30 }, "Export Image");
+                btnExportPressed = GuiButton((Rectangle){ windowBoxRec.x + 10, windowBoxRec.y + 145, 200, 30 }, "Export Image");
             }
-            else btnExport = false;
+            else btnExportPressed = false;
             
-            if (btnExport) DrawText("Image exported!", 20, screenHeight - 20, 20, RED);
+            if (btnExportPressed) DrawText("Image exported!", 20, screenHeight - 20, 20, RED);
             //-----------------------------------------------------------------------------
 
         EndDrawing();

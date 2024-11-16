@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2020 Bruce A Henderson
+  Copyright (c) 2024 Bruce A Henderson
 
   This software is provided 'as-is', without any express or implied
   warranty. In no event will the authors be held liable for any damages
@@ -20,8 +20,10 @@
      3. This notice may not be removed or altered from any source
      distribution.
 */
+#include <stdlib.h>
 #include "raylib.h"
-#include "easings.h"
+#include "reasings.h"
+#include "brl.mod/blitz.mod/blitz.h"
 
 void bmx_raylib_CloseWindow() {
 	CloseWindow();
@@ -45,4 +47,29 @@ Image bmx_raylib_LoadImage(const char *fileName) {
 
 void bmx_raylib_RLFree(void * obj) {
 	RL_FREE(obj);
+}
+
+static BBArray * bmx_FilePathList_to_BBArray(FilePathList list) {
+  int n = list.count;
+
+  if ( n == 0 ) {
+    return &bbEmptyArray;
+  }
+
+	BBArray *p=bbArrayNew1D( "$",n );
+	BBString **s=(BBString**)BBARRAYDATA( p,p->dims );
+	for( int i=0;i<n;++i ){
+		s[i] = bbStringFromUTF8String( (unsigned char *)list.paths[i] );
+	}
+	return p;
+}
+
+BBArray * bmx_raylib_LoadDroppedFiles() {
+  FilePathList list = LoadDroppedFiles();
+
+  BBArray * arr = bmx_FilePathList_to_BBArray(list);
+
+  UnloadDroppedFiles(list);
+
+  return arr;
 }

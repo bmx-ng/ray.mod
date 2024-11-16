@@ -7,21 +7,14 @@
 *
 *   NOTE: Shaders used in this example are #version 330 (OpenGL 3.3).
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.5, last time updated with raylib 3.7
 *
-*   Example contributed by Chris Camacho (@codifies) and reviewed by Ramon Santamaria (@raysan5)
+*   Example contributed by Chris Camacho (@chriscamacho) and reviewed by Ramon Santamaria (@raysan5)
 *
-*   Chris Camacho (@codifies -  http://bedroomcoders.co.uk/) notes:
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
 *
-*   This is based on the PBR lighting example, but greatly simplified to aid learning...
-*   actually there is very little of the PBR example left!
-*   When I first looked at the bewildering complexity of the PBR example I feared
-*   I would never understand how I could do simple lighting with raylib however its
-*   a testement to the authors of raylib (including rlights.h) that the example
-*   came together fairly quickly.
-*
-*   Copyright (c) 2019 Chris Camacho (@codifies) and Ramon Santamaria (@raysan5)
+*   Copyright (c) 2019-2024 Chris Camacho (@chriscamacho) and Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -34,10 +27,13 @@
 
 #if defined(PLATFORM_DESKTOP)
     #define GLSL_VERSION            330
-#else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
+#else   // PLATFORM_ANDROID, PLATFORM_WEB
     #define GLSL_VERSION            100
 #endif
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -49,11 +45,12 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "raylib [shaders] example - fog");
 
     // Define the camera to look into our 3d world
-    Camera camera = { 
-        (Vector3){ 2.0f, 2.0f, 6.0f },      // position
-        (Vector3){ 0.0f, 0.5f, 0.0f },      // target
-        (Vector3){ 0.0f, 1.0f, 0.0f },      // up
-        45.0f, CAMERA_PERSPECTIVE };        // fov, type
+    Camera camera = { 0 };
+    camera.position = (Vector3){ 2.0f, 2.0f, 6.0f };    // Camera position
+    camera.target = (Vector3){ 0.0f, 0.5f, 0.0f };      // Camera looking at point
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
     // Load models and texture
     Model modelA = LoadModelFromMesh(GenMeshTorus(0.4f, 1.0f, 16, 32));
@@ -62,23 +59,23 @@ int main(void)
     Texture texture = LoadTexture("resources/texel_checker.png");
 
     // Assign texture to default model material
-    modelA.materials[0].maps[MAP_DIFFUSE].texture = texture;
-    modelB.materials[0].maps[MAP_DIFFUSE].texture = texture;
-    modelC.materials[0].maps[MAP_DIFFUSE].texture = texture;
+    modelA.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+    modelB.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+    modelC.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
 
     // Load shader and set up some uniforms
-    Shader shader = LoadShader(FormatText("resources/shaders/glsl%i/base_lighting.vs", GLSL_VERSION), 
-                               FormatText("resources/shaders/glsl%i/fog.fs", GLSL_VERSION));
-    shader.locs[LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
-    shader.locs[LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
+    Shader shader = LoadShader(TextFormat("resources/shaders/glsl%i/lighting.vs", GLSL_VERSION),
+                               TextFormat("resources/shaders/glsl%i/fog.fs", GLSL_VERSION));
+    shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
+    shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
 
     // Ambient light level
     int ambientLoc = GetShaderLocation(shader, "ambient");
-    SetShaderValue(shader, ambientLoc, (float[4]){ 0.2f, 0.2f, 0.2f, 1.0f }, UNIFORM_VEC4);
-    
+    SetShaderValue(shader, ambientLoc, (float[4]){ 0.2f, 0.2f, 0.2f, 1.0f }, SHADER_UNIFORM_VEC4);
+
     float fogDensity = 0.15f;
     int fogDensityLoc = GetShaderLocation(shader, "fogDensity");
-    SetShaderValue(shader, fogDensityLoc, &fogDensity, UNIFORM_FLOAT);
+    SetShaderValue(shader, fogDensityLoc, &fogDensity, SHADER_UNIFORM_FLOAT);
 
     // NOTE: All models share the same shader
     modelA.materials[0].shader = shader;
@@ -88,38 +85,36 @@ int main(void)
     // Using just 1 point lights
     CreateLight(LIGHT_POINT, (Vector3){ 0, 2, 6 }, Vector3Zero(), WHITE, shader);
 
-    SetCameraMode(camera, CAMERA_ORBITAL);  // Set an orbital camera mode
-
-    SetTargetFPS(60);                       // Set our game to run at 60 frames-per-second
+    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())            // Detect window close button or ESC key
+    while (!WindowShouldClose())        // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        UpdateCamera(&camera);              // Update camera
+        UpdateCamera(&camera, CAMERA_ORBITAL);
 
-        if (IsKeyDown(KEY_UP)) 
+        if (IsKeyDown(KEY_UP))
         {
-            fogDensity += 0.001;
-            if (fogDensity > 1.0) fogDensity = 1.0;
+            fogDensity += 0.001f;
+            if (fogDensity > 1.0f) fogDensity = 1.0f;
         }
-        
+
         if (IsKeyDown(KEY_DOWN))
         {
-            fogDensity -= 0.001;
-            if (fogDensity < 0.0) fogDensity = 0.0;
+            fogDensity -= 0.001f;
+            if (fogDensity < 0.0f) fogDensity = 0.0f;
         }
-        
-        SetShaderValue(shader, fogDensityLoc, &fogDensity, UNIFORM_FLOAT);
+
+        SetShaderValue(shader, fogDensityLoc, &fogDensity, SHADER_UNIFORM_FLOAT);
 
         // Rotate the torus
-        modelA.transform = MatrixMultiply(modelA.transform, MatrixRotateX(-0.025));
-        modelA.transform = MatrixMultiply(modelA.transform, MatrixRotateZ(0.012));
+        modelA.transform = MatrixMultiply(modelA.transform, MatrixRotateX(-0.025f));
+        modelA.transform = MatrixMultiply(modelA.transform, MatrixRotateZ(0.012f));
 
         // Update the light shader with the camera view position
-        SetShaderValue(shader, shader.locs[LOC_VECTOR_VIEW], &camera.position.x, UNIFORM_VEC3);
+        SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], &camera.position.x, SHADER_UNIFORM_VEC3);
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -132,10 +127,10 @@ int main(void)
 
                 // Draw the three models
                 DrawModel(modelA, Vector3Zero(), 1.0f, WHITE);
-                DrawModel(modelB, (Vector3){ -2.6, 0, 0 }, 1.0f, WHITE);
-                DrawModel(modelC, (Vector3){ 2.6, 0, 0 }, 1.0f, WHITE);
+                DrawModel(modelB, (Vector3){ -2.6f, 0, 0 }, 1.0f, WHITE);
+                DrawModel(modelC, (Vector3){ 2.6f, 0, 0 }, 1.0f, WHITE);
 
-                for (int i = -20; i < 20; i += 2) DrawModel(modelA,(Vector3){ i, 0, 2 }, 1.0f, WHITE);
+                for (int i = -20; i < 20; i += 2) DrawModel(modelA,(Vector3){ (float)i, 0, 2 }, 1.0f, WHITE);
 
             EndMode3D();
 

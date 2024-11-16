@@ -22,15 +22,38 @@ REM verbose, sorry.
 
 REM To skip to the actual building part of the script, search for ":BUILD"
 
+REM Checks if cl is available and skips to the argument loop if it is
+REM (Prevents calling vcvarsall every time you run this script)
+WHERE cl >nul 2>nul
+IF %ERRORLEVEL% == 0 goto READ_ARGS
+REM Activate the msvc build environment if cl isn't available yet
+IF EXIST "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" (
+  set VC_INIT="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
+) ELSE IF EXIST "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" (
+  set VC_INIT="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
+) ELSE IF EXIST "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" (
+  set VC_INIT="C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat"
+) ELSE (
+  REM Initialize your vc environment here if the defaults don't work
+  REM  set VC_INIT="C:\your\path\here\vcvarsall.bat"
+  REM And then remove/comment out the following two lines
+  echo "Couldn't find vcvarsall.bat or vcbuildtools.bat, please set it manually."
+  exit /B
+)
+echo Setting up the msvc build environment, this could take some time but the next builds should be faster
+REM Remove everything after %TARGET_PLATFORM% if you want to see
+REM the vcvarsall.bat or vcbuildtools.bat output
+call %VC_INIT% %TARGET_PLATFORM% > NUL 2>&1
+
+:READ_ARGS
 REM For the ! variable notation
 setlocal EnableDelayedExpansion
 REM For shifting, which the command line argument parsing needs
 setlocal EnableExtensions
 
-
 :ARG_LOOP
 set ARG=%1
-if "!ARG!" == "" ( goto PREPARE )
+if "!ARG!" == "" ( goto BUILD )
 IF NOT "x!ARG!" == "x!ARG:h=!" (
   goto HELP
 )
@@ -91,28 +114,6 @@ echo  Build in debug, run, don't print at all:  build-windows.bat -drqq
 exit /B
 
 
-:PREPARE
-REM Activate the msvc build environment
-IF EXIST "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" (
-  set VC_INIT="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
-) ELSE IF EXIST "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" (
-  set VC_INIT="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
-) ELSE IF EXIST "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat" (
-  set VC_INIT="C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools.bat"
-) ELSE (
-  REM Initialize your vc environment here if the defaults don't work
-  REM  set VC_INIT="C:\your\path\here\vcvarsall.bat"
-  REM And then remove/comment out the following two lines
-  echo "Couldn't find vcvarsall.bat or vcbuildtools.bat, please set it manually."
-  exit /B
-)
-IF DEFINED VERBOSE (
-  call !VC_INIT! !TARGET_PLATFORM!
-) ELSE (
-  call !VC_INIT! !TARGET_PLATFORM! > NUL 2>&1
-)
-
-
 :BUILD
 REM Directories
 set "ROOT_DIR=%CD%"
@@ -121,16 +122,16 @@ set "RAYLIB_SRC=!ROOT_DIR!\!RAYLIB_SRC!"
 
 REM Flags
 set OUTPUT_FLAG=/Fe: "!GAME_NAME!"
-set COMPILATION_FLAGS=/O1 /GL
-set WARNING_FLAGS=
+set COMPILATION_FLAGS=/std:c11 /O1 /GL /favor:blend /utf-8 /validate-charset /EHsc
+set WARNING_FLAGS=/W3 /sdl
 set SUBSYSTEM_FLAGS=/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
 set LINK_FLAGS=/link /LTCG kernel32.lib user32.lib shell32.lib winmm.lib gdi32.lib opengl32.lib
 set OUTPUT_DIR=builds\windows-msvc
 REM Debug changes to flags
 IF DEFINED BUILD_DEBUG (
   set OUTPUT_FLAG=/Fe: "!GAME_NAME!"
-  set COMPILATION_FLAGS=/Od /Zi
-  set WARNING_FLAGS=/Wall
+  set COMPILATION_FLAGS=/std:c11 /Od /Zi /utf-8 /validate-charset /EHsc
+  set WARNING_FLAGS=/W3 /sdl
   set SUBSYSTEM_FLAGS=/DEBUG
   set LINK_FLAGS=/link kernel32.lib user32.lib shell32.lib winmm.lib gdi32.lib opengl32.lib
   set OUTPUT_DIR=builds-debug\windows-msvc
@@ -164,9 +165,9 @@ REM Build raylib if it hasn't been cached in TEMP_DIR
 IF NOT EXIST !TEMP_DIR!\ (
   mkdir !TEMP_DIR!
   cd !TEMP_DIR!
-  REM Raylib's src folder
+  REM raylib source folder
   set "RAYLIB_DEFINES=/D_DEFAULT_SOURCE /DPLATFORM_DESKTOP /DGRAPHICS_API_OPENGL_33"
-  set RAYLIB_C_FILES="!RAYLIB_SRC!\core.c" "!RAYLIB_SRC!\shapes.c" "!RAYLIB_SRC!\textures.c" "!RAYLIB_SRC!\text.c" "!RAYLIB_SRC!\models.c" "!RAYLIB_SRC!\utils.c" "!RAYLIB_SRC!\raudio.c" "!RAYLIB_SRC!\rglfw.c"
+  set RAYLIB_C_FILES="!RAYLIB_SRC!\rcore.c" "!RAYLIB_SRC!\rshapes.c" "!RAYLIB_SRC!\rtextures.c" "!RAYLIB_SRC!\rtext.c" "!RAYLIB_SRC!\rmodels.c" "!RAYLIB_SRC!\utils.c" "!RAYLIB_SRC!\raudio.c" "!RAYLIB_SRC!\rglfw.c"
   set RAYLIB_INCLUDE_FLAGS=/I"!RAYLIB_SRC!" /I"!RAYLIB_SRC!\external\glfw\include"
 
   IF DEFINED REALLY_QUIET (
@@ -174,7 +175,7 @@ IF NOT EXIST !TEMP_DIR!\ (
   ) ELSE (
     cl.exe /w /c !VERBOSITY_FLAG! !RAYLIB_DEFINES! !RAYLIB_INCLUDE_FLAGS! !COMPILATION_FLAGS! !RAYLIB_C_FILES! || exit /B
   )
-  IF NOT DEFINED QUIET echo COMPILE-INFO: Raylib compiled into object files in: !TEMP_DIR!\
+  IF NOT DEFINED QUIET echo COMPILE-INFO: raylib compiled into object files in: !TEMP_DIR!\
 
   REM Out of the temp directory
   cd !ROOT_DIR!

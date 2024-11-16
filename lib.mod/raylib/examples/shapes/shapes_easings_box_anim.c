@@ -2,17 +2,22 @@
 *
 *   raylib [shapes] example - easings box anim
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.5, last time updated with raylib 2.5
 *
-*   Copyright (c) 2014-2019 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2014-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
-#include "easings.h"            // Required for easing functions
+#include "reasings.h"            // Required for easing functions
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -23,7 +28,7 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "raylib [shapes] example - easings box anim");
 
     // Box variables to be animated with easings
-    Rectangle rec = { GetScreenWidth()/2, -100, 100, 100 };
+    Rectangle rec = { GetScreenWidth()/2.0f, -100, 100, 100 };
     float rotation = 0.0f;
     float alpha = 1.0f;
 
@@ -46,7 +51,7 @@ int main(void)
 
                 // NOTE: Remember that 3rd parameter of easing function refers to
                 // desired value variation, do not confuse it with expected final value!
-                rec.y = EaseElasticOut(framesCounter, -100, GetScreenHeight()/2 + 100, 120);
+                rec.y = EaseElasticOut((float)framesCounter, -100, GetScreenHeight()/2.0f + 100, 120);
 
                 if (framesCounter >= 120)
                 {
@@ -57,8 +62,8 @@ int main(void)
             case 1:     // Scale box to an horizontal bar
             {
                 framesCounter++;
-                rec.height = EaseBounceOut(framesCounter, 100, -90, 120);
-                rec.width = EaseBounceOut(framesCounter, 100, GetScreenWidth(), 120);
+                rec.height = EaseBounceOut((float)framesCounter, 100, -90, 120);
+                rec.width = EaseBounceOut((float)framesCounter, 100, (float)GetScreenWidth(), 120);
 
                 if (framesCounter >= 120)
                 {
@@ -69,7 +74,7 @@ int main(void)
             case 2:     // Rotate horizontal bar rectangle
             {
                 framesCounter++;
-                rotation = EaseQuadOut(framesCounter, 0.0f, 270.0f, 240);
+                rotation = EaseQuadOut((float)framesCounter, 0.0f, 270.0f, 240);
 
                 if (framesCounter >= 240)
                 {
@@ -80,7 +85,7 @@ int main(void)
             case 3:     // Increase bar size to fill all screen
             {
                 framesCounter++;
-                rec.height = EaseCircOut(framesCounter, 10, GetScreenWidth(), 120);
+                rec.height = EaseCircOut((float)framesCounter, 10, (float)GetScreenWidth(), 120);
 
                 if (framesCounter >= 120)
                 {
@@ -91,7 +96,7 @@ int main(void)
             case 4:     // Fade out animation
             {
                 framesCounter++;
-                alpha = EaseSineOut(framesCounter, 1.0f, -1.0f, 160);
+                alpha = EaseSineOut((float)framesCounter, 1.0f, -1.0f, 160);
 
                 if (framesCounter >= 160)
                 {
@@ -105,7 +110,7 @@ int main(void)
         // Reset animation at any moment
         if (IsKeyPressed(KEY_SPACE))
         {
-            rec = (Rectangle){ GetScreenWidth()/2, -100, 100, 100 };
+            rec = (Rectangle){ GetScreenWidth()/2.0f, -100, 100, 100 };
             rotation = 0.0f;
             alpha = 1.0f;
             state = 0;

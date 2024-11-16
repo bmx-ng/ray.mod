@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2020 Bruce A Henderson
+  Copyright (c) 2024 Bruce A Henderson
 
   This software is provided 'as-is', without any express or implied
   warranty. In no event will the authors be held liable for any damages

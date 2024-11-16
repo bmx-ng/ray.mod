@@ -4,10 +4,12 @@
 *
 *   NOTE: Images are loaded in CPU memory (RAM); textures are loaded in GPU memory (VRAM)
 *
-*   This example has been created using raylib 1.3 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.3, last time updated with raylib 3.5
 *
-*   Copyright (c) 2015 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2015-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -15,6 +17,9 @@
 
 #include <stdlib.h>         // Required for: malloc() and free()
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -27,7 +32,7 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
     // Load RAW image data (512x512, 32bit RGBA, no file header)
-    Image fudesumiRaw = LoadImageRaw("resources/fudesumi.raw", 384, 512, UNCOMPRESSED_R8G8B8A8, 0);
+    Image fudesumiRaw = LoadImageRaw("resources/fudesumi.raw", 384, 512, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 0);
     Texture2D fudesumi = LoadTextureFromImage(fudesumiRaw);  // Upload CPU (RAM) image to GPU (VRAM)
     UnloadImage(fudesumiRaw);                                // Unload CPU (RAM) image data
 
@@ -48,12 +53,18 @@ int main(void)
     }
 
     // Load pixels data into an image structure and create texture
-    Image checkedIm = LoadImageEx(pixels, width, height);
-    Texture2D checked = LoadTextureFromImage(checkedIm);
-    UnloadImage(checkedIm);         // Unload CPU (RAM) image data
+    Image checkedIm = {
+        .data = pixels,             // We can assign pixels directly to data
+        .width = width,
+        .height = height,
+        .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
+        .mipmaps = 1
+    };
 
-    // Dynamic memory must be freed after using it
-    free(pixels);                   // Unload CPU (RAM) pixels data
+    Texture2D checked = LoadTextureFromImage(checkedIm);
+    UnloadImage(checkedIm);         // Unload CPU (RAM) image data (pixels)
+
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //---------------------------------------------------------------------------------------
 
     // Main game loop

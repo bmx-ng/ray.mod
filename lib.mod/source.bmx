@@ -1,4 +1,4 @@
-' Copyright (c) 2020 Bruce A Henderson
+' Copyright (c) 2024 Bruce A Henderson
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -24,12 +24,12 @@ SuperStrict
 Import "raylib/src/external/glfw/include/*.h"
 
 Import "raylib/src/*.h"
-Import "raylib/src/core.c"
-Import "raylib/src/shapes.c"
-Import "raylib/src/textures.c"
-Import "raylib/src/models.c"
-Import "raylib/src/rglfw.c"
-Import "raylib/src/text.c"
+Import "raylib/src/rcore.c"
+Import "raylib/src/rshapes.c"
+Import "raylib/src/rtextures.c"
+Import "raylib/src/rmodels.c"
+' Import "raylib/src/rglfw.c"
+Import "raylib/src/rtext.c"
 Import "raylib/src/utils.c"
 
 ?macos
@@ -56,8 +56,10 @@ Import "raylib/src/external/glfw/src/monitor.c"
 'Import "raylib/src/external/glfw/src/null_joystick.c"
 'Import "raylib/src/external/glfw/src/null_monitor.c"
 'Import "raylib/src/external/glfw/src/null_window.c"
-'Import "raylib/src/external/glfw/src/osmesa_context.c"
+Import "raylib/src/external/glfw/src/osmesa_context.c"
+Import "raylib/src/external/glfw/src/platform.c"
 ?linux Or macos
+Import "raylib/src/external/glfw/src/posix_module.c"
 Import "raylib/src/external/glfw/src/posix_thread.c"
 ?
 Import "raylib/src/external/glfw/src/vulkan.c"
@@ -65,6 +67,7 @@ Import "raylib/src/external/glfw/src/vulkan.c"
 Import "raylib/src/external/glfw/src/wgl_context.c"
 Import "raylib/src/external/glfw/src/win32_init.c"
 Import "raylib/src/external/glfw/src/win32_joystick.c"
+Import "raylib/src/external/glfw/src/win32_module.c"
 Import "raylib/src/external/glfw/src/win32_monitor.c"
 Import "raylib/src/external/glfw/src/win32_thread.c"
 Import "raylib/src/external/glfw/src/win32_time.c"

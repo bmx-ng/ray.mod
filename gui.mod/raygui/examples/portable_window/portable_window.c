@@ -3,15 +3,15 @@
 *   raygui - portable window
 *
 *   DEPENDENCIES:
-*       raylib 2.1  - Windowing/input management and drawing.
-*       raygui 2.0  - Immediate-mode GUI controls.
+*       raylib 4.0  - Windowing/input management and drawing.
+*       raygui 3.0  - Immediate-mode GUI controls.
 *
 *   COMPILATION (Windows - MinGW):
 *       gcc -o $(NAME_PART).exe $(FILE_NAME) -I../../src -lraylib -lopengl32 -lgdi32 -std=c99
 *
 *   LICENSE: zlib/libpng
 *
-*   Copyright (c) 2019 raylib technologies (@raylibtech)
+*   Copyright (c) 2016-2024 Ramon Santamaria (@raysan5)
 *
 **********************************************************************************************/
 
@@ -27,8 +27,8 @@ int main()
 {
     // Initialization
     //---------------------------------------------------------------------------------------
-    int screenWidth = 800;
-    int screenHeight = 600;
+    const int screenWidth = 800;
+    const int screenHeight = 600;
     
     SetConfigFlags(FLAG_WINDOW_UNDECORATED);
     InitWindow(screenWidth, screenHeight, "raygui - portable window");
@@ -53,7 +53,7 @@ int main()
         //----------------------------------------------------------------------------------
         mousePosition = GetMousePosition();
         
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !dragWindow)
         {
             if (CheckCollisionPointRec(mousePosition, (Rectangle){ 0, 0, screenWidth, 20 }))
             {
@@ -66,10 +66,10 @@ int main()
         {            
             windowPosition.x += (mousePosition.x - panOffset.x);
             windowPosition.y += (mousePosition.y - panOffset.y);
+
+            SetWindowPosition((int)windowPosition.x, (int)windowPosition.y);
             
             if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) dragWindow = false;
-
-            SetWindowPosition(windowPosition.x, windowPosition.y);
         }
         //----------------------------------------------------------------------------------
 
@@ -79,9 +79,10 @@ int main()
 
             ClearBackground(RAYWHITE);
 
-            exitWindow = GuiWindowBox((Rectangle){ 0, 0, screenWidth, screenHeight }, "PORTABLE WINDOW");
+            exitWindow = GuiWindowBox((Rectangle){ 0, 0, screenWidth, screenHeight }, "#198# PORTABLE WINDOW");
             
-            DrawText(FormatText("Mouse Position: [ %.0f, %.0f ]", mousePosition.x, mousePosition.y), 10, 40, 10, DARKGRAY);
+            DrawText(TextFormat("Mouse Position: [ %.0f, %.0f ]", mousePosition.x, mousePosition.y), 10, 40, 10, DARKGRAY);
+            DrawText(TextFormat("Window Position: [ %.0f, %.0f ]", windowPosition.x, windowPosition.y), 10, 60, 10, DARKGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------

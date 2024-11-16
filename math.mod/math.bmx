@@ -1,4 +1,4 @@
-' Copyright (c) 2020 Bruce A Henderson
+' Copyright (c) 2024 Bruce A Henderson
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -28,8 +28,8 @@ Module Ray.Math
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2020 Bruce A Henderson"
-ModuleInfo "Copyright: raylib - 2013-2020 Ramon Santamaria"
+ModuleInfo "Copyright: Wrapper - 2024 Bruce A Henderson"
+ModuleInfo "Copyright: raylib - 2013-2024 Ramon Santamaria"
 
 ModuleInfo "History: 1.00"
 ModuleInfo "History: Initial Release."
@@ -72,6 +72,22 @@ Function Lerp:Float(s:Float, e:Float, amount:Float)
 	Return bmx_raymath_Lerp(s, e, amount)
 End Function
 
+Function Normalize:Float(value:Float, s:Float, e:Float)
+	Return bmx_raymath_Normalize(value, s, e)
+End Function
+
+Function Remap:Float(value:Float, inputStart:Float, inputEnd:Float, outputStart:Float, outputEnd:Float)
+	Return bmx_raymath_Remap(value, inputStart, inputEnd, outputStart, outputEnd)
+End Function
+
+Function Wrap:Float(value:Float, mininum:Float, maximum:Float)
+	Return bmx_raymath_Wrap(value, mininum, maximum)
+End Function
+
+Function FloatEquals:Int(x:Float, y:Float)
+	Return bmx_raymath_FloatEquals(x, y)
+End Function
+
 Rem
 bbdoc: #RVector with components value 0.0.
 End Rem
@@ -93,11 +109,19 @@ Function Vector2Add:RVector2(v1:RVector2, v2:RVector2)
 	Return bmx_raymath_Vector2Add(v1, v2)
 End Function
 
+Function Vector2AddValue:RVector2(v:RVector2, value:Float)
+	Return bmx_raymath_Vector2AddValue(v, value)
+End Function
+
 Rem
 bbdoc: Subtracts two vectors `(v1 - v2)`.
 End Rem
 Function Vector2Subtract:RVector2(v1:RVector2, v2:RVector2)
 	Return bmx_raymath_Vector2Subtract(v1, v2)
+End Function
+
+Function Vector2SubtractValue:RVector2(v:RVector2, value:Float)
+	Return bmx_raymath_Vector2SubtractValue(v, value)
 End Function
 
 Rem

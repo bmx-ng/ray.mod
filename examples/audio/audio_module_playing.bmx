@@ -35,6 +35,8 @@ While i >= 0
 Wend
 
 Local music:RMusic = LoadMusicStream("../../lib.mod/raylib/examples/audio/resources/mini1111.xm")
+music.looping = False
+Local pitch:Float = 1.0
 
 PlayMusicStream(music)
 
@@ -54,6 +56,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 	If IsKeyPressed(KEY_SPACE) Then
 		StopMusicStream(music)
 		PlayMusicStream(music)
+		pause = False
 	End If
 
 	' Pause/Resume music playing
@@ -66,6 +69,14 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 			ResumeMusicStream(music)
 		End If
 	End If
+
+	If IsKeyDown(KEY_DOWN) Then
+		pitch :- 0.01
+	Else If IsKeyDown(KEY_UP) Then
+		pitch :+ 0.01
+	End If
+
+	SetMusicPitch(music, pitch)
 
 	' Get timePlayed scaled to bar dimensions
 	timePlayed = GetMusicTimePlayed(music)/GetMusicTimeLength(music)*(screenWidth - 40)
@@ -108,6 +119,14 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		DrawRectangle(20, screenHeight - 20 - 12, screenWidth - 40, 12, LIGHTGRAY)
 		DrawRectangle(20, screenHeight - 20 - 12, Int(timePlayed), 12, MAROON)
 		DrawRectangleLines(20, screenHeight - 20 - 12, screenWidth - 40, 12, GRAY)
+
+		' Draw help instructions
+		DrawRectangle(20, 20, 425, 145, WHITE)
+		DrawRectangleLines(20, 20, 425, 145, GRAY)
+		DrawText("PRESS SPACE TO RESTART MUSIC", 40, 40, 20, BLACK)
+		DrawText("PRESS P TO PAUSE/RESUME", 40, 70, 20, BLACK)
+		DrawText("PRESS UP/DOWN TO CHANGE SPEED", 40, 100, 20, BLACK)
+		DrawText("SPEED: " + pitch, 40, 130, 20, MAROON)
 
 	EndDrawing()
 	'----------------------------------------------------------------------------------

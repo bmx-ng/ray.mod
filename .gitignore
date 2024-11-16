@@ -10,3 +10,5 @@
 
 *.i2
 *.app
+
+.DS_Store

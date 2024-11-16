@@ -2,7 +2,7 @@ SuperStrict
 
 Framework Ray.Lib
 
-Const NUM_PROCESSES:Int = 8
+Const NUM_PROCESSES:Int = 9
 
 Local processText:String[] = [ ..
     "NO PROCESSING", ..
@@ -11,6 +11,7 @@ Local processText:String[] = [ ..
     "COLOR INVERT", ..
     "COLOR CONTRAST", ..
     "COLOR BRIGHTNESS", ..
+	"GAUSSIAN BLUR", ..
     "FLIP VERTICAL", ..
     "FLIP HORIZONTAL"]
 
@@ -23,9 +24,11 @@ InitWindow(screenWidth, screenHeight, "raylib [textures] example - image process
 
 ' NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
-Local image:RImage = LoadImage("../../lib.mod/raylib/examples/textures/resources/parrots.png")   ' Loaded in CPU memory (RAM)
-ImageFormat(image, UNCOMPRESSED_R8G8B8A8)         ' Format image to RGBA 32bit (required for texture update) <-- ISSUE
-Local texture:RTexture2D = LoadTextureFromImage(image)    ' Image converted to texture, GPU memory (VRAM)
+Local imOrigin:RImage = LoadImage("../../lib.mod/raylib/examples/textures/resources/parrots.png")   ' Loaded in CPU memory (RAM)
+ImageFormat(imOrigin, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8)         ' Format image to RGBA 32bit (required for texture update) <-- ISSUE
+Local texture:RTexture2D = LoadTextureFromImage(imOrigin)    ' Image converted to texture, GPU memory (VRAM)
+
+Local imCopy:RImage = ImageCopy(imOrigin)
 
 Local currentProcess:Int = NONE
 Local textureReload:Int = False
@@ -57,33 +60,36 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		textureReload = True
 	End If
 
+	' Reload texture when required
 	If textureReload Then
-		UnloadImage(image)                         ' Unload current image data
-		image = LoadImage("../../lib.mod/raylib/examples/textures/resources/parrots.png") ' Re-load image data
+		UnloadImage(imCopy)                         ' Unload current image data
+		imCopy = ImageCopy(imOrigin)                ' Copy image data to work with
 
 		' NOTE: Image processing is a costly CPU process to be done every frame,
 		' If image processing is required in a frame-basis, it should be done
 		' with a texture and by shaders
 		Select currentProcess
 			Case COLOR_GRAYSCALE
-				ImageColorGrayscale(image)
+				ImageColorGrayscale(imCopy)
 			Case COLOR_TINT
-				ImageColorTint(image, GREEN)
+				ImageColorTint(imCopy, GREEN)
 			Case COLOR_INVERT
-				ImageColorInvert(image)
+				ImageColorInvert(imCopy)
 			Case COLOR_CONTRAST
-				ImageColorContrast(image, -40)
+				ImageColorContrast(imCopy, -40)
 			Case COLOR_BRIGHTNESS
-				ImageColorBrightness(image, -80)
+				ImageColorBrightness(imCopy, -80)
+			Case GAUSSIAN_BLUR
+				ImageBlurGaussian(imCopy, 10)
 			Case FLIP_VERTICAL
-				ImageFlipVertical(image)
+				ImageFlipVertical(imCopy)
 			Case FLIP_HORIZONTAL
-				ImageFlipHorizontal(image)
+				ImageFlipHorizontal(imCopy)
 		End Select
 
-		Local pixels:RColor Ptr = GetImageData(image)        ' Get pixel data from image (RGBA 32bit)
+		Local pixels:RColor Ptr = LoadImageColors(imCopy)        ' Load pixel data from image (RGBA 32bit)
 		UpdateTexture(texture, pixels)             ' Update texture with new image data
-		RLFree(pixels)                               ' Unload pixels data from RAM
+		UnloadImageColors(pixels)                               ' Unload pixels data from RAM
 
 		textureReload = False
 	End If
@@ -124,7 +130,8 @@ Wend
 ' De-Initialization
 '--------------------------------------------------------------------------------------
 UnloadTexture(texture)       ' Unload texture from VRAM
-UnloadImage(image)           ' Unload image from RAM
+UnloadImage(imOrigin)           ' Unload image-origin from RAM
+UnloadImage(imCopy)           ' Unload image-copy from RAM
 
 CloseWindow()                ' Close window and OpenGL context
 '--------------------------------------------------------------------------------------
@@ -135,5 +142,6 @@ Const COLOR_TINT:Int = 2
 Const COLOR_INVERT:Int = 3
 Const COLOR_CONTRAST:Int = 4
 Const COLOR_BRIGHTNESS:Int = 5
-Const FLIP_VERTICAL:Int = 6
-Const FLIP_HORIZONTAL:Int = 7
+Const GAUSSIAN_BLUR:Int = 6
+Const FLIP_VERTICAL:Int = 7
+Const FLIP_HORIZONTAL:Int = 8

@@ -2,17 +2,24 @@
 *
 *   raylib example - procedural mesh generation
 *
-*   This example has been created using raylib 1.8 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.8, last time updated with raylib 4.0
 *
-*   Copyright (c) 2017 Ramon Santamaria (Ray San)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2017-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
-#define NUM_MODELS  8      // Parametric 3d shapes to generate
+#define NUM_MODELS  9               // Parametric 3d shapes to generate
 
+static Mesh GenMeshCustom(void);    // Generate a simple triangle mesh from code
+
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -29,7 +36,7 @@ int main(void)
 
     Model models[NUM_MODELS] = { 0 };
 
-    models[0] = LoadModelFromMesh(GenMeshPlane(2, 2, 5, 5));
+    models[0] = LoadModelFromMesh(GenMeshPlane(2, 2, 4, 3));
     models[1] = LoadModelFromMesh(GenMeshCube(2.0f, 1.0f, 2.0f));
     models[2] = LoadModelFromMesh(GenMeshSphere(2, 32, 32));
     models[3] = LoadModelFromMesh(GenMeshHemiSphere(2, 16, 16));
@@ -37,9 +44,21 @@ int main(void)
     models[5] = LoadModelFromMesh(GenMeshTorus(0.25f, 4.0f, 16, 32));
     models[6] = LoadModelFromMesh(GenMeshKnot(1.0f, 2.0f, 16, 128));
     models[7] = LoadModelFromMesh(GenMeshPoly(5, 2.0f));
+    models[8] = LoadModelFromMesh(GenMeshCustom());
+    
+    // Generated meshes could be exported as .obj files
+    //ExportMesh(models[0].meshes[0], "plane.obj");
+    //ExportMesh(models[1].meshes[0], "cube.obj");
+    //ExportMesh(models[2].meshes[0], "sphere.obj");
+    //ExportMesh(models[3].meshes[0], "hemisphere.obj");
+    //ExportMesh(models[4].meshes[0], "cylinder.obj");
+    //ExportMesh(models[5].meshes[0], "torus.obj");
+    //ExportMesh(models[6].meshes[0], "knot.obj");
+    //ExportMesh(models[7].meshes[0], "poly.obj");
+    //ExportMesh(models[8].meshes[0], "custom.obj");
 
     // Set checked texture as default diffuse component for all models material
-    for (int i = 0; i < NUM_MODELS; i++) models[i].materials[0].maps[MAP_DIFFUSE].texture = texture;
+    for (int i = 0; i < NUM_MODELS; i++) models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
 
     // Define the camera to look into our 3d world
     Camera camera = { { 5.0f, 5.0f, 5.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, 45.0f, 0 };
@@ -49,8 +68,6 @@ int main(void)
 
     int currentModel = 0;
 
-    SetCameraMode(camera, CAMERA_ORBITAL);  // Set a orbital camera mode
-
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
@@ -59,9 +76,9 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        UpdateCamera(&camera);      // Update internal camera and our camera
+        UpdateCamera(&camera, CAMERA_ORBITAL);
 
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
             currentModel = (currentModel + 1)%NUM_MODELS; // Cycle between the textures
         }
@@ -86,9 +103,8 @@ int main(void)
 
             BeginMode3D(camera);
 
-                DrawModel(models[currentModel], position, 1.0f, WHITE);
-
-                DrawGrid(10, 1.0);
+               DrawModel(models[currentModel], position, 1.0f, WHITE);
+               DrawGrid(10, 1.0);
 
             EndMode3D();
 
@@ -106,6 +122,7 @@ int main(void)
                 case 5: DrawText("TORUS", 680, 10, 20, DARKBLUE); break;
                 case 6: DrawText("KNOT", 680, 10, 20, DARKBLUE); break;
                 case 7: DrawText("POLY", 680, 10, 20, DARKBLUE); break;
+                case 8: DrawText("Custom (triangle)", 580, 10, 20, DARKBLUE); break;
                 default: break;
             }
 
@@ -124,4 +141,50 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     return 0;
+}
+
+// Generate a simple triangle mesh from code
+static Mesh GenMeshCustom(void)
+{
+    Mesh mesh = { 0 };
+    mesh.triangleCount = 1;
+    mesh.vertexCount = mesh.triangleCount*3;
+    mesh.vertices = (float *)MemAlloc(mesh.vertexCount*3*sizeof(float));    // 3 vertices, 3 coordinates each (x, y, z)
+    mesh.texcoords = (float *)MemAlloc(mesh.vertexCount*2*sizeof(float));   // 3 vertices, 2 coordinates each (x, y)
+    mesh.normals = (float *)MemAlloc(mesh.vertexCount*3*sizeof(float));     // 3 vertices, 3 coordinates each (x, y, z)
+
+    // Vertex at (0, 0, 0)
+    mesh.vertices[0] = 0;
+    mesh.vertices[1] = 0;
+    mesh.vertices[2] = 0;
+    mesh.normals[0] = 0;
+    mesh.normals[1] = 1;
+    mesh.normals[2] = 0;
+    mesh.texcoords[0] = 0;
+    mesh.texcoords[1] = 0;
+
+    // Vertex at (1, 0, 2)
+    mesh.vertices[3] = 1;
+    mesh.vertices[4] = 0;
+    mesh.vertices[5] = 2;
+    mesh.normals[3] = 0;
+    mesh.normals[4] = 1;
+    mesh.normals[5] = 0;
+    mesh.texcoords[2] = 0.5f;
+    mesh.texcoords[3] = 1.0f;
+
+    // Vertex at (2, 0, 0)
+    mesh.vertices[6] = 2;
+    mesh.vertices[7] = 0;
+    mesh.vertices[8] = 0;
+    mesh.normals[6] = 0;
+    mesh.normals[7] = 1;
+    mesh.normals[8] = 0;
+    mesh.texcoords[4] = 1;
+    mesh.texcoords[5] =0;
+
+    // Upload mesh data from CPU (RAM) to GPU (VRAM) memory
+    UploadMesh(&mesh, false);
+
+    return mesh;
 }

@@ -2,18 +2,23 @@
 *
 *   raylib [textures] example - sprite explosion
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.5, last time updated with raylib 3.5
 *
-*   Copyright (c) 2019 Anata and Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2019-2024 Anata and Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
-#define NUM_FRAMES      8
-#define NUM_LINES       6
+#define NUM_FRAMES_PER_LINE     5
+#define NUM_LINES               5
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -30,10 +35,10 @@ int main(void)
 
     // Load explosion texture
     Texture2D explosion = LoadTexture("resources/explosion.png");
-    
+
     // Init variables for animation
-    int frameWidth = explosion.width/NUM_FRAMES;    // Sprite one frame rectangle width
-    int frameHeight = explosion.height/NUM_LINES;   // Sprite one frame rectangle height
+    float frameWidth = (float)(explosion.width/NUM_FRAMES_PER_LINE);   // Sprite one frame rectangle width
+    float frameHeight = (float)(explosion.height/NUM_LINES);           // Sprite one frame rectangle height
     int currentFrame = 0;
     int currentLine = 0;
 
@@ -43,8 +48,8 @@ int main(void)
     bool active = false;
     int framesCounter = 0;
 
-    SetTargetFPS(120);
-    //--------------------------------------------------------------------------------------
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    //---------------------------------------------------------------------------------------
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -53,13 +58,13 @@ int main(void)
         //----------------------------------------------------------------------------------
 
         // Check for mouse button pressed and activate explosion (if not active)
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !active)
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !active)
         {
             position = GetMousePosition();
             active = true;
 
-            position.x -= frameWidth/2;
-            position.y -= frameHeight/2;
+            position.x -= frameWidth/2.0f;
+            position.y -= frameHeight/2.0f;
 
             PlaySound(fxBoom);
         }
@@ -73,7 +78,7 @@ int main(void)
             {
                 currentFrame++;
 
-                if (currentFrame >= NUM_FRAMES)
+                if (currentFrame >= NUM_FRAMES_PER_LINE)
                 {
                     currentFrame = 0;
                     currentLine++;

@@ -4,24 +4,28 @@
 *
 *   Welcome to raylib!
 *
-*   To test examples in Notepad++, provided with default raylib installer package, 
-*   just press F6 and run [raylib_compile_execute] script, it will compile and execute.
+*   To test examples, just press F6 and execute raylib_compile_execute script
 *   Note that compiled executable is placed in the same folder as .c file
 *
-*   You can find all basic examples on [C:\raylib\raylib\examples] directory and
-*   raylib official webpage: [www.raylib.com]
+*   You can find all basic examples on C:\raylib\raylib\examples folder or
+*   raylib official webpage: www.raylib.com
 *
 *   Enjoy using raylib. :)
 *
-*   This example has been created using raylib 1.0 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.0, last time updated with raylib 1.0
 *
-*   Copyright (c) 2013-2020 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2013-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
