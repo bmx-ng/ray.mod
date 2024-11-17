@@ -513,8 +513,8 @@ Extern
 	Function bmx_raylib_ImageDrawTriangleFan(dst:RImage Var, points:RVector2 Ptr, pointCount:Int, color:RColor)="ImageDrawTriangleFan"
 	Function bmx_raylib_ImageDrawTriangleStrip(dst:RImage Var, points:RVector2 Ptr, pointCount:Int, color:RColor)="ImageDrawTriangleStrip"
 	Function bmx_raylib_ImageDraw(dst:RImage Var, src:RImage, srcRec:RRectangle, dstRec:RRectangle, tint:RColor)="ImageDraw"
-	Function bmx_raylib_ImageDrawText(dst:RImage Var, position:RVector2, txt:Byte Ptr, FontSize:Int, color:RColor)="ImageDrawText"
-	Function bmx_raylib_ImageDrawTextEx(dst:RImage Var, position:RVector2, font:RFont, txt:Byte Ptr, FontSize:Float, spacing:Float, color:RColor)="ImageDrawTextEx"
+	Function bmx_raylib_ImageDrawText(dst:RImage Var, txt:Byte Ptr, posX:Int, posY:Int, fontSize:Int, color:RColor)="ImageDrawText"
+	Function bmx_raylib_ImageDrawTextEx(dst:RImage Var, font:RFont, txt:Byte Ptr, position:RVector2, fontSize:Float, spacing:Float, color:RColor)="ImageDrawTextEx"
 			
 	' Function bmx_raylib_LoadMeshes:RMesh Ptr(filename:Byte Ptr, meshCount:Int Var)="LoadMeshes"
 
@@ -715,6 +715,14 @@ Struct RImage
 	Field height:Int
 	Field mipmaps:Int
 	Field format:Int
+
+	Method New(data:Byte Ptr, width:Int, height:Int, mipmaps:Int, format:Int)
+		Self.data = data
+		Self.width = width
+		Self.height = height
+		Self.mipmaps = mipmaps
+		Self.format = format
+	End Method
 End Struct
 
 Struct RCamera
@@ -722,14 +730,14 @@ Struct RCamera
 	Field target:RVector3
 	Field up:RVector3
 	Field fovy:Float
-	Field cameraType:Int
+	Field projection:Int
 	
-	Method New(position:RVector3, target:RVector3, up:RVector3, fovy:Float, cameraType:Int)
+	Method New(position:RVector3, target:RVector3, up:RVector3, fovy:Float, projection:Int)
 		Self.position = position
 		Self.target = target
 		Self.up = up
 		Self.fovy = fovy
-		Self.cameraType = cameraType
+		Self.projection = projection
 	End Method
 End Struct
 
@@ -780,6 +788,7 @@ End Struct
 Struct RFont
 	Field baseSize:Int
 	Field charsCount:Int
+	Field glyphPadding:Int
 	Field texture:RTexture2D
 	Field recs:RRectangle Ptr
 	Field chars:RGlyphInfo Ptr
@@ -807,15 +816,14 @@ Struct RModel
 	Field transform:RMatrix
 	
 	Field meshCount:Int
-	Field meshes:RMesh Ptr
-	
 	Field materialCount:Int
+	Field meshes:RMesh Ptr
 	Field materials:RMaterial Ptr
 	Field meshMaterial:Int Ptr
 	
 	Field boneCount:Int
-	Field bones:RBoneInfo
-	Field bindPose:RTransform
+	Field bones:RBoneInfo Ptr
+	Field bindPose:RTransform Ptr
 End Struct
 
 Struct RMesh
@@ -834,6 +842,8 @@ Struct RMesh
 	Field animNormals:Float Ptr
 	Field boneIds:Int Ptr
 	Field boneWeights:Float Ptr
+	Field boneMatrices:RMatrix Ptr
+	Field boneCount:Int
 	
 	Field vaoId:UInt
 	Field vboId:UInt Ptr
@@ -862,7 +872,7 @@ End Struct
 Struct RMaterial
 	Field shader:RShader
 	Field maps:RMaterialMap Ptr
-	Field params:Float Ptr
+	Field StaticArray params:Float[4]
 End Struct
 
 Struct RMaterialMap
@@ -883,9 +893,10 @@ End Struct
 
 Struct RModelAnimation
 	Field boneCount:Int
-	Field bones:RBoneInfo Ptr
 	Field frameCount:Int
+	Field bones:RBoneInfo Ptr
 	Field framePoses:RTransform Ptr Ptr
+	Field StaticArray name:Byte[32]
 End Struct
 
 ' VrDeviceInfo, Head-Mounted-Display device parameters

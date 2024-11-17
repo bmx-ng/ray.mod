@@ -26,7 +26,7 @@ Next
 
 Local gravity:Float = 3.0
 
-Local smoke:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/textures/resources/smoke.png")
+Local smoke:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/textures/resources/spark_flame.png")
 
 Local blending:Int = BLEND_ALPHA
 
@@ -53,14 +53,14 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 
 	For Local i:Int = 0 Until MAX_PARTICLES
 		If mouseTail[i].active Then
-			mouseTail[i].position.y :+ gravity
-			mouseTail[i].alpha :- 0.01
+			mouseTail[i].position.y :+ gravity/2
+			mouseTail[i].alpha :- 0.005
 
 			If mouseTail[i].alpha <= 0.0 Then
 				mouseTail[i].active = False
 			End If
 
-			mouseTail[i].Rotation :+ 5.0
+			mouseTail[i].Rotation :+ 2.0
 		End If
 	Next
 

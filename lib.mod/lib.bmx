@@ -2059,15 +2059,15 @@ End Function
 Rem
 bbdoc: Draws text (default font) within an image (destination).
 End Rem
-Function ImageDrawText(dst:RImage Var, position:RVector2, txt:String, FontSize:Int, color:RColor)
-	bmx_raylib_ImageDrawText(dst, position, txt, FontSize, color)
+Function ImageDrawText(dst:RImage Var, txt:String, posX:Int, posY:Int, fontSize:Int, color:RColor)
+	bmx_raylib_ImageDrawText(dst, txt, posX, posY, fontSize, color)
 End Function
 
 Rem
 bbdoc: Draws text (custom sprite font) within an image (destination).
 End Rem
-Function ImageDrawTextEx(dst:RImage Var, position:RVector2, font:RFont, txt:String, FontSize:Float, spacing:Float, color:RColor)
-	bmx_raylib_ImageDrawTextEx(dst, position, font, txt, FontSize, spacing, color)
+Function ImageDrawTextEx(dst:RImage Var, font:RFont, txt:String, position:RVector2, fontSize:Float, spacing:Float, color:RColor)
+	bmx_raylib_ImageDrawTextEx(dst, font, txt, position, fontSize, spacing, color)
 End Function
 
 ' Texture loading functions

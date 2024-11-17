@@ -3,8 +3,8 @@ SuperStrict
 Framework Ray.Lib
 Import Ray.Audio
 
-Const NUM_FRAMES:Int = 8
-Const NUM_LINES:Int = 6
+Const NUM_FRAMES_PER_LINE:Int = 5
+Const NUM_LINES:Int = 5
 
 ' Initialization
 '--------------------------------------------------------------------------------------
@@ -22,8 +22,8 @@ Local fxBoom:RSound = LoadSound("../../lib.mod/raylib/examples/textures/resource
 Local explosion:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/textures/resources/explosion.png")
 
 ' Init variables for animation
-Local frameWidth:Int = explosion.width/NUM_FRAMES    ' Sprite one frame rectangle width
-Local frameHeight:Int = explosion.height/NUM_LINES   ' Sprite one frame rectangle height
+Local frameWidth:Int = explosion.width/NUM_FRAMES_PER_LINE    ' Sprite one frame rectangle width
+Local frameHeight:Int = explosion.height/NUM_LINES            ' Sprite one frame rectangle height
 Local currentFrame:Int = 0
 Local currentLine:Int = 0
 
@@ -33,7 +33,7 @@ Local position:RVector2 = New RVector2(0.0, 0.0)
 Local active:Int = False
 Local framesCounter:Int = 0
 
-SetTargetFPS(120)
+SetTargetFPS(60)
 '--------------------------------------------------------------------------------------
 
 ' Main game loop
@@ -59,7 +59,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		If framesCounter > 2 Then
 			currentFrame :+ 1
 
-			If currentFrame >= NUM_FRAMES Then
+			If currentFrame >= NUM_FRAMES_PER_LINE Then
 				currentFrame = 0
 				currentLine :+ 1
 

@@ -15,11 +15,13 @@ Local image:RImage = LoadImage("../../lib.mod/raylib/examples/textures/resources
 Local texture:RTexture2D = LoadTextureFromImage(image)       ' Image converted to texture, GPU memory (RAM -> VRAM)
 UnloadImage(image)                                    ' Unload image data from CPU memory (RAM)
 
-image = GetTextureData(texture)                       ' Retrieve image data from GPU memory (VRAM -> RAM)
+image = LoadImageFromTexture(texture)                       ' Retrieve image data from GPU memory (VRAM -> RAM)
 UnloadTexture(texture)                                ' Unload texture from GPU memory (VRAM)
 
 texture = LoadTextureFromImage(image)                 ' Recreate texture from retrieved image data (RAM -> VRAM)
 UnloadImage(image)                                    ' Unload retrieved image data from CPU memory (RAM)
+
+SetTargetFPS(60)                 ' Set our game to run at 60 frames-per-second
 '---------------------------------------------------------------------------------------
 
 ' Main game loop
