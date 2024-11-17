@@ -162,8 +162,8 @@ End Function
 Rem
 bbdoc: Multiplies vector by vector.
 End Rem
-Function Vector2MultiplyV:RVector2(v1:RVector2, v2:RVector2)
-	Return bmx_raymath_Vector2MultiplyV(v1, v2)
+Function Vector2Multiply:RVector2(v1:RVector2, v2:RVector2)
+	Return bmx_raymath_Vector2Multiply(v1, v2)
 End Function
 
 Rem
@@ -174,17 +174,10 @@ Function Vector2Negate:RVector2(v:RVector2)
 End Function
 
 Rem
-bbdoc: Divides vector by a #Float value.
-End Rem
-Function Vector2Divide:RVector2(v:RVector2, div:Float)
-	Return bmx_raymath_Vector2Divide(v, div)
-End Function
-
-Rem
 bbdoc: Divides vector by vector.
 End Rem
-Function Vector2DivideV:RVector2(v1:RVector2, v2:RVector2)
-	Return bmx_raymath_Vector2DivideV(v1, v2)
+Function Vector2Divide:RVector2(v1:RVector2, v2:RVector2)
+	Return bmx_raymath_Vector2Divide(v1, v2)
 End Function
 
 Rem
@@ -293,17 +286,10 @@ Function Vector3Negate:RVector3(v:RVector3)
 End Function
 
 Rem
-bbdoc: Divides vector by a #Float value.
-End Rem
-Function Vector3Divide:RVector3(v:RVector3, div:Float)
-	Return bmx_raymath_Vector3Divide(v, div)
-End Function
-
-Rem
 bbdoc: Divides vector by vector.
 End Rem
-Function Vector3DivideV:RVector3(v1:RVector3, v2:RVector3)
-	Return bmx_raymath_Vector3DivideV(v1, v2)
+Function Vector3Divide:RVector3(v1:RVector3, v2:RVector3)
+	Return bmx_raymath_Vector3Divide(v1, v2)
 End Function
 
 Rem
@@ -406,13 +392,6 @@ bbdoc: Inverts provided matrix.
 End Rem
 Function MatrixInvert:RMatrix(mat:RMatrix)
 	Return bmx_raymath_MatrixInvert(mat)
-End Function
-
-Rem
-bbdoc: Normalizes provided matrix.
-End Rem
-Function MatrixNormalize:RMatrix(mat:RMatrix)
-	Return bmx_raymath_MatrixNormalize(mat)
 End Function
 
 Rem
