@@ -23,7 +23,26 @@
 #include <stdlib.h>
 #include "raylib.h"
 #include "reasings.h"
+
+#if !defined(_WIN32)
 #include "brl.mod/blitz.mod/blitz.h"
+#else
+#include "brl.mod/blitz.mod/blitz_debug.h"
+#include "brl.mod/blitz.mod/blitz_array.h"
+
+#if defined(_WIN64)
+ typedef __int64 LONG_PTR; 
+ typedef unsigned __int64 UINT_PTR;
+#else
+ typedef long LONG_PTR;
+ typedef unsigned int UINT_PTR;
+#endif
+typedef UINT_PTR WPARAM;
+typedef LONG_PTR LPARAM;
+
+#include "brl.mod/blitz.mod/blitz_string.h"
+#endif
+
 
 void bmx_raylib_CloseWindow() {
 	CloseWindow();
