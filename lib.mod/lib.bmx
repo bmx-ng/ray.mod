@@ -774,6 +774,28 @@ Function OpenURL(url:String)
 	MemFree(u)
 End Function
 
+Rem
+bbdoc: Internal memory allocator.
+End Rem
+Function RMemAlloc:Byte Ptr(size:UInt)
+	Return bmx_raylib_MemAlloc(size)
+End Function
+
+Rem
+bbc: Internal memory reallocator.
+End Rem
+Function RMemRealloc:Byte Ptr(data:Byte Ptr, size:UInt)
+	Return bmx_raylib_MemRealloc(data, size)
+End Function
+
+Rem
+bbdoc: Internal memory free.
+End Rem
+Function RMemFree(data:Byte Ptr)
+	bmx_raylib_MemFree(data)
+End Function
+
+
 ' Input-related functions: keyboard
 Rem
 bbdoc: Detects if a key has been pressed once.

@@ -10,7 +10,7 @@ Const screenHeight:Int = 450
 InitWindow(screenWidth, screenHeight, "raylib [models] example - first person maze")
 
 ' Define the camera to look into our 3d world
-Local camera:RCamera = New RCamera( New RVector3(0.2, 0.4, 0.2), New RVector3(0.0, 0.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, 0 )
+Local camera:RCamera = New RCamera( New RVector3(0.2, 0.4, 0.2), New RVector3(0.185, 0.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, CAMERA_PERSPECTIVE )
 
 Local imMap:RImage = LoadImage("../../lib.mod/raylib/examples/models/resources/cubicmap.png")      ' Load cubicmap image (RAM)
 Local cubicmap:RTexture2D = LoadTextureFromImage(imMap)       ' Convert image to texture to display (VRAM)
@@ -19,16 +19,15 @@ Local model:RModel = LoadModelFromMesh(mesh)
 
 ' NOTE: By default each cube is mapped to one part of texture atlas
 Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/models/resources/cubicmap_atlas.png")    ' Load map texture
-model.materials[0].maps[MAP_DIFFUSE].texture = texture             ' Set map diffuse texture
+model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture             ' Set map diffuse texture
 
 ' Get map image data to be used for collision detection
-Local mapPixels:RColor Ptr = GetImageData(imMap)
+Local mapPixels:RColor Ptr = LoadImageColors(imMap)
 UnloadImage(imMap)             ' Unload image from RAM
 
 Local mapPosition:RVector3 = New RVector3(-16.0, 0.0, -8.0)  ' Set model position
-Local playerPosition:RVector3 = camera.position       ' Set player position
 
-SetCameraMode(camera, CAMERA_FIRST_PERSON)     ' Set camera mode
+DisableCursor()                ' Limit cursor to relative movement inside the window
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -39,7 +38,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 	'----------------------------------------------------------------------------------
 	Local oldCamPos:RVector3 = camera.position    ' Store old camera position
 
-	UpdateCamera(camera)      ' Update camera
+	UpdateCamera(camera, CAMERA_FIRST_PERSON)      ' Update camera
 
 	' Check player collision (we simplify to 2D collision detection)
 	Local playerPos:RVector2 = New RVector2(camera.position.x, camera.position.z)
@@ -81,10 +80,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		ClearBackground(RAYWHITE)
 
 		BeginMode3D(camera)
-
 			DrawModel(model, mapPosition, 1.0, WHITE)                     ' Draw maze map
-			'DrawCubeV(playerPosition, new RVector3(0.2, 0.4, 0.2), RED)  ' Draw player
-
 		EndMode3D()
 
 		DrawTextureEx(cubicmap, New RVector2(GetScreenWidth() - cubicmap.width*4 - 20, 20), 0.0, 4.0, WHITE)
@@ -101,7 +97,7 @@ Wend
 
 ' De-Initialization
 '--------------------------------------------------------------------------------------
-RLFree(mapPixels)            ' Unload color array
+UnloadImageColors(mapPixels)            ' Unload color array
 
 UnloadTexture(cubicmap)    ' Unload cubicmap texture
 UnloadTexture(texture)     ' Unload map texture

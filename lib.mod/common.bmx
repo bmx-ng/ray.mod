@@ -166,7 +166,11 @@ Extern
 	Function bmx_raylib_TakeScreenshot(fileName:Byte Ptr)="TakeScreenshot"
 	Function bmx_raylib_SetConfigFlags(flags:UInt)="SetConfigFlags"
 	Function bmx_raylib_OpenURL(url:Byte Ptr)="OpenURL"
-	
+
+	Function bmx_raylib_MemAlloc:Byte Ptr(size:UInt)="MemAlloc"
+	Function bmx_raylib_MemRealloc:Byte Ptr(data:Byte Ptr, size:UInt)="MemRealloc"
+	Function bmx_raylib_MemFree(data:Byte Ptr)="MemFree"
+
 	Function bmx_raylib_DrawFPS(posX:Int, posY:Int)="DrawFPS"
 	Function bmx_raylib_DrawText(txt:Byte Ptr, posX:Int, posY:Int, FontSize:Int, color:RColor)
 	Function bmx_raylib_DrawTextEx(font:RFont, txt:Byte Ptr, position:RVector2, FontSize:Float, spacing:Float, tint:RColor)

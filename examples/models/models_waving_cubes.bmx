@@ -18,7 +18,7 @@ camera.position = New RVector3(30.0, 20.0, 30.0)
 camera.target = New RVector3(0.0, 0.0, 0.0)
 camera.up = New RVector3(0.0, 1.0, 0.0)
 camera.fovy = 70.0
-camera.cameraType = CAMERA_PERSPECTIVE
+camera.projection = CAMERA_PERSPECTIVE
 
 ' Specify the amount of blocks in each direction
 Const numBlocks:Int = 15

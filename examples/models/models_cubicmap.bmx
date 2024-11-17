@@ -10,7 +10,7 @@ Const screenHeight:Int = 450
 InitWindow(screenWidth, screenHeight, "raylib [models] example - cubesmap loading and drawing")
 
 ' Define the camera to look into our 3d world
-Local camera:RCamera = New RCamera(New RVector3(16.0, 14.0, 16.0), New RVector3(0.0, 0.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, 0)
+Local camera:RCamera = New RCamera(New RVector3(16.0, 14.0, 16.0), New RVector3(0.0, 0.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, CAMERA_PERSPECTIVE)
 
 Local image:RImage = LoadImage("../../lib.mod/raylib/examples/models/resources/cubicmap.png")      ' Load cubicmap image (RAM)
 Local cubicmap:RTexture2D = LoadTextureFromImage(image)       ' Convert image to texture to display (VRAM)
@@ -20,13 +20,13 @@ Local model:RModel = LoadModelFromMesh(mesh)
 
 ' NOTE: By default each cube is mapped to one part of texture atlas
 Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/models/resources/cubicmap_atlas.png")    ' Load map texture
-model.materials[0].maps[MAP_DIFFUSE].texture = texture             ' Set map diffuse texture
+model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture             ' Set map diffuse texture
 
 Local mapPosition:RVector3 = New RVector3(-16.0, 0.0, -8.0)          ' Set model position
 
 UnloadImage(image)     ' Unload cubesmap image from RAM, already uploaded to VRAM
 
-SetCameraMode(camera, CAMERA_ORBITAL)  ' Set an orbital camera mode
+Local pause:Int = false     ' Pause camera orbital rotation (and zoom)
 
 SetTargetFPS(60)                       ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -35,7 +35,13 @@ SetTargetFPS(60)                       ' Set our game to run at 60 frames-per-se
 While Not WindowShouldClose()            ' Detect window close button or ESC key
 	' Update
 	'----------------------------------------------------------------------------------
-	UpdateCamera(camera)              ' Update camera
+	If IsKeyPressed(KEY_P) Then
+		pause = Not pause
+	End If
+
+	If Not pause Then
+		UpdateCamera(camera, CAMERA_ORBITAL)              ' Update camera
+	End If
 	'----------------------------------------------------------------------------------
 
 	' Draw

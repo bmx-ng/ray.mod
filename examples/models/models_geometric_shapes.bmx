@@ -15,7 +15,7 @@ camera.position = New RVector3(0.0, 10.0, 10.0)
 camera.target = New RVector3(0.0, 0.0, 0.0)
 camera.up = New RVector3(0.0, 1.0, 0.0)
 camera.fovy = 45.0
-camera.cameraType = CAMERA_PERSPECTIVE
+camera.projection = CAMERA_PERSPECTIVE
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -48,6 +48,9 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 
 			DrawCylinder(New RVector3(1.0, 0.0, -4.0), 0.0, 1.5, 3.0, 8, GOLD)
 			DrawCylinderWires(New RVector3(1.0, 0.0, -4.0), 0.0, 1.5, 3.0, 8, PINK)
+
+			DrawCapsule(New RVector3(-3.0, 1.5, -4.0), New RVector3(-4.0, -1.0, -4.0), 1.2, 8, 8, VIOLET)
+			DrawCapsuleWires(New RVector3(-3.0, 1.5, -4.0), New RVector3(-4.0, -1.0, -4.0), 1.2, 8, 8, PURPLE)
 
 			DrawGrid(10, 1.0)        ' Draw a grid
 
