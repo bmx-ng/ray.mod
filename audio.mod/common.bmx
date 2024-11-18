@@ -91,7 +91,13 @@ Extern
 	Function bmx_raylib_SetAudioStreamPitch(stream:RAudioStream, pitch:Float)="SetAudioStreamPitch"
 	Function bmx_raylib_SetAudioStreamPan(stream:RAudioStream, pan:Float)="SetAudioStreamPan"
 	Function bmx_raylib_SetAudioStreamBufferSizeDefault(size:Int)="SetAudioStreamBufferSizeDefault"
+	Function bmx_raylib_SetAudioStreamCallback(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))="SetAudioStreamCallback"
 
+	Function bmx_raylib_AttachAudioStreamProcessor(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))="AttachAudioStreamProcessor"
+	Function bmx_raylib_DetachAudioStreamProcessor(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))="DetachAudioStreamProcessor"
+
+	Function bmx_raylib_AttachAudioMixedProcessor(processor(data:Byte Ptr, frames:UInt))="AttachAudioMixedProcessor"
+	Function bmx_raylib_DetachAudioMixedProcessor(processor(data:Byte Ptr, frames:UInt))="DetachAudioMixedProcessor"
 End Extern
 
 Struct RWave

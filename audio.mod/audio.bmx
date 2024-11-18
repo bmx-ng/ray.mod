@@ -383,10 +383,16 @@ Function LoadAudioStream:RAudioStream(sampleRate:UInt, sampleSize:UInt, channels
 	Return bmx_raylib_LoadAudioStream(sampleRate, sampleSize, channels)
 End Function
 
+Rem
+bbdoc: Checks if an audio stream is valid (buffers initialized).
+End Rem
 Function IsAudioStreamValid:Int(stream:RAudioStream)
 	Return bmx_raylib_IsAudioStreamValid(stream)
 End Function
 
+Rem
+bbdoc: Unloads audio stream and free memory.
+End Rem
 Function UnloadAudioStream(stream:RAudioStream)
 	bmx_raylib_UnloadAudioStream(stream)
 End Function
@@ -454,6 +460,9 @@ Function SetAudioStreamPitch(stream:RAudioStream, pitch:Float)
 	bmx_raylib_SetAudioStreamPitch(stream, pitch)
 End Function
 
+Rem
+bbdoc: Sets pan for audio stream (0.5 is centered).
+End Rem
 Function SetAudioStreamPan(stream:RAudioStream, pan:Float)
 	bmx_raylib_SetAudioStreamPan(stream, pan)
 End Function
@@ -463,4 +472,39 @@ bbdoc: Sets the default buffer size for new audio streams.
 End Rem
 Function SetAudioStreamBufferSizeDefault(size:Int)
 	bmx_raylib_SetAudioStreamBufferSizeDefault(size)
+End Function
+
+Rem
+bbdoc: Sets audio thread callback to request new data.
+End Rem
+Function SetAudioStreamCallback(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_SetAudioStreamCallback(stream, processor)
+End Function
+
+Rem
+bbdoc: Attaches audio stream processor to stream, receives the samples as 'float'.
+End Rem
+Function AttachAudioStreamProcessor(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_AttachAudioStreamProcessor(stream, processor)
+End Function
+
+Rem
+bbdoc: Detaches audio stream processor from stream.
+End Rem
+Function DetachAudioStreamProcessor(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_DetachAudioStreamProcessor(stream, processor)
+End Function
+
+Rem
+bbdoc: Attaches audio stream processor to the entire audio pipeline, receives the samples as 'float'.
+End Rem
+Function AttachAudioMixedProcessor(processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_AttachAudioMixedProcessor(processor)
+End Function
+
+Rem
+bbdoc: Detaches audio stream processor from the entire audio pipeline.
+End Rem
+Function DetachAudioMixedProcessor(processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_DetachAudioMixedProcessor(processor)
 End Function

@@ -12,14 +12,14 @@ InitWindow(screenWidth, screenHeight, "raylib [audio] example - music playing (s
 
 InitAudioDevice()              ' Initialize audio device
 
-Local music:RMusic = LoadMusicStream("../../lib.mod/raylib/examples/audio/resources/guitar_noodling.ogg")
+Local music:RMusic = LoadMusicStream("../../lib.mod/raylib/examples/audio/resources/country.mp3")
 
 PlayMusicStream(music)
 
 Local timePlayed:Float = 0.0
 Local pause:Int = False
 
-SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
+SetTargetFPS(30)               ' Set our game to run at 30 frames-per-second
 '--------------------------------------------------------------------------------------
 
 ' Main game loop
@@ -45,11 +45,11 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		End If
 	End If
 
-	' Get timePlayed scaled to bar dimensions (400 pixels)
-	timePlayed = GetMusicTimePlayed(music)/GetMusicTimeLength(music)*400
+	' Get normalized time played for current music stream
+	timePlayed = GetMusicTimePlayed(music)/GetMusicTimeLength(music)
 
-	If timePlayed > 400 Then
-		StopMusicStream(music)
+	If timePlayed > 1.0 Then ' Make sure time played is no longer than music
+		timePlayed = 1.0
 	End If
 	'----------------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		DrawText("MUSIC SHOULD BE PLAYING!", 255, 150, 20, LIGHTGRAY)
 
 		DrawRectangle(200, 200, 400, 12, LIGHTGRAY)
-		DrawRectangle(200, 200, Int(timePlayed), 12, MAROON)
+		DrawRectangle(200, 200, Int(timePlayed * 400), 12, MAROON)
 		DrawRectangleLines(200, 200, 400, 12, GRAY)
 
 		DrawText("PRESS SPACE TO RESTART MUSIC", 215, 250, 20, LIGHTGRAY)
