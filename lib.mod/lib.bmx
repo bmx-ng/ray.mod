@@ -1283,14 +1283,14 @@ End Function
 Rem
 bbdoc: Draws a ring.
 End Rem
-Function DrawRing(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
+Function DrawRing(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Float, endAngle:Float, segments:Int, color:RColor)
 	bmx_raylib_DrawRing(center, innerRadius, outerRadius, startAngle, endAngle, segments, color:RColor)
 End Function
 
 Rem
 bbdoc: Draws ring outline.
 End Rem
-Function DrawRingLines(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
+Function DrawRingLines(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Float, endAngle:Float, segments:Int, color:RColor)
 	bmx_raylib_DrawRingLines(center, innerRadius, outerRadius, startAngle, endAngle, segments, color)
 End Function
 
@@ -1367,11 +1367,11 @@ End Function
 Rem
 bbdoc: Draws a rectangle with rounded edges outline.
 End Rem
-Function DrawRectangleRoundedLines(rec:RRectangle, roundness:Float, segments:Int, lineThick:Int, color:RColor)
-	bmx_raylib_DrawRectangleRoundedLines(rec, roundness, segments, lineThick, color)
+Function DrawRectangleRoundedLines(rec:RRectangle, roundness:Float, segments:Int, color:RColor)
+	bmx_raylib_DrawRectangleRoundedLines(rec, roundness, segments, color)
 End Function
 
-Function DrawRectangleRoundedLinesEx(rec:RRectangle, roundness:Float, segments:Int, lineThick:Int, color:RColor)
+Function DrawRectangleRoundedLinesEx(rec:RRectangle, roundness:Float, segments:Int, lineThick:Float, color:RColor)
 	bmx_raylib_DrawRectangleRoundedLinesEx(rec, roundness, segments, lineThick, color)
 End Function
 
@@ -2357,6 +2357,9 @@ Function LoadFontFromImage:RFont(image:RImage, key:RColor, firstChar:Int)
 	Return bmx_raylib_LoadFontFromImage(image, key, firstChar)
 End Function
 
+Rem
+bbdoc: Loads font from memory buffer, fileType refers to extension: i.e. '.ttf'.
+End Rem
 Function LoadFontFromMemory:RFont(fileType:String, data:Byte Ptr, dataSize:Int, fontSize:Int, codepoints:Int Ptr, codepointCount:Int)
 	Local f:Byte Ptr = fileType.ToUTF8String()
 	Local font:RFont = bmx_raylib_LoadFontFromMemory(f, data, dataSize, fontSize, codepoints, codepointCount)
@@ -2364,6 +2367,9 @@ Function LoadFontFromMemory:RFont(fileType:String, data:Byte Ptr, dataSize:Int, 
 	Return font
 End Function
 
+Rem
+bbdoc: Checks if a font is valid (font data loaded, WARNING: GPU texture not checked).
+End Rem
 Function IsFontValid:Int(font:RFont)
 	Return bmx_raylib_IsFontValid(font)
 End Function
@@ -2371,8 +2377,8 @@ End Function
 Rem
 bbdoc: Loads font data for further use.
 End Rem
-Function LoadFontData:RGlyphInfo Ptr(filename:String, FontSize:Int, fontChars:Int Ptr, charsCount:Int, fontType:Int)
-	Return bmx_raylib_LoadFontData(filename, FontSize, fontChars, charsCount, fontType)
+Function LoadFontData:RGlyphInfo Ptr(fileData:Byte Ptr, dataSize:Int, fontSize:Int, codepoints:Int Ptr, codepointCount:Int, fontType:Int)
+	Return bmx_raylib_LoadFontData(fileData, dataSize, fontSize, codepoints, codepointCount, fontType)
 End Function
 
 Rem

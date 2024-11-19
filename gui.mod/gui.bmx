@@ -311,7 +311,7 @@ End Function
 Rem
 bbdoc: Toggle Button control, which returns #True when active.
 End Rem
-Function GuiToggle:Int(bounds:RRectangle, txt:String, active:Int)
+Function GuiToggle:Int(bounds:RRectangle, txt:String, active:Int Var)
 	Local t:Byte Ptr
 	If txt Then
 		Local length:Size_T = txt.length * 3 + 1
@@ -324,7 +324,7 @@ End Function
 Rem
 bbdoc: Toggle Group control, which returns active toggle index.
 End Rem
-Function GuiToggleGroup:Int(bounds:RRectangle, txt:String, active:Int)
+Function GuiToggleGroup:Int(bounds:RRectangle, txt:String, active:Int Var)
 	Local t:Byte Ptr
 	If txt Then
 		Local length:Size_T = txt.length * 3 + 1
@@ -337,7 +337,7 @@ End Function
 Rem
 bbdoc: Check Box control, which returns #True when active.
 End Rem
-Function GuiCheckBox:Int(bounds:RRectangle, txt:String, checked:Int)
+Function GuiCheckBox:Int(bounds:RRectangle, txt:String, checked:Int Var)
 	Local t:Byte Ptr
 	If txt Then
 		Local length:Size_T = txt.length * 3 + 1
@@ -350,7 +350,7 @@ End Function
 Rem
 bbdoc: Combo Box control, which returns selected item index.
 End Rem
-Function GuiComboBox:Int(bounds:RRectangle, txt:String, active:Int)
+Function GuiComboBox:Int(bounds:RRectangle, txt:String, active:Int Var)
 	Local t:Byte Ptr
 	If txt Then
 		Local length:Size_T = txt.length * 3 + 1

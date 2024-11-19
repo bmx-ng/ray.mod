@@ -31,8 +31,8 @@ Local fontPosition:RVector2 = New RVector2(40, screenHeight/2 - 80)
 Local textSize:RVector2 = New RVector2(0.0, 0.0)
 
 ' Setup texture scaling filter
-SetTextureFilter(font.texture, FILTER_POINT)
-Local currentFontFilter:Int = 0      ' FILTER_POINT
+SetTextureFilter(font.texture, TEXTURE_FILTER_POINT)
+Local currentFontFilter:Int = 0      ' TEXTURE_FILTER_POINT
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -45,14 +45,14 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 
 	' Choose font texture filter method
 	If IsKeyPressed(KEY_ONE) Then
-		SetTextureFilter(font.texture, FILTER_POINT)
+		SetTextureFilter(font.texture, TEXTURE_FILTER_POINT)
 		currentFontFilter = 0
 	Else If IsKeyPressed(KEY_TWO) Then
-		SetTextureFilter(font.texture, FILTER_BILINEAR)
+		SetTextureFilter(font.texture, TEXTURE_FILTER_BILINEAR)
 		currentFontFilter = 1
 	Else If IsKeyPressed(KEY_THREE) Then
 		' NOTE: Trilinear filter won't be noticed on 2D drawing
-		SetTextureFilter(font.texture, FILTER_TRILINEAR)
+		SetTextureFilter(font.texture, TEXTURE_FILTER_TRILINEAR)
 		currentFontFilter = 2
 	End If
 
@@ -71,7 +71,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		' NOTE: We only support first ttf file dropped
 		If ExtractExt(droppedFiles[0]) = "ttf" Then
 			UnloadFont(font)
-			font = LoadFontEx(droppedFiles[0], FontSize, 0, 0)
+			font = LoadFontEx(droppedFiles[0], Int(fontSize), 0, 0)
 		End If
 	End If
 	'----------------------------------------------------------------------------------
