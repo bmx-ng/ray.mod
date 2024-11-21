@@ -703,14 +703,12 @@ Struct RRenderTexture2D
 	Field id:UInt
 	Field texture:RTexture2D
 	Field depth:RTexture2D
-	Field depthTexture:Int
 End Struct
 
 Struct RRenderTexture
 	Field id:UInt
 	Field texture:RTexture2D
 	Field depth:RTexture2D
-	Field depthTexture:Int
 End Struct
 
 Struct RImage

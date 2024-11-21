@@ -433,7 +433,7 @@ Rem
 bbdoc: Returns xyz-rotation matrix.
 End Rem
 Function MatrixRotateXYZ:RMatrix(ang:RVector3)
-	Return bmx_raymath_MatrixRotateXYZ(New RVector3(ang.x * 0.0174533, ang.y * 0.0174533, ang.z * 0.0174533))
+	Return bmx_raymath_MatrixRotateXYZ(ang)
 End Function
 
 Rem

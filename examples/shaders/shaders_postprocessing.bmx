@@ -37,11 +37,16 @@ SetConfigFlags(FLAG_MSAA_4X_HINT)      ' Enable Multi Sampling Anti Aliasing 4x 
 InitWindow(screenWidth, screenHeight, "raylib [shaders] example - postprocessing shader")
 
 ' Define the camera to look into our 3d world
-Local camera:RCamera = New RCamera(New RVector3(2.0, 3.0, 2.0), New RVector3(0.0, 1.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, 0)
+Local camera:RCamera
+camera.position = New RVector3(2.0, 3.0, 2.0)    ' Camera position
+camera.target = New RVector3(0.0, 1.0, 0.0)      ' Camera looking at point
+camera.up = New RVector3(0.0, 1.0, 0.0)          ' Camera up vector (rotation towards target)
+camera.fovy = 45.0                                ' Camera field-of-view Y
+camera.projection = CAMERA_PERSPECTIVE             ' Camera projection type
 
 Local model:RModel = LoadModel("../../lib.mod/raylib/examples/shaders/resources/models/church.obj")                 ' Load OBJ model
 Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/models/church_diffuse.png") ' Load model texture (diffuse map)
-model.materials[0].maps[MAP_DIFFUSE].texture = texture                     ' Set model diffuse texture
+model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture                     ' Set model diffuse texture
 
 Local position:RVector3 = New RVector3(0.0, 0.0, 0.0)                             ' Set model position
 
@@ -69,9 +74,6 @@ Local currentShader:Int = FX_GRAYSCALE
 ' Create a RenderTexture2D to be used for render to texture
 Local target:RRenderTexture2D = LoadRenderTexture(screenWidth, screenHeight)
 
-' Setup orbital camera
-SetCameraMode(camera, CAMERA_ORBITAL)  ' Set an orbital camera mode
-
 SetTargetFPS(60)                       ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
 
@@ -79,7 +81,7 @@ SetTargetFPS(60)                       ' Set our game to run at 60 frames-per-se
 While Not WindowShouldClose()            ' Detect window close button or ESC key
 	' Update
 	'----------------------------------------------------------------------------------
-	UpdateCamera(camera)              ' Update camera
+	UpdateCamera(camera, CAMERA_ORBITAL)              ' Update camera
 
 	If IsKeyPressed(KEY_RIGHT) Then
 		currentShader :+ 1
@@ -96,23 +98,17 @@ While Not WindowShouldClose()            ' Detect window close button or ESC key
 
 	' Draw
 	'----------------------------------------------------------------------------------
+	BeginTextureMode(target)       ' Enable drawing to texture
+		ClearBackground(RAYWHITE)  ' Clear texture background
+
+		BeginMode3D(camera)        ' Begin 3d mode drawing
+			DrawModel(model, position, 0.1, WHITE)   ' Draw 3d model with texture
+			DrawGrid(10, 1.0)     ' Draw a grid
+		EndMode3D()                ' End 3d mode drawing, returns to orthographic 2d mode
+	EndTextureMode()               ' End drawing to texture (now we have a texture available for next passes)
+
 	BeginDrawing()
-
-		ClearBackground(RAYWHITE)
-
-		BeginTextureMode(target)       ' Enable drawing to texture
-
-			ClearBackground(RAYWHITE)  ' Clear texture background
-
-			BeginMode3D(camera)        ' Begin 3d mode drawing
-
-				DrawModel(model, position, 0.1, WHITE)   ' Draw 3d model with texture
-
-				DrawGrid(10, 1.0)     ' Draw a grid
-
-			EndMode3D()                ' End 3d mode drawing, returns to orthographic 2d mode
-
-		EndTextureMode()               ' End drawing to texture (now we have a texture available for next passes)
+		ClearBackground(RAYWHITE) ' Clear screen background
 
 		' Render previously generated texture using selected postpro shader
 		BeginShaderMode(shaders[currentShader])
@@ -126,7 +122,6 @@ While Not WindowShouldClose()            ' Detect window close button or ESC key
 		DrawRectangle(0, 9, 580, 30, Fade(LIGHTGRAY, 0.7))
 
 		DrawText("(c) Church 3D model by Alberto Cano", screenWidth - 200, screenHeight - 20, 10, GRAY)
-
 		DrawText("CURRENT POSTPRO SHADER:", 10, 15, 20, BLACK)
 		DrawText(postproShaderText[currentShader], 330, 15, 20, RED)
 		DrawText("< >", 540, 10, 30, DARKBLUE)

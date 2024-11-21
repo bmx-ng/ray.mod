@@ -21,6 +21,10 @@ Local POINTS_OF_INTEREST:Float[] = [ ..
 '--------------------------------------------------------------------------------------
 Const screenWidth:Int = 800
 Const screenHeight:Int = 450
+Const zoomSpeed:Float = 1.01
+Const offsetSpeedMul:Float = 2.0
+
+Const startingZoom:Float = 0.75
 
 InitWindow(screenWidth, screenHeight, "raylib [shaders] example - julia sets")
 
@@ -28,12 +32,15 @@ InitWindow(screenWidth, screenHeight, "raylib [shaders] example - julia sets")
 ' NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
 Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl" + GLSL_VERSION + "/julia_set.fs")
 
+' Create a RenderTexture2D to be used for render to texture
+Local target:RRenderTexture2D = LoadRenderTexture(GetScreenWidth(), GetScreenHeight())
+
 ' c constant to use in z^2 + c
 Local c:Float[] = [POINTS_OF_INTEREST[0], POINTS_OF_INTEREST[1]]
 
 ' Offset and zoom to draw the julia set at. (centered on screen and default size)
-Local offset:Float[] = [-Float(screenWidth/2), -Float(screenHeight/2)]
-Local zoom:Float = 1.0
+Local offset:Float[] = [0, 0]
+Local zoom:Float = startingZoom
 
 Local offsetSpeed:RVector2
 
@@ -43,20 +50,13 @@ Local cLoc:Int = GetShaderLocation(shader, "c")
 Local zoomLoc:Int = GetShaderLocation(shader, "zoom")
 Local offsetLoc:Int = GetShaderLocation(shader, "offset")
 
-' Tell the shader what the screen dimensions, zoom, offset and c are
-Local screenDims:Float[] = [Float(screenWidth), Float(screenHeight)]
-SetShaderValue(shader, GetShaderLocation(shader, "screenDims"), screenDims, UNIFORM_VEC2)
-
-SetShaderValue(shader, cLoc, c, UNIFORM_VEC2)
-SetShaderValue(shader, zoomLoc, Varptr zoom, UNIFORM_FLOAT)
-SetShaderValue(shader, offsetLoc, Varptr offset, UNIFORM_VEC2)
-
-' Create a RenderTexture2D to be used for render to texture
-Local target:RRenderTexture2D = LoadRenderTexture(screenWidth, screenHeight)
+' Upload the shader uniform values!
+SetShaderValue(shader, cLoc, c, SHADER_UNIFORM_VEC2)
+SetShaderValue(shader, zoomLoc, Varptr zoom, SHADER_UNIFORM_FLOAT)
+SetShaderValue(shader, offsetLoc, offset, SHADER_UNIFORM_VEC2)
 
 Local incrementSpeed:Int = 0         ' Multiplier of speed to change c value
 Local showControls:Int = True       ' Show controls
-Local pause:Int = False             ' Pause animation
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -93,79 +93,87 @@ While Not windowShouldClose()    ' Detect window close button or ESC key
 			c[1] = POINTS_OF_INTEREST[11]
 		End If
 
-		SetShaderValue(shader, cLoc, c, UNIFORM_VEC2)
+		SetShaderValue(shader, cLoc, c, SHADER_UNIFORM_VEC2)
+	End If
+
+	' If "R" is pressed, reset zoom and offset.
+	if IsKeyPressed(KEY_R) Then
+		zoom = startingZoom
+		offset[0] = 0.0
+		offset[1] = 0.0
+		SetShaderValue(shader, zoomLoc, VarPtr zoom, SHADER_UNIFORM_FLOAT)
+		SetShaderValue(shader, offsetLoc, offset, SHADER_UNIFORM_VEC2)
 	End If
 
 	If IsKeyPressed(KEY_SPACE) Then
-		pause = Not pause                 ' Pause animation (c change)
+		incrementSpeed = 0
 	End If
 	
 	If IsKeyPressed(KEY_F1) Then
 		showControls = Not showControls  ' Toggle whether or not to show controls
 	End If
 
-	If Not pause Then
-		If IsKeyPressed(KEY_RIGHT) Then
-			incrementSpeed :+ 1
-		Else If IsKeyPressed(KEY_LEFT) Then
-			incrementSpeed :- 1
-		End If
-
-		' TODO: The idea is to zoom and move around with mouse
-		' Probably offset movement should be proportional to zoom level
-		If IsMouseButtonDown(MOUSE_LEFT_BUTTON) Or IsMouseButtonDown(MOUSE_RIGHT_BUTTON) Then
-			If IsMouseButtonDown(MOUSE_LEFT_BUTTON) Then
-				zoom :+ zoom * 0.003
-			End If
-			If IsMouseButtonDown(MOUSE_RIGHT_BUTTON) Then
-				zoom :- zoom * 0.003
-			End If
-
-			Local mousePos:RVector2 = GetMousePosition()
-
-			offsetSpeed.x = mousePos.x -Float(screenWidth/2)
-			offsetSpeed.y = mousePos.y -Float(screenHeight/2)
-
-			' Slowly move camera to targetOffset
-			offset[0] :+ GetFrameTime()*offsetSpeed.x*0.8
-			offset[1] :+ GetFrameTime()*offsetSpeed.y*0.8
-		Else
-			offsetSpeed = New RVector2
-		End If
-
-		SetShaderValue(shader, zoomLoc, Varptr zoom, UNIFORM_FLOAT)
-		SetShaderValue(shader, offsetLoc, offset, UNIFORM_VEC2)
-
-		' Increment c value with time
-		Local amount:Float = GetFrameTime() * incrementSpeed * 0.0005
-		c[0] :+ amount
-		c[1] :+ amount
-
-		SetShaderValue(shader, cLoc, c, UNIFORM_VEC2)
+	If IsKeyPressed(KEY_RIGHT) Then
+		incrementSpeed :+ 1
+	Else If IsKeyPressed(KEY_LEFT) Then
+		incrementSpeed :- 1
 	End If
+
+	' If either left or right button is pressed, zoom in/out.
+	If IsMouseButtonDown(MOUSE_LEFT_BUTTON) Or IsMouseButtonDown(MOUSE_RIGHT_BUTTON) Then	
+		' Change zoom. If Mouse left -> zoom in. Mouse right -> zoom out.
+		If IsMouseButtonDown(MOUSE_BUTTON_LEFT) Then
+			zoom :* zoomSpeed
+		Else
+			zoom :* 1.0/zoomSpeed
+		End IF
+
+		Local  mousePos:RVector2 = GetMousePosition()
+		Local offsetVelocity:RVector2
+
+		' Find the velocity at which to change the camera. Take the distance of the mouse
+		' from the center of the screen as the direction, and adjust magnitude based on
+		' the current zoom.
+		offsetVelocity.x = (mousePos.x/Float(screenWidth) - 0.5)*offsetSpeedMul/zoom
+		offsetVelocity.y = (mousePos.y/Float(screenHeight) - 0.5)*offsetSpeedMul/zoom
+
+		' Apply move velocity to camera
+		offset[0] :+ GetFrameTime()*offsetVelocity.x
+		offset[1] :+ GetFrameTime()*offsetVelocity.y
+
+		' Update the shader uniform values!
+		SetShaderValue(shader, zoomLoc, VarPtr zoom, SHADER_UNIFORM_FLOAT)
+		SetShaderValue(shader, offsetLoc, offset, SHADER_UNIFORM_VEC2)
+	End If
+
+	' Increment c value with time
+	Local  dc:Float = GetFrameTime() * Float(incrementSpeed) * 0.0005
+	c[0] :+ dc
+	c[1] :+ dc
+	SetShaderValue(shader, cLoc, c, SHADER_UNIFORM_VEC2)
+
 	'----------------------------------------------------------------------------------
 
 	' Draw
 	'----------------------------------------------------------------------------------
+	' Using a render texture to draw Julia set
+	BeginTextureMode(target)       ' Enable drawing to texture
+		ClearBackground(BLACK)     ' Clear the render texture
+
+		' Draw a rectangle in shader mode to be used as shader canvas
+		' NOTE: Rectangle uses font white character texture coordinates,
+		' so shader can not be applied here directly because input vertexTexCoord
+		' do not represent full screen coordinates (space where want to apply shader)
+		DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLACK)
+	EndTextureMode()
+
 	BeginDrawing()
-
 		ClearBackground(BLACK)         ' Clear the screen of the previous frame.
-
-		' Using a render texture to draw Julia set
-		BeginTextureMode(target)       ' Enable drawing to texture
-			ClearBackground(BLACK)     ' Clear the render texture
-
-			' Draw a rectangle in shader mode to be used as shader canvas
-			' NOTE: Rectangle uses font white character texture coordinates,
-			' so shader can not be applied here directly because input vertexTexCoord
-			' do not represent full screen coordinates (space where want to apply shader)
-			DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLACK)
-		EndTextureMode()
 
 		' Draw the saved texture and rendered julia set with shader
 		' NOTE: We do not invert texture on Y, already considered inside shader
 		BeginShaderMode(shader)
-			DrawTexture(target.texture, 0, 0, WHITE)
+			DrawTextureEx(target.texture, New RVector2, 0, 1, WHITE)
 		EndShaderMode()
 
 		If showControls Then
@@ -174,6 +182,7 @@ While Not windowShouldClose()    ' Detect window close button or ESC key
 			DrawText("Press KEYS [1 - 6] to change point of interest", 10, 45, 10, RAYWHITE)
 			DrawText("Press KEY_LEFT | KEY_RIGHT to change speed", 10, 60, 10, RAYWHITE)
 			DrawText("Press KEY_SPACE to pause movement animation", 10, 75, 10, RAYWHITE)
+			DrawText("Press KEY_R to recenter the camera", 10, 90, 10, RAYWHITE)
 		End If
 
 	EndDrawing()

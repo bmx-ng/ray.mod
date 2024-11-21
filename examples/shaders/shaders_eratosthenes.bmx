@@ -33,19 +33,19 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 
 	' Draw
 	'----------------------------------------------------------------------------------
+	BeginTextureMode(target)   ' Enable drawing to texture
+		ClearBackground(BLACK) ' Clear the render texture
+
+		' Draw a rectangle in shader mode to be used as shader canvas
+		' NOTE: Rectangle uses font white character texture coordinates,
+		' so shader can not be applied here directly because input vertexTexCoord
+		' do not represent full screen coordinates (space where want to apply shader)
+		DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLACK)
+	EndTextureMode()           ' End drawing to texture (now we have a blank texture available for the shader)
+
 	BeginDrawing()
 
 		ClearBackground(RAYWHITE)
-
-		BeginTextureMode(target)   ' Enable drawing to texture
-			ClearBackground(BLACK) ' Clear the render texture
-
-			' Draw a rectangle in shader mode to be used as shader canvas
-			' NOTE: Rectangle uses font white character texture coordinates,
-			' so shader can not be applied here directly because input vertexTexCoord
-			' do not represent full screen coordinates (space where want to apply shader)
-			DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLACK)
-		EndTextureMode()           ' End drawing to texture (now we have a blank texture available for the shader)
 
 		BeginShaderMode(shader)
 			' NOTE: Render texture must be y-flipped due to default OpenGL coordinates (left-bottom)

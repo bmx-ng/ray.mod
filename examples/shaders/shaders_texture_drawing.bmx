@@ -24,7 +24,7 @@ Local shader:RShader = LoadShader(0,"../../lib.mod/raylib/examples/shaders/resou
 
 Local time:Float = 0.0
 Local timeLoc:Int = GetShaderLocation(shader, "uTime")
-SetShaderValue(shader, timeLoc, Varptr time, UNIFORM_FLOAT)
+SetShaderValue(shader, timeLoc, Varptr time, SHADER_UNIFORM_FLOAT)
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 ' -------------------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 	' Update
 	'----------------------------------------------------------------------------------
 	time = GetTime()
-	SetShaderValue(shader, timeLoc, Varptr time, UNIFORM_FLOAT)
+	SetShaderValue(shader, timeLoc, Varptr time, SHADER_UNIFORM_FLOAT)
 	'----------------------------------------------------------------------------------
 
 	' Draw
