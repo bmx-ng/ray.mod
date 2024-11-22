@@ -171,6 +171,11 @@ Extern
 	Function bmx_raylib_MemRealloc:Byte Ptr(data:Byte Ptr, size:UInt)="MemRealloc"
 	Function bmx_raylib_MemFree(data:Byte Ptr)="MemFree"
 
+	' Files management functions
+	Function bmx_raylib_LoadFileData:Byte Ptr(fileName:Byte Ptr, dataSize:Int Var)="LoadFileData"
+	Function bmx_raylib_UnloadFileData(data:Byte Ptr)="UnloadFileData"
+	Function bmx_raylib_SaveFileData:Int(fileName:Byte Ptr, data:Byte Ptr, dataSize:Int)="SaveFileData"
+
 	Function bmx_raylib_DrawFPS(posX:Int, posY:Int)="DrawFPS"
 	Function bmx_raylib_DrawText(txt:Byte Ptr, posX:Int, posY:Int, FontSize:Int, color:RColor)
 	Function bmx_raylib_DrawTextEx(font:RFont, txt:Byte Ptr, position:RVector2, FontSize:Float, spacing:Float, tint:RColor)
@@ -789,11 +794,11 @@ End Struct
 
 Struct RFont
 	Field baseSize:Int
-	Field charsCount:Int
+	Field glyphCount:Int
 	Field glyphPadding:Int
 	Field texture:RTexture2D
 	Field recs:RRectangle Ptr
-	Field chars:RGlyphInfo Ptr
+	Field glyphs:RGlyphInfo Ptr
 End Struct
 
 Struct RNPatchInfo

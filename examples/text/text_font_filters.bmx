@@ -66,7 +66,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 
 	' Load a dropped TTF file dynamically (at current fontSize)
 	If IsFileDropped() Then
-		Local droppedFiles:String[] = GetDroppedFiles()
+		Local droppedFiles:String[] = LoadDroppedFiles()
 
 		' NOTE: We only support first ttf file dropped
 		If ExtractExt(droppedFiles[0]) = "ttf" Then

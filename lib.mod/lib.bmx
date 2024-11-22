@@ -795,6 +795,33 @@ Function RMemFree(data:Byte Ptr)
 	bmx_raylib_MemFree(data)
 End Function
 
+' Files management functions
+Rem
+bbdoc: Loads file data as bytes (read)
+End Rem
+Function LoadFileData:Byte Ptr(fileName:String, dataSize:Int Var)
+	Local f:Byte Ptr = fileName.ToUTF8String()
+	Local result:Byte Ptr = bmx_raylib_LoadFileData(f, dataSize)
+	MemFree(f)
+	Return result
+End Function
+
+Rem
+bbdoc: Unloads file data allocated by LoadFileData()
+End Rem
+Function UnloadFileData(data:Byte Ptr)
+	bmx_raylib_UnloadFileData(data)
+End Function
+
+Rem
+bbdoc: Saves data to file from bytes (write), returns #True on success
+End Rem
+Function SaveFileData:Int(fileName:String, data:Byte Ptr, dataSize:Int)
+	Local f:Byte Ptr = fileName.ToUTF8String()
+	Local result:Int = bmx_raylib_SaveFileData(f, data, dataSize)
+	MemFree(f)
+	Return result
+End Function
 
 ' Input-related functions: keyboard
 Rem
@@ -3034,9 +3061,9 @@ Function IsFileDropped:Int()
 End Function
 
 Rem
-bbdoc: Gets dropped files names.
+bbdoc: Loads dropped files names.
 End Rem
-Function GetDroppedFiles:String[]()
+Function LoadDroppedFiles:String[]()
 	Return bmx_raylib_LoadDroppedFiles()
 End Function
 

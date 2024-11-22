@@ -14,7 +14,7 @@ Const screenHeight:Int = 450
 
 InitWindow(screenWidth, screenHeight, "raylib [text] example - input box")
 
-Local name:Byte[MAX_INPUT_CHARS + 1]      ' NOTE: One extra space required for line ending char '\0'
+Local name:String
 Local letterCount:Int = 0
 
 Local textBox:RRectangle = New RRectangle(screenWidth/2 - 100, 180, 225, 50)
@@ -22,7 +22,7 @@ Local mouseOnText:Int = False
 
 Local framesCounter:Int = 0
 
-SetTargetFPS(10)               ' Set our game to run at 60 frames-per-second
+SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
 
 ' Main game loop
@@ -36,14 +36,17 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 	End If
 
 	If mouseOnText Then
+		' Set the window's cursor to the I-Beam
+		SetMouseCursor(MOUSE_CURSOR_IBEAM)
+
 		' Get pressed key (character) on the queue
 		Local key:Int = GetKeyPressed()
 
 		' Check if more characters have been pressed on the same frame
-		While key >= 32
+		While key > 0
 			' NOTE: Only allow keys in range [32..125]
 			If (key >= 32) And (key <= 125) And (letterCount < MAX_INPUT_CHARS) Then
-				name[letterCount] = key
+				name :+ Chr(key)
 				letterCount :+ 1
 			End If
 			
@@ -57,8 +60,10 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 				letterCount = 0
 			End If
 
-			name[letterCount] = 0
+			name = name[0..letterCount]
 		End If
+	Else
+		SetMouseCursor(MOUSE_CURSOR_DEFAULT)
 	End If
 
 	If mouseOnText Then
@@ -78,13 +83,12 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 
 		DrawRectangleRec(textBox, LIGHTGRAY)
 		If mouseOnText Then
-			DrawRectangleLines(textBox.x, textBox.y, textBox.width, textBox.height, RED)
+			DrawRectangleLines(Int(textBox.x), Int(textBox.y), Int(textBox.width), Int(textBox.height), RED)
 		Else
-			DrawRectangleLines(textBox.x, textBox.y, textBox.width, textBox.height, DARKGRAY)
+			DrawRectangleLines(Int(textBox.x), Int(textBox.y), Int(textBox.width), Int(textBox.height), DARKGRAY)
 		End If
 
-		Local s:String = String.FromCString(name)
-		DrawText(s, textBox.x + 5, textBox.y + 8, 40, MAROON)
+		DrawText(name, Int(textBox.x + 5), Int(textBox.y + 8), 40, MAROON)
 
 		DrawText(formatter.Clear().Arg(letterCount).Arg(MAX_INPUT_CHARS).Format(), 315, 250, 20, DARKGRAY)
 
@@ -92,7 +96,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 			If letterCount < MAX_INPUT_CHARS Then
 				' Draw blinking underscore char
 				If ((framesCounter/20) Mod 2) = 0 Then
-					DrawText("_", textBox.x + 8 + MeasureText(s, 40), textBox.y + 12, 40, MAROON)
+					DrawText("_", Int(textBox.x + 8 + MeasureText(name, 40)), Int(textBox.y + 12), 40, MAROON)
 				End If
 			Else
 				DrawText("Press BACKSPACE to delete chars...", 230, 300, 20, GRAY)
