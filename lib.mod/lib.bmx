@@ -3068,6 +3068,105 @@ Function LoadDroppedFiles:String[]()
 End Function
 
 
+' camera functions
+Rem
+bbdoc: Returns the cameras forward vector (normalized).
+End Rem
+Function GetCameraForward:RVector3(camera:RCamera)
+	Return bmx_raylib_GetCameraForward(camera)
+End Function
+
+Rem
+bbdoc: Returns the cameras up vector (normalized).
+about: Note: The up vector might not be perpendicular to the forward vector
+End Rem
+Function GetCameraUp:RVector3(camera:RCamera)
+	Return bmx_raylib_GetCameraUp(camera)
+End Function
+
+Rem
+bbdoc: Returns the cameras right vector (normalized).
+End Rem
+Function GetCameraRight:RVector3(camera:RCamera)
+	Return bmx_raylib_GetCameraRight(camera)
+End Function
+
+' camera movement
+Rem
+bbdoc: Moves the camera in its forward direction.
+End Rem
+Function CameraMoveForward(camera:RCamera, distance:Float, moveInWorldPlane:Int)
+	bmx_raylib_CameraMoveForward(camera, distance, moveInWorldPlane)
+End Function
+
+Rem
+bbdoc: Moves the camera in its up direction.
+End Rem
+Function CameraMoveUp(camera:RCamera, distance:Float)
+	bmx_raylib_CameraMoveUp(camera, distance)
+End Function
+
+Rem
+bbdoc: Moves the camera target in its current right direction.
+End Rem
+Function CameraMoveRight(camera:RCamera, distance:Float, moveInWorldPlane:Int)
+	bmx_raylib_CameraMoveRight(camera, distance, moveInWorldPlane)
+End Function
+
+Rem
+bbdoc: Moves the camera position closer/farther to/from the camera target.
+End Rem
+Function CameraMoveToTarget(camera:RCamera, delta:Float)
+	bmx_raylib_CameraMoveToTarget(camera, delta)
+End Function
+
+' camera rotation
+Rem
+bbdoc: Rotates the camera around its up vector
+about: Yaw is "looking left and right"
+If @rotateAroundTarget is #False, the camera rotates around its position
+
+Note: angle must be provided in radians
+End Rem
+Function CameraYaw(camera:RCamera, angleInRadians:Float, rotateAroundTarget:Int)
+	bmx_raylib_CameraYaw(camera, angleInRadians, rotateAroundTarget)
+End Function
+
+Rem
+bbdoc: Rotates the camera around its right vector, pitch is "looking up and down"
+about: @lockView prevents camera overrotation (aka "somersaults")
+@rotateAroundTarget defines if rotation is around target or around its position
+@rotateUp rotates the up direction as well (typically only usefull in CAMERA_FREE)
+
+NOTE: angle must be provided in radians
+End Rem
+Function CameraPitch(camera:RCamera, angleInRadians:Float, lockView:Int, rotateAroundTarget:Int, rotateUp:Int)
+	bmx_raylib_CameraPitch(camera, angleInRadians, lockView, rotateAroundTarget, rotateUp)
+End Function
+
+Rem
+bbdoc: Rotates the camera around its forward vector.
+about: Roll is "turning your head sideways to the left or right"
+
+Note: angle must be provided in radians
+End Rem
+Function CameraRoll(camera:RCamera, angleInRadians:Float)
+	bmx_raylib_CameraRoll(camera, angleInRadians)
+End Function
+
+Rem
+bbdoc: Returns the camera view matrix.
+End Rem
+Function GetCameraViewMatrix:RMatrix(camera:RCamera)
+	Return bmx_raylib_GetCameraViewMatrix(camera)
+End Function
+
+Rem
+bbdoc: Returns the camera projection matrix.
+End Rem
+Function GetCameraProjectionMatrix:RMatrix(camera:RCamera, aspect:Float)
+	Return bmx_raylib_GetCameraProjectionMatrix(camera, aspect)
+End Function
 
 
 ' Linear Easing functions

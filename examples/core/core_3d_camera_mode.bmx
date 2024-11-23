@@ -15,7 +15,7 @@ camera.position = New RVector3(0.0, 10.0, 10.0)  ' Camera position
 camera.target = New RVector3(0.0, 0.0, 0.0)      ' Camera looking at point
 camera.up = New RVector3(0.0, 1.0, 0.0)          ' Camera up vector (rotation towards target)
 camera.fovy = 45.0                               ' Camera field-of-view Y
-camera.cameraType = CAMERA_PERSPECTIVE           ' Camera mode type
+camera.projection = CAMERA_PERSPECTIVE           ' Camera mode type
 
 Local cubePosition:RVector3 = New RVector3(0.0, 0.0, 0.0)
 

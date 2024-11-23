@@ -9,9 +9,9 @@ Const screenHeight:Int = 450
 
 InitWindow(screenWidth, screenHeight, "raylib [core] example - generate random values")
 
-Local framesCounter:Int = 0          ' Variable used to count frames
-
 Local randValue:Int = GetRandomValue(-8, 5)   ' Get a random integer number between -8 and 5 (both included)
+
+Local framesCounter:Int = 0          ' Variable used to count frames
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------

@@ -571,8 +571,19 @@ Extern
 	Function bmx_raylib_IsFileDropped:Int()="IsFileDropped"
 	Function bmx_raylib_LoadDroppedFiles:String[]()
 
+	Function bmx_raylib_GetCameraForward:RVector3(camera:RCamera Var)="GetCameraForward"
+	Function bmx_raylib_GetCameraUp:RVector3(camera:RCamera Var)="GetCameraUp"
+	Function bmx_raylib_GetCameraRight:RVector3(camera:RCamera Var)="GetCameraRight"
+	Function bmx_raylib_CameraMoveForward(camera:RCamera Var, distance:Float, moveInWorldPlane:Int)="CameraMoveForward"
+	Function bmx_raylib_CameraMoveUp(camera:RCamera Var, distance:Float)="CameraMoveUp"
+	Function bmx_raylib_CameraMoveRight(camera:RCamera Var, distance:Float, moveInWorldPlane:Int)="CameraMoveRight"
+	Function bmx_raylib_CameraMoveToTarget(camera:RCamera Var, delta:Float)="CameraMoveToTarget"
+	Function bmx_raylib_CameraYaw(camera:RCamera Var, angle:Float, rotateAroundTarget:Int)="CameraYaw"
+	Function bmx_raylib_CameraPitch(camera:RCamera Var, angle:Float, lockView:Int, rotateAroundTarget:Int, rotateUp:Int)="CameraPitch"
+	Function bmx_raylib_CameraRoll(camera:RCamera Var, angle:Float)="CameraRoll"
+	Function bmx_raylib_GetCameraViewMatrix:RMatrix(camera:RCamera Var)="GetCameraViewMatrix"
+	Function bmx_raylib_GetCameraProjectionMatrix:RMatrix(camera:RCamera Var, aspect:Float)="GetCameraProjectionMatrix"
 End Extern
-
 
 Struct RColor
 	Field r:Byte

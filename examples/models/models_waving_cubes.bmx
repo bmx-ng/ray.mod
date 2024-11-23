@@ -3,8 +3,6 @@ SuperStrict
 Framework Ray.Lib
 Import BRL.Math
 
-Const RAD2DEG:Float = 57.2958
-
 ' Initialization
 '--------------------------------------------------------------------------------------
 Const screenWidth:Int = 800
@@ -33,12 +31,12 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 	Local time:Double = GetTime()
 
 	' Calculate time scale for cube position and size
-	Local scale:Float = (2.0 + Float(Sin(time * RAD2DEG)))*0.7
+	Local scale:Float = (2.0 + Float(Sin(Rad2Deg(time))))*0.7
 
 	' Move camera around the scene
 	Local cameraTime:Double = time * 0.3
-	camera.position.x = Float(Cos(cameraTime * RAD2DEG))*40.0
-	camera.position.z = Float(Sin(cameraTime * RAD2DEG))*40.0
+	camera.position.x = Float(Cos(Rad2Deg(cameraTime)))*40.0
+	camera.position.z = Float(Sin(Rad2Deg(cameraTime)))*40.0
 	'----------------------------------------------------------------------------------
 	
 	' Draw
