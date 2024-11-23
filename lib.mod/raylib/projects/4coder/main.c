@@ -8,19 +8,18 @@ int main() {
     InitWindow(screenWidth, screenHeight, "raylib");
 
     Camera cam;
-    cam.position = (Vector3){ 0.f, 10.f, 8.f };
-    cam.target = (Vector3){ 0.f, 0.f, 0.f };
-    cam.up = (Vector3){ 0.f, 1.f, 0.f };
-    cam.fovy = 60.f;
-    cam.type = CAMERA_PERSPECTIVE;
+    cam.position = (Vector3){ 0.0f, 10.0f, 8.f };
+    cam.target = (Vector3){ 0.0f, 0.0f, 0.0f };
+    cam.up = (Vector3){ 0.0f, 1.f, 0.0f };
+    cam.fovy = 60.0f;
 
-    Vector3 cubePos = { 0.f, 0.f, 0.f };
+    Vector3 cubePos = { 0.0f, 0.0f, 0.0f };
 
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
-        cam.position.x = sin(GetTime()) * 10.f;
-        cam.position.z = cos(GetTime()) * 10.f;
+        cam.position.x = sin(GetTime()) * 10.0f;
+        cam.position.z = cos(GetTime()) * 10.0f;
 
         BeginDrawing();
             ClearBackground(RAYWHITE);

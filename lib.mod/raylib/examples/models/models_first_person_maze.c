@@ -2,10 +2,12 @@
 *
 *   raylib [models] example - first person maze
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.5, last time updated with raylib 3.5
 *
-*   Copyright (c) 2019 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2019-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -13,6 +15,9 @@
 
 #include <stdlib.h>           // Required for: free()
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -23,7 +28,12 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "raylib [models] example - first person maze");
 
     // Define the camera to look into our 3d world
-    Camera camera = { { 0.2f, 0.4f, 0.2f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, 45.0f, 0 };
+    Camera camera = { 0 };
+    camera.position = (Vector3){ 0.2f, 0.4f, 0.2f };    // Camera position
+    camera.target = (Vector3){ 0.185f, 0.4f, 0.0f };    // Camera looking at point
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
     Image imMap = LoadImage("resources/cubicmap.png");      // Load cubicmap image (RAM)
     Texture2D cubicmap = LoadTextureFromImage(imMap);       // Convert image to texture to display (VRAM)
@@ -32,16 +42,15 @@ int main(void)
 
     // NOTE: By default each cube is mapped to one part of texture atlas
     Texture2D texture = LoadTexture("resources/cubicmap_atlas.png");    // Load map texture
-    model.materials[0].maps[MAP_DIFFUSE].texture = texture;             // Set map diffuse texture
+    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;    // Set map diffuse texture
 
     // Get map image data to be used for collision detection
-    Color *mapPixels = GetImageData(imMap);
+    Color *mapPixels = LoadImageColors(imMap);
     UnloadImage(imMap);             // Unload image from RAM
 
     Vector3 mapPosition = { -16.0f, 0.0f, -8.0f };  // Set model position
-    Vector3 playerPosition = camera.position;       // Set player position
 
-    SetCameraMode(camera, CAMERA_FIRST_PERSON);     // Set camera mode
+    DisableCursor();                // Limit cursor to relative movement inside the window
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -53,7 +62,7 @@ int main(void)
         //----------------------------------------------------------------------------------
         Vector3 oldCamPos = camera.position;    // Store old camera position
 
-        UpdateCamera(&camera);      // Update camera
+        UpdateCamera(&camera, CAMERA_FIRST_PERSON);
 
         // Check player collision (we simplify to 2D collision detection)
         Vector2 playerPos = { camera.position.x, camera.position.z };
@@ -93,13 +102,10 @@ int main(void)
             ClearBackground(RAYWHITE);
 
             BeginMode3D(camera);
-
                 DrawModel(model, mapPosition, 1.0f, WHITE);                     // Draw maze map
-                //DrawCubeV(playerPosition, (Vector3){ 0.2f, 0.4f, 0.2f }, RED);  // Draw player
-
             EndMode3D();
 
-            DrawTextureEx(cubicmap, (Vector2){ GetScreenWidth() - cubicmap.width*4 - 20, 20 }, 0.0f, 4.0f, WHITE);
+            DrawTextureEx(cubicmap, (Vector2){ GetScreenWidth() - cubicmap.width*4.0f - 20, 20.0f }, 0.0f, 4.0f, WHITE);
             DrawRectangleLines(GetScreenWidth() - cubicmap.width*4 - 20, 20, cubicmap.width*4, cubicmap.height*4, GREEN);
 
             // Draw player position radar
@@ -113,13 +119,13 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    free(mapPixels);            // Unload color array
+    UnloadImageColors(mapPixels);   // Unload color array
 
-    UnloadTexture(cubicmap);    // Unload cubicmap texture
-    UnloadTexture(texture);     // Unload map texture
-    UnloadModel(model);         // Unload map model
+    UnloadTexture(cubicmap);        // Unload cubicmap texture
+    UnloadTexture(texture);         // Unload map texture
+    UnloadModel(model);             // Unload map model
 
-    CloseWindow();              // Close window and OpenGL context
+    CloseWindow();                  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
     return 0;

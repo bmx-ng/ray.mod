@@ -2,17 +2,22 @@
 *
 *   raylib [shapes] example - easings ball anim
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.5, last time updated with raylib 2.5
 *
-*   Copyright (c) 2014-2019 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2014-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
-#include "easings.h"                // Required for easing functions
+#include "reasings.h"                // Required for easing functions
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -41,7 +46,7 @@ int main(void)
         if (state == 0)             // Move ball position X with easing
         {
             framesCounter++;
-            ballPositionX = EaseElasticOut(framesCounter, -100, screenWidth/2 + 100, 120);
+            ballPositionX = (int)EaseElasticOut((float)framesCounter, -100, screenWidth/2.0f + 100, 120);
 
             if (framesCounter >= 120)
             {
@@ -52,7 +57,7 @@ int main(void)
         else if (state == 1)        // Increase ball radius with easing
         {
             framesCounter++;
-            ballRadius = EaseElasticIn(framesCounter, 20, 500, 200);
+            ballRadius = (int)EaseElasticIn((float)framesCounter, 20, 500, 200);
 
             if (framesCounter >= 200)
             {
@@ -63,7 +68,7 @@ int main(void)
         else if (state == 2)        // Change ball alpha with easing (background color blending)
         {
             framesCounter++;
-            ballAlpha = EaseCubicOut(framesCounter, 0.0f, 1.0f, 200);
+            ballAlpha = EaseCubicOut((float)framesCounter, 0.0f, 1.0f, 200);
 
             if (framesCounter >= 200)
             {
@@ -93,7 +98,7 @@ int main(void)
             ClearBackground(RAYWHITE);
 
             if (state >= 2) DrawRectangle(0, 0, screenWidth, screenHeight, GREEN);
-            DrawCircle(ballPositionX, 200, ballRadius, Fade(RED, 1.0f - ballAlpha));
+            DrawCircle(ballPositionX, 200, (float)ballRadius, Fade(RED, 1.0f - ballAlpha));
 
             if (state == 3) DrawText("PRESS [ENTER] TO PLAY AGAIN!", 240, 200, 20, BLACK);
 

@@ -2,15 +2,20 @@
 *
 *   raylib [core] examples - Mouse wheel input
 *
-*   This test has been created using raylib 1.1 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.1, last time updated with raylib 1.3
 *
-*   Copyright (c) 2014 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2014-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -31,7 +36,7 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        boxPositionY -= (GetMouseWheelMove()*scrollSpeed);
+        boxPositionY -= (int)(GetMouseWheelMove()*scrollSpeed);
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -43,7 +48,7 @@ int main(void)
             DrawRectangle(screenWidth/2 - 40, boxPositionY, 80, 80, MAROON);
 
             DrawText("Use mouse wheel to move the cube up and down!", 10, 10, 20, GRAY);
-            DrawText(FormatText("Box position Y: %03i", boxPositionY), 10, 40, 20, LIGHTGRAY);
+            DrawText(TextFormat("Box position Y: %03i", boxPositionY), 10, 40, 20, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------

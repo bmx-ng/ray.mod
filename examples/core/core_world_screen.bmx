@@ -15,12 +15,12 @@ camera.position = New RVector3(10.0, 10.0, 10.0)
 camera.target = New RVector3(0.0, 0.0, 0.0)
 camera.up = New RVector3(0.0, 1.0, 0.0)
 camera.fovy = 45.0
-camera.cameraType = CAMERA_PERSPECTIVE
+camera.projection = CAMERA_PERSPECTIVE
 
 Local cubePosition:RVector3 = New RVector3(0.0, 0.0, 0.0)
 Local cubeScreenPosition:RVector2 = New RVector2(0.0, 0.0)
 
-SetCameraMode(camera, CAMERA_FREE) ' Set a free camera mode
+DisableCursor()                    ' Limit cursor to relative movement inside the window
 
 SetTargetFPS(60)                   ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ SetTargetFPS(60)                   ' Set our game to run at 60 frames-per-second
 While Not WindowShouldClose()        ' Detect window close button or ESC key
 	' Update
 	'----------------------------------------------------------------------------------
-	UpdateCamera(camera)          ' Update camera
+	UpdateCamera(camera, CAMERA_THIRD_PERSON)          ' Update camera
 
 	' Calculate cube screen space position (with a little offset to be in top)
 	cubeScreenPosition = GetWorldToScreen(New RVector3(cubePosition.x, cubePosition.y + 2.5, cubePosition.z), camera)
@@ -51,7 +51,9 @@ While Not WindowShouldClose()        ' Detect window close button or ESC key
 		EndMode3D()
 
 		DrawText("Enemy: 100 / 100", Int(cubeScreenPosition.x - MeasureText("Enemy: 100/100", 20)/2), Int(cubeScreenPosition.y), 20, BLACK)
-		DrawText("Text is always on top of the cube", (screenWidth - MeasureText("Text is always on top of the cube", 20))/2, 25, 20, GRAY)
+
+		DrawText("Cube position in screen space coordinates: [ " + Int(cubeScreenPosition.x) + ", " + Int(cubeScreenPosition.y) + "]", 10, 10, 20, LIME);
+		DrawText("Text 2d should be always on top of the cube", 10, 40, 20, GRAY)
 
 	EndDrawing()
 	'----------------------------------------------------------------------------------

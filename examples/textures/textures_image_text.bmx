@@ -15,7 +15,7 @@ Local parrots:RImage = LoadImage("../../lib.mod/raylib/examples/textures/resourc
 Local font:RFont = LoadFontEx("../../lib.mod/raylib/examples/textures/resources/KAISG.ttf", 64, 0, 0)
 
 ' Draw over image using custom font
-ImageDrawTextEx(parrots, New RVector2(20.0, 20.0), font, "[Parrots font drawing]", Float(font.baseSize), 0.0, RED)
+ImageDrawTextEx(parrots, font, "[Parrots font drawing]", New RVector2(20.0, 20.0), Float(font.baseSize), 0.0, RED)
 
 Local texture:RTexture2D  = LoadTextureFromImage(parrots)  ' Image converted to texture, uploaded to GPU memory (VRAM)
 UnloadImage(parrots)   ' Once image has been converted to texture and uploaded to VRAM, it can be unloaded from RAM

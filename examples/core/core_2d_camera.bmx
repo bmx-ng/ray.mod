@@ -96,8 +96,8 @@ While Not WindowShouldClose()        ' Detect window close button or ESC key
 
 			DrawRectangleRec(player, RED)
 
-			DrawLine(camera.target.x, -screenHeight * 10, camera.target.x, screenHeight * 10, GREEN)
-			DrawLine(-screenWidth * 10, camera.target.y, screenWidth * 10, camera.target.y, GREEN)
+			DrawLine(Int(camera.target.x), -screenHeight * 10, Int(camera.target.x), screenHeight * 10, GREEN)
+			DrawLine(-screenWidth * 10, Int(camera.target.y), screenWidth * 10, Int(camera.target.y), GREEN)
 
 		EndMode2D()
 

@@ -2,17 +2,21 @@
 *
 *   raylib [models] example - rlgl module usage with push/pop matrix transformations
 *
-*   This example uses [rlgl] module funtionality (pseudo-OpenGL 1.1 style coding)
+*   NOTE: This example uses [rlgl] module functionality (pseudo-OpenGL 1.1 style coding)
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.5, last time updated with raylib 4.0
 *
-*   Copyright (c) 2018 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2018-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 #include "rlgl.h"
+
+#include <math.h>           // Required for: cosf(), sinf()
 
 //------------------------------------------------------------------------------------
 // Module Functions Declaration
@@ -39,13 +43,11 @@ int main(void)
 
     // Define the camera to look into our 3d world
     Camera camera = { 0 };
-    camera.position = (Vector3){ 16.0f, 16.0f, 16.0f };
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
-    camera.fovy = 45.0f;
-    camera.type = CAMERA_PERSPECTIVE;
-
-    SetCameraMode(camera, CAMERA_FREE);
+    camera.position = (Vector3){ 16.0f, 16.0f, 16.0f }; // Camera position
+    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };      // Camera looking at point
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
     float rotationSpeed = 0.2f;         // General system rotation speed
 
@@ -62,7 +64,7 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        UpdateCamera(&camera);
+        UpdateCamera(&camera, CAMERA_ORBITAL);
 
         earthRotation += (5.0f*rotationSpeed);
         earthOrbitRotation += (365/360.0f*(5.0f*rotationSpeed)*rotationSpeed);
@@ -86,7 +88,6 @@ int main(void)
                 rlPushMatrix();
                     rlRotatef(earthOrbitRotation, 0.0f, 1.0f, 0.0f);    // Rotation for Earth orbit around Sun
                     rlTranslatef(earthOrbitRadius, 0.0f, 0.0f);         // Translation for Earth orbit
-                    rlRotatef(-earthOrbitRotation, 0.0f, 1.0f, 0.0f);   // Rotation for Earth orbit around Sun inverted
 
                     rlPushMatrix();
                         rlRotatef(earthRotation, 0.25, 1.0, 0.0);       // Rotation for Earth itself
@@ -97,7 +98,6 @@ int main(void)
 
                     rlRotatef(moonOrbitRotation, 0.0f, 1.0f, 0.0f);     // Rotation for Moon orbit around Earth
                     rlTranslatef(moonOrbitRadius, 0.0f, 0.0f);          // Translation for Moon orbit
-                    rlRotatef(-moonOrbitRotation, 0.0f, 1.0f, 0.0f);    // Rotation for Moon orbit around Earth inverted
                     rlRotatef(moonRotation, 0.0f, 1.0f, 0.0f);          // Rotation for Moon itself
                     rlScalef(moonRadius, moonRadius, moonRadius);       // Scale Moon
 
@@ -135,6 +135,10 @@ void DrawSphereBasic(Color color)
 {
     int rings = 16;
     int slices = 16;
+
+    // Make sure there is enough space in the internal render batch
+    // buffer to store all required vertex, batch is reseted if required
+    rlCheckRenderBatchLimit((rings + 2)*slices*6);
 
     rlBegin(RL_TRIANGLES);
         rlColor4ub(color.r, color.g, color.b, color.a);

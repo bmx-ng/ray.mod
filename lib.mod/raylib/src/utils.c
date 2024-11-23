@@ -3,15 +3,14 @@
 *   raylib.utils - Some common utility functions
 *
 *   CONFIGURATION:
-*
-*   #define SUPPORT_TRACELOG
-*       Show TraceLog() output messages
-*       NOTE: By default LOG_DEBUG traces not shown
+*       #define SUPPORT_TRACELOG
+*           Show TraceLog() output messages
+*           NOTE: By default LOG_DEBUG traces not shown
 *
 *
 *   LICENSE: zlib/libpng
 *
-*   Copyright (c) 2014-2020 Ramon Santamaria (@raysan5)
+*   Copyright (c) 2014-2024 Ramon Santamaria (@raysan5)
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -42,37 +41,44 @@
 #if defined(PLATFORM_ANDROID)
     #include <errno.h>                  // Required for: Android error types
     #include <android/log.h>            // Required for: Android log system: __android_log_vprint()
-    #include <android/asset_manager.h>  // Required for: Android assets manager: AAsset, AAssetManager_open(), ...
+    #include <android/asset_manager.h>  // Required for: Android assets manager: AAsset, AAssetManager_open()...
 #endif
 
 #include <stdlib.h>                     // Required for: exit()
-#include <stdio.h>                      // Required for: vprintf()
+#include <stdio.h>                      // Required for: FILE, fopen(), fseek(), ftell(), fread(), fwrite(), fprintf(), vprintf(), fclose()
 #include <stdarg.h>                     // Required for: va_list, va_start(), va_end()
 #include <string.h>                     // Required for: strcpy(), strcat()
 
-#define MAX_TRACELOG_BUFFER_SIZE   128  // Max length of one trace-log message
-
-#define MAX_UWP_MESSAGES 512            // Max UWP messages to process
+//----------------------------------------------------------------------------------
+// Defines and Macros
+//----------------------------------------------------------------------------------
+#ifndef MAX_TRACELOG_MSG_LENGTH
+    #define MAX_TRACELOG_MSG_LENGTH     256         // Max length of one trace-log message
+#endif
 
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
+static int logTypeLevel = LOG_INFO;                 // Minimum log type level
 
-// Log types messages
-static int logTypeLevel = LOG_INFO;                     // Minimum log type level
-static int logTypeExit = LOG_ERROR;                     // Log type that exits
-static TraceLogCallback logCallback = NULL;             // Log callback function pointer
+static TraceLogCallback traceLog = NULL;            // TraceLog callback function pointer
+static LoadFileDataCallback loadFileData = NULL;    // LoadFileData callback function pointer
+static SaveFileDataCallback saveFileData = NULL;    // SaveFileText callback function pointer
+static LoadFileTextCallback loadFileText = NULL;    // LoadFileText callback function pointer
+static SaveFileTextCallback saveFileText = NULL;    // SaveFileText callback function pointer
+
+//----------------------------------------------------------------------------------
+// Functions to set internal callbacks
+//----------------------------------------------------------------------------------
+void SetTraceLogCallback(TraceLogCallback callback) { traceLog = callback; }              // Set custom trace log
+void SetLoadFileDataCallback(LoadFileDataCallback callback) { loadFileData = callback; }  // Set custom file data loader
+void SetSaveFileDataCallback(SaveFileDataCallback callback) { saveFileData = callback; }  // Set custom file data saver
+void SetLoadFileTextCallback(LoadFileTextCallback callback) { loadFileText = callback; }  // Set custom file text loader
+void SetSaveFileTextCallback(SaveFileTextCallback callback) { saveFileText = callback; }  // Set custom file text saver
 
 #if defined(PLATFORM_ANDROID)
-static AAssetManager *assetManager = NULL;              // Android assets manager pointer
-static const char *internalDataPath = NULL;             // Android internal data path
-#endif
-
-#if defined(PLATFORM_UWP)
-static int UWPOutMessageId = -1;                        // Last index of output message
-static UWPMessage *UWPOutMessages[MAX_UWP_MESSAGES];    // Messages out to UWP
-static int UWPInMessageId = -1;                         // Last index of input message
-static UWPMessage *UWPInMessages[MAX_UWP_MESSAGES];     // Messages in from UWP
+static AAssetManager *assetManager = NULL;          // Android assets manager pointer
+static const char *internalDataPath = NULL;         // Android internal data path
 #endif
 
 //----------------------------------------------------------------------------------
@@ -93,22 +99,7 @@ static int android_close(void *cookie);
 //----------------------------------------------------------------------------------
 
 // Set the current threshold (minimum) log level
-void SetTraceLogLevel(int logType)
-{
-    logTypeLevel = logType;
-}
-
-// Set the exit threshold (minimum) log level
-void SetTraceLogExit(int logType)
-{
-    logTypeExit = logType;
-}
-
-// Set a trace log callback to enable custom logging
-void SetTraceLogCallback(TraceLogCallback callback)
-{
-    logCallback = callback;
-}
+void SetTraceLogLevel(int logType) { logTypeLevel = logType; }
 
 // Show trace log messages (LOG_INFO, LOG_WARNING, LOG_ERROR, LOG_DEBUG)
 void TraceLog(int logType, const char *text, ...)
@@ -120,15 +111,15 @@ void TraceLog(int logType, const char *text, ...)
     va_list args;
     va_start(args, text);
 
-    if (logCallback)
+    if (traceLog)
     {
-        logCallback(logType, text, args);
+        traceLog(logType, text, args);
         va_end(args);
         return;
     }
 
 #if defined(PLATFORM_ANDROID)
-    switch(logType)
+    switch (logType)
     {
         case LOG_TRACE: __android_log_vprint(ANDROID_LOG_VERBOSE, "raylib", text, args); break;
         case LOG_DEBUG: __android_log_vprint(ANDROID_LOG_DEBUG, "raylib", text, args); break;
@@ -139,7 +130,7 @@ void TraceLog(int logType, const char *text, ...)
         default: break;
     }
 #else
-    char buffer[MAX_TRACELOG_BUFFER_SIZE] = { 0 };
+    char buffer[MAX_TRACELOG_MSG_LENGTH] = { 0 };
 
     switch (logType)
     {
@@ -152,26 +143,55 @@ void TraceLog(int logType, const char *text, ...)
         default: break;
     }
 
-    strcat(buffer, text);
+    unsigned int textSize = (unsigned int)strlen(text);
+    memcpy(buffer + strlen(buffer), text, (textSize < (MAX_TRACELOG_MSG_LENGTH - 12))? textSize : (MAX_TRACELOG_MSG_LENGTH - 12));
     strcat(buffer, "\n");
     vprintf(buffer, args);
+    fflush(stdout);
 #endif
 
     va_end(args);
 
-    if (logType >= logTypeExit) exit(1); // If exit message, exit program
+    if (logType == LOG_FATAL) exit(EXIT_FAILURE);  // If fatal logging, exit program
 
 #endif  // SUPPORT_TRACELOG
 }
 
+// Internal memory allocator
+// NOTE: Initializes to zero by default
+void *MemAlloc(unsigned int size)
+{
+    void *ptr = RL_CALLOC(size, 1);
+    return ptr;
+}
+
+// Internal memory reallocator
+void *MemRealloc(void *ptr, unsigned int size)
+{
+    void *ret = RL_REALLOC(ptr, size);
+    return ret;
+}
+
+// Internal memory free
+void MemFree(void *ptr)
+{
+    RL_FREE(ptr);
+}
+
 // Load data from file into a buffer
-unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead)
+unsigned char *LoadFileData(const char *fileName, int *dataSize)
 {
     unsigned char *data = NULL;
-    *bytesRead = 0;
+    *dataSize = 0;
 
     if (fileName != NULL)
     {
+        if (loadFileData)
+        {
+            data = loadFileData(fileName, dataSize);
+            return data;
+        }
+#if defined(SUPPORT_STANDARD_FILEIO)
         FILE *file = fopen(fileName, "rb");
 
         if (file != NULL)
@@ -179,51 +199,145 @@ unsigned char *LoadFileData(const char *fileName, unsigned int *bytesRead)
             // WARNING: On binary streams SEEK_END could not be found,
             // using fseek() and ftell() could not work in some (rare) cases
             fseek(file, 0, SEEK_END);
-            int size = ftell(file);
+            int size = ftell(file);     // WARNING: ftell() returns 'long int', maximum size returned is INT_MAX (2147483647 bytes)
             fseek(file, 0, SEEK_SET);
 
             if (size > 0)
             {
-                data = (unsigned char *)RL_MALLOC(sizeof(unsigned char)*size);
+                data = (unsigned char *)RL_MALLOC(size*sizeof(unsigned char));
 
-                // NOTE: fread() returns number of read elements instead of bytes, so we read [1 byte, size elements]
-                unsigned int count = fread(data, sizeof(unsigned char), size, file);
-                *bytesRead = count;
+                if (data != NULL)
+                {
+                    // NOTE: fread() returns number of read elements instead of bytes, so we read [1 byte, size elements]
+                    size_t count = fread(data, sizeof(unsigned char), size, file);
 
-                if (count != size) TRACELOG(LOG_WARNING, "FILEIO: [%s] File partially loaded", fileName);
-                else TRACELOG(LOG_INFO, "FILEIO: [%s] File loaded successfully", fileName);
+                    // WARNING: fread() returns a size_t value, usually 'unsigned int' (32bit compilation) and 'unsigned long long' (64bit compilation)
+                    // dataSize is unified along raylib as a 'int' type, so, for file-sizes > INT_MAX (2147483647 bytes) we have a limitation
+                    if (count > 2147483647)
+                    {
+                        TRACELOG(LOG_WARNING, "FILEIO: [%s] File is bigger than 2147483647 bytes, avoid using LoadFileData()", fileName);
+
+                        RL_FREE(data);
+                        data = NULL;
+                    }
+                    else
+                    {
+                        *dataSize = (int)count;
+
+                        if ((*dataSize) != size) TRACELOG(LOG_WARNING, "FILEIO: [%s] File partially loaded (%i bytes out of %i)", fileName, dataSize, count);
+                        else TRACELOG(LOG_INFO, "FILEIO: [%s] File loaded successfully", fileName);
+                    }
+                }
+                else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to allocated memory for file reading", fileName);
             }
             else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to read file", fileName);
 
             fclose(file);
         }
         else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file", fileName);
+#else
+    TRACELOG(LOG_WARNING, "FILEIO: Standard file io not supported, use custom file callback");
+#endif
     }
     else TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
 
     return data;
 }
 
-// Save data to file from buffer
-void SaveFileData(const char *fileName, void *data, unsigned int bytesToWrite)
+// Unload file data allocated by LoadFileData()
+void UnloadFileData(unsigned char *data)
 {
+    RL_FREE(data);
+}
+
+// Save data to file from buffer
+bool SaveFileData(const char *fileName, void *data, int dataSize)
+{
+    bool success = false;
+
     if (fileName != NULL)
     {
+        if (saveFileData)
+        {
+            return saveFileData(fileName, data, dataSize);
+        }
+#if defined(SUPPORT_STANDARD_FILEIO)
         FILE *file = fopen(fileName, "wb");
 
         if (file != NULL)
         {
-            unsigned int count = fwrite(data, sizeof(unsigned char), bytesToWrite, file);
+            // WARNING: fwrite() returns a size_t value, usually 'unsigned int' (32bit compilation) and 'unsigned long long' (64bit compilation)
+            // and expects a size_t input value but as dataSize is limited to INT_MAX (2147483647 bytes), there shouldn't be a problem
+            int count = (int)fwrite(data, sizeof(unsigned char), dataSize, file);
 
             if (count == 0) TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to write file", fileName);
-            else if (count != bytesToWrite) TRACELOG(LOG_WARNING, "FILEIO: [%s] File partially written", fileName);
+            else if (count != dataSize) TRACELOG(LOG_WARNING, "FILEIO: [%s] File partially written", fileName);
             else TRACELOG(LOG_INFO, "FILEIO: [%s] File saved successfully", fileName);
 
-            fclose(file);
+            int result = fclose(file);
+            if (result == 0) success = true;
         }
         else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open file", fileName);
+#else
+    TRACELOG(LOG_WARNING, "FILEIO: Standard file io not supported, use custom file callback");
+#endif
     }
     else TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
+
+    return success;
+}
+
+// Export data to code (.h), returns true on success
+bool ExportDataAsCode(const unsigned char *data, int dataSize, const char *fileName)
+{
+    bool success = false;
+
+#ifndef TEXT_BYTES_PER_LINE
+    #define TEXT_BYTES_PER_LINE     20
+#endif
+
+    // NOTE: Text data buffer size is estimated considering raw data size in bytes
+    // and requiring 6 char bytes for every byte: "0x00, "
+    char *txtData = (char *)RL_CALLOC(dataSize*6 + 2000, sizeof(char));
+
+    int byteCount = 0;
+    byteCount += sprintf(txtData + byteCount, "////////////////////////////////////////////////////////////////////////////////////////\n");
+    byteCount += sprintf(txtData + byteCount, "//                                                                                    //\n");
+    byteCount += sprintf(txtData + byteCount, "// DataAsCode exporter v1.0 - Raw data exported as an array of bytes                  //\n");
+    byteCount += sprintf(txtData + byteCount, "//                                                                                    //\n");
+    byteCount += sprintf(txtData + byteCount, "// more info and bugs-report:  github.com/raysan5/raylib                              //\n");
+    byteCount += sprintf(txtData + byteCount, "// feedback and support:       ray[at]raylib.com                                      //\n");
+    byteCount += sprintf(txtData + byteCount, "//                                                                                    //\n");
+    byteCount += sprintf(txtData + byteCount, "// Copyright (c) 2022-2024 Ramon Santamaria (@raysan5)                                //\n");
+    byteCount += sprintf(txtData + byteCount, "//                                                                                    //\n");
+    byteCount += sprintf(txtData + byteCount, "////////////////////////////////////////////////////////////////////////////////////////\n\n");
+
+    // Get file name from path
+    char varFileName[256] = { 0 };
+    strcpy(varFileName, GetFileNameWithoutExt(fileName));
+    for (int i = 0; varFileName[i] != '\0'; i++)
+    {
+        // Convert variable name to uppercase
+        if ((varFileName[i] >= 'a') && (varFileName[i] <= 'z')) { varFileName[i] = varFileName[i] - 32; }
+        // Replace non valid character for C identifier with '_'
+        else if (varFileName[i] == '.' || varFileName[i] == '-' || varFileName[i] == '?' || varFileName[i] == '!' || varFileName[i] == '+') { varFileName[i] = '_'; }
+    }
+
+    byteCount += sprintf(txtData + byteCount, "#define %s_DATA_SIZE     %i\n\n", varFileName, dataSize);
+
+    byteCount += sprintf(txtData + byteCount, "static unsigned char %s_DATA[%s_DATA_SIZE] = { ", varFileName, varFileName);
+    for (int i = 0; i < (dataSize - 1); i++) byteCount += sprintf(txtData + byteCount, ((i%TEXT_BYTES_PER_LINE == 0)? "0x%x,\n" : "0x%x, "), data[i]);
+    byteCount += sprintf(txtData + byteCount, "0x%x };\n", data[dataSize - 1]);
+
+    // NOTE: Text data size exported is determined by '\0' (NULL) character
+    success = SaveFileText(fileName, txtData);
+
+    RL_FREE(txtData);
+
+    if (success != 0) TRACELOG(LOG_INFO, "FILEIO: [%s] Data as code exported successfully", fileName);
+    else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to export data as code", fileName);
+
+    return success;
 }
 
 // Load text data from file, returns a '\0' terminated string
@@ -234,61 +348,94 @@ char *LoadFileText(const char *fileName)
 
     if (fileName != NULL)
     {
-        FILE *textFile = fopen(fileName, "rt");
+        if (loadFileText)
+        {
+            text = loadFileText(fileName);
+            return text;
+        }
+#if defined(SUPPORT_STANDARD_FILEIO)
+        FILE *file = fopen(fileName, "rt");
 
-        if (textFile != NULL)
+        if (file != NULL)
         {
             // WARNING: When reading a file as 'text' file,
             // text mode causes carriage return-linefeed translation...
             // ...but using fseek() should return correct byte-offset
-            fseek(textFile, 0, SEEK_END);
-            int size = ftell(textFile);
-            fseek(textFile, 0, SEEK_SET);
+            fseek(file, 0, SEEK_END);
+            unsigned int size = (unsigned int)ftell(file);
+            fseek(file, 0, SEEK_SET);
 
             if (size > 0)
             {
-                text = (char *)RL_MALLOC(sizeof(char)*(size + 1));
-                int count = fread(text, sizeof(char), size, textFile);
+                text = (char *)RL_MALLOC((size + 1)*sizeof(char));
 
-                // WARNING: \r\n is converted to \n on reading, so,
-                // read bytes count gets reduced by the number of lines
-                if (count < size) text = RL_REALLOC(text, count + 1);
+                if (text != NULL)
+                {
+                    unsigned int count = (unsigned int)fread(text, sizeof(char), size, file);
 
-                // Zero-terminate the string
-                text[count] = '\0';
+                    // WARNING: \r\n is converted to \n on reading, so,
+                    // read bytes count gets reduced by the number of lines
+                    if (count < size) text = RL_REALLOC(text, count + 1);
 
-                TRACELOG(LOG_INFO, "FILEIO: [%s] Text file loaded successfully", fileName);
+                    // Zero-terminate the string
+                    text[count] = '\0';
+
+                    TRACELOG(LOG_INFO, "FILEIO: [%s] Text file loaded successfully", fileName);
+                }
+                else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to allocated memory for file reading", fileName);
             }
             else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to read text file", fileName);
 
-            fclose(textFile);
+            fclose(file);
         }
         else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open text file", fileName);
+#else
+    TRACELOG(LOG_WARNING, "FILEIO: Standard file io not supported, use custom file callback");
+#endif
     }
     else TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
 
     return text;
 }
 
-// Save text data to file (write), string must be '\0' terminated
-void SaveFileText(const char *fileName, char *text)
+// Unload file text data allocated by LoadFileText()
+void UnloadFileText(char *text)
 {
+    RL_FREE(text);
+}
+
+// Save text data to file (write), string must be '\0' terminated
+bool SaveFileText(const char *fileName, char *text)
+{
+    bool success = false;
+
     if (fileName != NULL)
     {
+        if (saveFileText)
+        {
+            return saveFileText(fileName, text);
+        }
+#if defined(SUPPORT_STANDARD_FILEIO)
         FILE *file = fopen(fileName, "wt");
 
         if (file != NULL)
         {
             int count = fprintf(file, "%s", text);
 
-            if (count == 0) TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to write text file", fileName);
+            if (count < 0) TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to write text file", fileName);
             else TRACELOG(LOG_INFO, "FILEIO: [%s] Text file saved successfully", fileName);
 
-            fclose(file);
+            int result = fclose(file);
+            if (result == 0) success = true;
         }
         else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to open text file", fileName);
+#else
+    TRACELOG(LOG_WARNING, "FILEIO: Standard file io not supported, use custom file callback");
+#endif
     }
     else TRACELOG(LOG_WARNING, "FILEIO: File name provided is not valid");
+
+    return success;
 }
 
 #if defined(PLATFORM_ANDROID)
@@ -299,14 +446,14 @@ void InitAssetManager(AAssetManager *manager, const char *dataPath)
     internalDataPath = dataPath;
 }
 
-// Replacement for fopen
+// Replacement for fopen()
 // Ref: https://developer.android.com/ndk/reference/group/asset
 FILE *android_fopen(const char *fileName, const char *mode)
 {
-    if (mode[0] == 'w')     // TODO: Test!
+    if (mode[0] == 'w')
     {
-        // TODO: fopen() is mapped to android_fopen() that only grants read access
-        // to assets directory through AAssetManager but we want to also be able to
+        // fopen() is mapped to android_fopen() that only grants read access to
+        // assets directory through AAssetManager but we want to also be able to
         // write data when required using the standard stdio FILE access functions
         // Ref: https://stackoverflow.com/questions/11294487/android-writing-saving-files-from-native-code-only
         #undef fopen
@@ -318,8 +465,18 @@ FILE *android_fopen(const char *fileName, const char *mode)
         // NOTE: AAsset provides access to read-only asset
         AAsset *asset = AAssetManager_open(assetManager, fileName, AASSET_MODE_UNKNOWN);
 
-        if (asset != NULL) return funopen(asset, android_read, android_write, android_seek, android_close);
-        else return NULL;
+        if (asset != NULL)
+        {
+            // Get pointer to file in the assets
+            return funopen(asset, android_read, android_write, android_seek, android_close);
+        }
+        else
+        {
+            #undef fopen
+            // Just do a regular open if file is not found in the assets
+            return fopen(TextFormat("%s/%s", internalDataPath, fileName), mode);
+            #define fopen(name, mode) android_fopen(name, mode)
+        }
     }
 }
 #endif  // PLATFORM_ANDROID
@@ -328,12 +485,12 @@ FILE *android_fopen(const char *fileName, const char *mode)
 // Module specific Functions Definition
 //----------------------------------------------------------------------------------
 #if defined(PLATFORM_ANDROID)
-static int android_read(void *cookie, char *buf, int size)
+static int android_read(void *cookie, char *data, int dataSize)
 {
-    return AAsset_read((AAsset *)cookie, buf, size);
+    return AAsset_read((AAsset *)cookie, data, dataSize);
 }
 
-static int android_write(void *cookie, const char *buf, int size)
+static int android_write(void *cookie, const char *data, int dataSize)
 {
     TRACELOG(LOG_WARNING, "ANDROID: Failed to provide write access to APK");
 
@@ -351,69 +508,3 @@ static int android_close(void *cookie)
     return 0;
 }
 #endif  // PLATFORM_ANDROID
-
-#if defined(PLATFORM_UWP)
-UWPMessage *CreateUWPMessage(void)
-{
-    UWPMessage *msg = (UWPMessage *)RL_MALLOC(sizeof(UWPMessage));
-    msg->type = UWP_MSG_NONE;
-    Vector2 v0 = { 0, 0 };
-    msg->paramVector0 = v0;
-    msg->paramInt0 = 0;
-    msg->paramInt1 = 0;
-    msg->paramChar0 = 0;
-    msg->paramFloat0 = 0;
-    msg->paramDouble0 = 0;
-    msg->paramBool0 = false;
-    return msg;
-}
-
-void DeleteUWPMessage(UWPMessage *msg)
-{
-    RL_FREE(msg);
-}
-
-bool UWPHasMessages(void)
-{
-    return (UWPOutMessageId > -1);
-}
-
-UWPMessage *UWPGetMessage(void)
-{
-    if (UWPHasMessages()) return UWPOutMessages[UWPOutMessageId--];
-
-    return NULL;
-}
-
-void UWPSendMessage(UWPMessage *msg)
-{
-    if ((UWPInMessageId + 1) < MAX_UWP_MESSAGES)
-    {
-        UWPInMessageId++;
-        UWPInMessages[UWPInMessageId] = msg;
-    }
-    else TRACELOG(LOG_WARNING, "UWP: Not enough array space to register new inbound message");
-}
-
-void SendMessageToUWP(UWPMessage *msg)
-{
-    if ((UWPOutMessageId + 1) < MAX_UWP_MESSAGES)
-    {
-        UWPOutMessageId++;
-        UWPOutMessages[UWPOutMessageId] = msg;
-    }
-    else TRACELOG(LOG_WARNING, "UWP: Not enough array space to register new outward message");
-}
-
-bool HasMessageFromUWP(void)
-{
-    return UWPInMessageId > -1;
-}
-
-UWPMessage *GetMessageFromUWP(void)
-{
-    if (HasMessageFromUWP()) return UWPInMessages[UWPInMessageId--];
-
-    return NULL;
-}
-#endif  // PLATFORM_UWP

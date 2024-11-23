@@ -23,7 +23,7 @@ camera.position = New RVector3(4.0, 4.0, 4.0)
 camera.target = New RVector3(0.0, 1.0, -1.0)
 camera.up = New RVector3(0.0, 1.0, 0.0)
 camera.fovy = 45.0
-camera.cameraType = CAMERA_PERSPECTIVE
+camera.projection = CAMERA_PERSPECTIVE
 
 Local model:RModel = LoadModel("../../lib.mod/raylib/examples/shaders/resources/models/watermill.obj")                   ' Load OBJ model
 Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/resources/models/watermill_diffuse.png")   ' Load model texture
@@ -33,12 +33,11 @@ Local texture:RTexture2D = LoadTexture("../../lib.mod/raylib/examples/shaders/re
 Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/shaders/resources/shaders/glsl"  + GLSL_VERSION + "/grayscale.fs")
 
 model.materials[0].shader = shader                     ' Set shader effect to 3d model
-model.materials[0].maps[MAP_DIFFUSE].texture = texture ' Bind texture to model
+model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture ' Bind texture to model
 
 Local position:RVector3 = New RVector3(0.0, 0.0, 0.0)    ' Set model position
 
-SetCameraMode(camera, CAMERA_FREE)         ' Set an orbital camera mode
-
+DisableCursor()                            ' Limit cursor to relative movement inside the window
 SetTargetFPS(60)                           ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
 
@@ -46,7 +45,7 @@ SetTargetFPS(60)                           ' Set our game to run at 60 frames-pe
 While Not WindowShouldClose()                ' Detect window close button or ESC key
 	' Update
 	'----------------------------------------------------------------------------------
-	UpdateCamera(camera)                  ' Update camera
+	UpdateCamera(camera, CAMERA_FREE)                  ' Update camera
 	'----------------------------------------------------------------------------------
 
 	' Draw

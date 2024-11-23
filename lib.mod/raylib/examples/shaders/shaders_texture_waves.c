@@ -9,12 +9,14 @@
 *         on OpenGL ES 2.0 platforms (Android, Raspberry Pi, HTML5), use #version 100 shaders
 *         raylib comes with shaders ready for both versions, check raylib/shaders install folder
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.5, last time updated with raylib 3.7
 *
 *   Example contributed by Anata (@anatagawa) and reviewed by Ramon Santamaria (@raysan5)
 *
-*   Copyright (c) 2019 Anata (@anatagawa) and Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2019-2024 Anata (@anatagawa) and Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -22,10 +24,13 @@
 
 #if defined(PLATFORM_DESKTOP)
     #define GLSL_VERSION            330
-#else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
+#else   // PLATFORM_ANDROID, PLATFORM_WEB
     #define GLSL_VERSION            100
 #endif
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -34,14 +39,14 @@ int main(void)
     const int screenHeight = 450;
 
     InitWindow(screenWidth, screenHeight, "raylib [shaders] example - texture waves");
-    
+
     // Load texture texture to apply shaders
     Texture2D texture = LoadTexture("resources/space.png");
-    
-    // Load shader and setup location points and values
-    Shader shader = LoadShader(0, FormatText("resources/shaders/glsl%i/wave.fs", GLSL_VERSION));
 
-    int secondsLoc = GetShaderLocation(shader, "secondes");
+    // Load shader and setup location points and values
+    Shader shader = LoadShader(0, TextFormat("resources/shaders/glsl%i/wave.fs", GLSL_VERSION));
+
+    int secondsLoc = GetShaderLocation(shader, "seconds");
     int freqXLoc = GetShaderLocation(shader, "freqX");
     int freqYLoc = GetShaderLocation(shader, "freqY");
     int ampXLoc = GetShaderLocation(shader, "ampX");
@@ -58,13 +63,13 @@ int main(void)
     float speedY = 8.0f;
 
     float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
-    SetShaderValue(shader, GetShaderLocation(shader, "size"), &screenSize, UNIFORM_VEC2);
-    SetShaderValue(shader, freqXLoc, &freqX, UNIFORM_FLOAT);
-    SetShaderValue(shader, freqYLoc, &freqY, UNIFORM_FLOAT);
-    SetShaderValue(shader, ampXLoc, &ampX, UNIFORM_FLOAT);
-    SetShaderValue(shader, ampYLoc, &ampY, UNIFORM_FLOAT);
-    SetShaderValue(shader, speedXLoc, &speedX, UNIFORM_FLOAT);
-    SetShaderValue(shader, speedYLoc, &speedY, UNIFORM_FLOAT);
+    SetShaderValue(shader, GetShaderLocation(shader, "size"), &screenSize, SHADER_UNIFORM_VEC2);
+    SetShaderValue(shader, freqXLoc, &freqX, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, freqYLoc, &freqY, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, ampXLoc, &ampX, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, ampYLoc, &ampY, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, speedXLoc, &speedX, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(shader, speedYLoc, &speedY, SHADER_UNIFORM_FLOAT);
 
     float seconds = 0.0f;
 
@@ -77,8 +82,8 @@ int main(void)
         // Update
         //----------------------------------------------------------------------------------
         seconds += GetFrameTime();
-        
-        SetShaderValue(shader, secondsLoc, &seconds, UNIFORM_FLOAT);
+
+        SetShaderValue(shader, secondsLoc, &seconds, SHADER_UNIFORM_FLOAT);
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -88,10 +93,10 @@ int main(void)
             ClearBackground(RAYWHITE);
 
             BeginShaderMode(shader);
-            
+
                 DrawTexture(texture, 0, 0, WHITE);
                 DrawTexture(texture, texture.width, 0, WHITE);
-                
+
             EndShaderMode();
 
         EndDrawing();
@@ -102,7 +107,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     UnloadShader(shader);         // Unload shader
     UnloadTexture(texture);       // Unload texture
-    
+
     CloseWindow();              // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 

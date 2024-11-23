@@ -2,7 +2,7 @@ SuperStrict
 
 Framework Ray.Lib
 
-Const NUM_MODELS:Int = 8      ' Parametric 3d shapes to generate
+Const NUM_MODELS:Int = 9      ' Parametric 3d shapes to generate
 
 ' Initialization
 '--------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ UnloadImage(checked)
 
 Local models:RModel[NUM_MODELS]
 
-models[0] = LoadModelFromMesh(GenMeshPlane(2, 2, 5, 5))
+models[0] = LoadModelFromMesh(GenMeshPlane(2, 2, 4, 3))
 models[1] = LoadModelFromMesh(GenMeshCube(2.0, 1.0, 2.0))
 models[2] = LoadModelFromMesh(GenMeshSphere(2, 32, 32))
 models[3] = LoadModelFromMesh(GenMeshHemiSphere(2, 16, 16))
@@ -26,10 +26,11 @@ models[4] = LoadModelFromMesh(GenMeshCylinder(1, 2, 16))
 models[5] = LoadModelFromMesh(GenMeshTorus(0.25, 4.0, 16, 32))
 models[6] = LoadModelFromMesh(GenMeshKnot(1.0, 2.0, 16, 128))
 models[7] = LoadModelFromMesh(GenMeshPoly(5, 2.0))
+models[8] = LoadModelFromMesh(GenMeshCustom())
 
 ' Set checked texture as default diffuse component for all models material
 For Local i:Int = 0 Until NUM_MODELS
-	models[i].materials[0].maps[MAP_DIFFUSE].texture = texture
+	models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture
 Next
 
 ' Define the camera to look into our 3d world
@@ -40,8 +41,6 @@ Local position:RVector3 = New RVector3(0.0, 0.0, 0.0)
 
 Local currentModel:Int = 0
 
-SetCameraMode(camera, CAMERA_ORBITAL)  ' Set a orbital camera mode
-
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
 
@@ -49,7 +48,7 @@ SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 While Not WindowShouldClose()    ' Detect window close button or ESC key
 	' Update
 	'----------------------------------------------------------------------------------
-	UpdateCamera(camera)      ' Update internal camera and our camera
+	UpdateCamera(camera, CAMERA_ORBITAL)      ' Update internal camera and our camera
 
 	If IsMouseButtonPressed(MOUSE_LEFT_BUTTON) Then
 		currentModel = (currentModel + 1) Mod NUM_MODELS ' Cycle between the textures
@@ -103,6 +102,8 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 				DrawText("KNOT", 680, 10, 20, DARKBLUE)
 			Case 7
 				DrawText("POLY", 680, 10, 20, DARKBLUE)
+			Case 8
+				DrawText("Custom (triangle)", 580, 10, 20, DARKBLUE)
 		End Select
 
 	EndDrawing()
@@ -120,3 +121,47 @@ Next
 
 CloseWindow()          ' Close window and OpenGL context
 '--------------------------------------------------------------------------------------
+
+' Generate a simple triangle mesh from code
+Function GenMeshCustom:RMesh()
+	Local mesh:RMesh = New RMesh()
+	mesh.triangleCount = 1
+	mesh.vertexCount = mesh.triangleCount*3
+	mesh.vertices = RMemAlloc(UInt(mesh.vertexCount*3*4))    ' 3 vertices, 3 coordinates each (x, y, z)
+	mesh.texcoords = RMemAlloc(UInt(mesh.vertexCount*2*4))   ' 3 vertices, 2 coordinates each (x, y)
+	mesh.normals = RMemAlloc(UInt(mesh.vertexCount*3*4))     ' 3 vertices, 3 coordinates each (x, y, z)
+
+	' Vertex at (0, 0, 0)
+	mesh.vertices[0] = 0
+	mesh.vertices[1] = 0
+	mesh.vertices[2] = 0
+	mesh.normals[0] = 0
+	mesh.normals[1] = 1
+	mesh.normals[2] = 0
+	mesh.texcoords[0] = 0
+	mesh.texcoords[1] = 0
+
+	' Vertex at (1, 0, 2)
+	mesh.vertices[3] = 1
+	mesh.vertices[4] = 0
+	mesh.vertices[5] = 2
+	mesh.normals[3] = 0
+	mesh.normals[4] = 1
+	mesh.normals[5] = 0
+	mesh.texcoords[2] = 0.5
+	mesh.texcoords[3] = 1.0
+
+	' Vertex at (2, 0, 0)
+	mesh.vertices[6] = 2
+	mesh.vertices[7] = 0
+	mesh.vertices[8] = 0
+	mesh.normals[6] = 0
+	mesh.normals[7] = 1
+	mesh.normals[8] = 0
+	mesh.texcoords[4] = 1
+	mesh.texcoords[5] = 0
+
+	UploadMesh(mesh, False)
+
+	Return mesh
+End Function

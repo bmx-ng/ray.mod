@@ -2,24 +2,29 @@
 *
 *   raylib [text] example - Font loading
 *
-*   raylib can load fonts from multiple file formats:
+*   NOTE: raylib can load fonts from multiple input file formats:
 *
 *     - TTF/OTF > Sprite font atlas is generated on loading, user can configure
 *                 some of the generation parameters (size, characters to include)
 *     - BMFonts > Angel code font fileformat, sprite font image must be provided
 *                 together with the .fnt file, font generation cna not be configured
 *     - XNA Spritefont > Sprite font image, following XNA Spritefont conventions,
-*                 Characters in image must follow some spacing and order rules 
+*                 Characters in image must follow some spacing and order rules
 *
-*   This example has been created using raylib 2.6 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.4, last time updated with raylib 3.0
 *
-*   Copyright (c) 2016-2019 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2016-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -41,6 +46,8 @@ int main(void)
     // TTF font : Font data and atlas are generated directly from TTF
     // NOTE: We define a font base size of 32 pixels tall and up-to 250 characters
     Font fontTtf = LoadFontEx("resources/pixantiqua.ttf", 32, 0, 250);
+
+    SetTextLineSpacing(16);         // Set line spacing for multiline text (when line breaks are included '\n')
 
     bool useTtf = false;
 
@@ -66,12 +73,12 @@ int main(void)
 
             if (!useTtf)
             {
-                DrawTextEx(fontBm, msg, (Vector2){ 20.0f, 100.0f }, fontBm.baseSize, 2, MAROON);
+                DrawTextEx(fontBm, msg, (Vector2){ 20.0f, 100.0f }, (float)fontBm.baseSize, 2, MAROON);
                 DrawText("Using BMFont (Angelcode) imported", 20, GetScreenHeight() - 30, 20, GRAY);
             }
             else
             {
-                DrawTextEx(fontTtf, msg, (Vector2){ 20.0f, 100.0f }, fontTtf.baseSize, 2, LIME);
+                DrawTextEx(fontTtf, msg, (Vector2){ 20.0f, 100.0f }, (float)fontTtf.baseSize, 2, LIME);
                 DrawText("Using TTF font generated", 20, GetScreenHeight() - 30, 20, GRAY);
             }
 

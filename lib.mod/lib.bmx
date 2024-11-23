@@ -1,4 +1,4 @@
-' Copyright (c) 2020 Bruce A Henderson
+' Copyright (c) 2024 Bruce A Henderson
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -26,11 +26,13 @@ bbdoc: Raylib - Simple Games Programming
 End Rem
 Module Ray.Lib
 
-ModuleInfo "Version: 1.02"
+ModuleInfo "Version: 1.03"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2020 Bruce A Henderson"
-ModuleInfo "Copyright: raylib - 2013-2020 Ramon Santamaria"
+ModuleInfo "Copyright: Wrapper - 2024 Bruce A Henderson"
+ModuleInfo "Copyright: raylib - 2013-2024 Ramon Santamaria"
 
+ModuleInfo "History: 1.03"
+ModuleInfo "History: Updated to raylib 5.5.377248b."
 ModuleInfo "History: 1.02"
 ModuleInfo "History: Updated to raylib 3.0.7ef114d."
 ModuleInfo "History: 1.01"
@@ -45,13 +47,13 @@ ModuleInfo "CC_OPTS: -DSUPPORT_CAMERA_SYSTEM"
 ModuleInfo "CC_OPTS: -DSUPPORT_FILEFORMAT_OBJ -DSUPPORT_FILEFORMAT_IQM -DSUPPORT_FILEFORMAT_GLTF -DSUPPORT_FILEFORMAT_MTL"
 
 ?win32
-ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
+ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP_GLFW"
 ModuleInfo "CC_OPTS: -D_GLFW_WIN32"
 ?macos
-ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
+ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP_GLFW"
 ModuleInfo "CC_OPTS: -D_GLFW_COCOA"
 ?linux And Not raspberrypi
-ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP"
+ModuleInfo "CC_OPTS: -DPLATFORM_DESKTOP_GLFW"
 ModuleInfo "CC_OPTS: -D_POSIX_C_SOURCE=199309L"
 ModuleInfo "CC_OPTS: -D_GLFW_X11"
 ?raspberrypi
@@ -80,17 +82,17 @@ Function InitWindow(width:Int, height:Int, title:String)
 End Function
 
 Rem
-bbdoc: Checks if KEY_ESCAPE pressed or Close icon pressed.
-End Rem
-Function WindowShouldClose:Int()
-	Return bmx_raylib_WindowShouldClose()
-End Function
-
-Rem
 bbdoc: Closes window and unload OpenGL context
 End Rem
 Function CloseWindow()
 	bmx_raylib_CloseWindow()
+End Function
+
+Rem
+bbdoc: Checks if KEY_ESCAPE pressed or Close icon pressed.
+End Rem
+Function WindowShouldClose:Int()
+	Return bmx_raylib_WindowShouldClose()
 End Function
 
 Rem
@@ -101,17 +103,10 @@ Function IsWindowReady:Int()
 End Function
 
 Rem
-bbdoc: Checks if window has been minimized (or lost focus).
+bbdoc: Checks if window is currently fullscreen
 End Rem
-Function IsWindowMinimized:Int()
-	Return bmx_raylib_IsWindowMinimized()
-End Function
-
-Rem
-bbdoc: Checks if window has been resized.
-End Rem
-Function IsWindowResized:Int()
-	Return bmx_raylib_IsWindowResized()
+Function IsWindowFullscreen:Int()
+	Return bmx_raylib_IsWindowFullscreen()
 End Function
 
 Rem
@@ -122,10 +117,43 @@ Function IsWindowHidden:Int()
 End Function
 
 Rem
-bbdoc: Checks if window is currently fullscreen
+bbdoc: Checks if window has been minimized (or lost focus).
 End Rem
-Function IsWindowFullscreen:Int()
-	Return bmx_raylib_IsWindowFullscreen()
+Function IsWindowMinimized:Int()
+	Return bmx_raylib_IsWindowMinimized()
+End Function
+
+Rem
+bbdoc: Checks if window has been maximized.
+End Rem
+Function IsWindowMaximized:Int()
+	Return bmx_raylib_IsWindowMaximized()
+End Function
+
+Rem
+bbdoc: Checks if window is focused.
+End Rem
+Function IsWindowFocused:Int()
+	Return bmx_raylib_IsWindowFocused()
+End Function
+
+Rem
+bbdoc: Checks if window has been resized.
+End Rem
+Function IsWindowResized:Int()
+	Return bmx_raylib_IsWindowResized()
+End Function
+
+Function IsWindowState:Int(flag:UInt)
+	Return bmx_raylib_IsWindowState(flag)
+End Function
+
+Function SetWindowState(flag:UInt)
+	bmx_raylib_SetWindowState(flag)
+End Function
+
+Function ClearWindowState(flag:UInt)
+	bmx_raylib_ClearWindowState(flag)
 End Function
 
 Rem
@@ -135,18 +163,20 @@ Function ToggleFullscreen()
 	bmx_raylib_ToggleFullscreen()
 End Function
 
-Rem
-bbdoc: Shows the window.
-End Rem
-Function UnhideWindow()
-	bmx_raylib_UnhideWindow()
+Function ToggleBorderlessWindowed()
+	bmx_raylib_ToggleBorderlessWindowed()
 End Function
 
-Rem
-bbdoc: Hides the window.
-End Rem
-Function HideWindow()
-	bmx_raylib_HideWindow()
+Function MaximizeWindow()
+	bmx_raylib_MaximizeWindow()
+End Function
+
+Function MinimizeWindow()
+	bmx_raylib_MinimizeWindow()
+End Function
+
+Function RestoreWindow()
+	bmx_raylib_RestoreWindow()
 End Function
 
 Rem
@@ -154,6 +184,10 @@ bbdoc: Sets icon for window (only Desktop)
 End Rem
 Function SetWindowIcon(image:RImage)
 	bmx_raylib_SetWindowIcon(image)
+End Function
+
+Function SetWindowIcons(images:RImage[], count:Int)
+	bmx_raylib_SetWindowIcons(images, count)
 End Function
 
 Rem
@@ -186,11 +220,23 @@ Function SetWindowMinSize(width:Int, height:Int)
 	bmx_raylib_SetWindowMinSize(width, height)
 End Function
 
+Function SetWindowMaxSize(width:Int, height:Int)
+	bmx_raylib_SetWindowMaxSize(width, height)
+End Function
+
 Rem
 bbdoc: Sets window dimensions.
 End Rem
 Function SetWindowSize(width:Int, height:Int)
 	bmx_raylib_SetWindowSize(width, height)
+End Function
+
+Function SetWindowOpacity(opacity:Float)
+	bmx_raylib_SetWindowOpacity(opacity)
+End Function
+
+Function SetWindowFocused()
+	bmx_raylib_SetWindowFocused()
 End Function
 
 Rem
@@ -214,11 +260,27 @@ Function GetScreenHeight:Int()
 	Return bmx_raylib_GetScreenHeight()
 End Function
 
+Function GetRenderWidth:Int()
+	Return bmx_raylib_GetRenderWidth()
+End Function
+
+Function GetRenderHeight:Int()
+	Return bmx_raylib_GetRenderHeight()
+End Function
+
 Rem
 bbdoc: Gets number of connected monitors.
 End Rem
 Function GetMonitorCount:Int()
 	Return bmx_raylib_GetMonitorCount()
+End Function
+
+Function GetCurrentMonitor:Int()
+	Return bmx_raylib_GetCurrentMonitor()
+End Function
+
+Function GetMonitorPosition:RVector2(monitor:Int)
+	Return bmx_raylib_GetMonitorPosition(monitor)
 End Function
 
 Rem
@@ -249,11 +311,19 @@ Function GetMonitorPhysicalHeight:Int(monitor:Int)
 	Return bmx_raylib_GetMonitorPhysicalHeight(monitor)
 End Function
 
+Function GetMonitorRefreshRate:Int(monitor:Int)
+	Return bmx_raylib_GetMonitorRefreshRate(monitor)
+End Function
+
 Rem
 bbdoc: Gets window position XY on monitor.
 End Rem
 Function GetWindowPosition:RVector2()
 	Return bmx_raylib_GetWindowPosition()
+End Function
+
+Function GetWindowScaleDPI:RVector2()
+	Return bmx_raylib_GetWindowScaleDPI()
 End Function
 
 Rem
@@ -265,6 +335,15 @@ Function GetMonitorName:String(monitor:Int)
 End Function
 
 Rem
+bbdoc: Sets clipboard text content.
+End Rem
+Function SetClipboardText(txt:String)
+	Local t:Byte Ptr = txt.ToUTF8String()
+	bmx_raylib_SetClipboardText(t)
+	MemFree(t)
+End Function
+
+Rem
 bbdoc: Gets clipboard text content.
 End Rem
 Function GetClipboardText:String()
@@ -273,12 +352,24 @@ Function GetClipboardText:String()
 End Function
 
 Rem
-bbdoc: Sets clipboard text content.
+bbdoc: Gets clipboard image.
 End Rem
-Function SetClipboardText(txt:String)
-	Local t:Byte Ptr = txt.ToUTF8String()
-	bmx_raylib_SetClipboardText(t)
-	MemFree(t)
+Function GetClipboardImage:RImage()
+	Return bmx_raylib_GetClipboardImage()
+End Function
+
+Rem
+bbdoc: Enables waiting for events on EndDrawing(), no automatic event polling
+End Rem
+Function EnableEventWaiting()
+	bmx_raylib_EnableEventWaiting()
+End Function
+
+Rem
+bbdoc: Disables waiting for events on EndDrawing(), automatic events polling
+End Rem
+Function DisableEventWaiting()
+	bmx_raylib_DisableEventWaiting()
 End Function
 
 ' Cursor-related functions
@@ -315,6 +406,10 @@ bbdoc: Disables cursor (lock cursor).
 End Rem
 Function DisableCursor()
 	bmx_raylib_DisableCursor()
+End Function
+
+Function IsCursorOnScreen:Int()
+	Return bmx_raylib_IsCursorOnScreen()
 End Function
 
 ' Drawing-related functions
@@ -382,6 +477,34 @@ Function EndTextureMode()
 End Function
 
 Rem
+bbdoc: Begins custom shader drawing.
+End Rem
+Function BeginShaderMode(shader:RShader)
+	bmx_raylib_BeginShaderMode(shader)
+End Function
+
+Rem
+bbdoc: Ends custom shader drawing (use default shader).
+End Rem
+Function EndShaderMode()
+	bmx_raylib_EndShaderMode()
+End Function
+
+Rem
+bbdoc: Begins blending mode (alpha, additive, multiplied).
+End Rem
+Function BeginBlendMode(Mode:Int)
+	bmx_raylib_BeginBlendMode(Mode)
+End Function
+
+Rem
+bbdoc: Ends blending mode (reset to default: alpha blending).
+End Rem
+Function EndBlendMode()
+	bmx_raylib_EndBlendMode()
+End Function
+
+Rem
 bbdoc: Begins scissor mode (define screen area for following drawing).
 End Rem
 Function BeginScissorMode(x:Int, y:Int, width:Int, height:Int)
@@ -402,26 +525,99 @@ Function EndScissorMode()
 	bmx_raylib_EndScissorMode()
 End Function
 
+Rem
+bbdoc: Begins stereo rendering (requires VR simulator).
+End Rem
+Function BeginVrStereoMode(vrConfig:RVrStereoConfig)
+	bmx_raylib_BeginVrStereoMode(vrConfig)
+End Function
+
+Rem
+bbdoc: Ends stereo rendering (requires VR simulator)'
+End Rem
+Function EndVrStereoMode()
+	bmx_raylib_EndVrStereoMode()
+End Function
+
+' VR stereo config functions for VR simulator
+Function LoadVrStereoConfig:RVrStereoConfig(device:RVrDeviceInfo)
+	Return bmx_raylib_LoadVrStereoConfig(device)
+End Function
+
+Function UnloadVrStereoConfig(config:RVrStereoConfig)
+	bmx_raylib_UnloadVrStereoConfig(config)
+End Function
+
+' Shader management functions
+Function LoadShader:RShader(vsFileName:String, fsFileName:String)
+	Local vs:Byte Ptr = vsFileName.ToUTF8String()
+	Local fs:Byte Ptr = fsFileName.ToUTF8String()
+	Local result:RShader = bmx_raylib_LoadShader(vs, fs)
+	MemFree(vs)
+	MemFree(fs)
+	Return result
+End Function
+
+Function LoadShaderFromMemory:RShader(vsCode:String, fsCode:String)
+	Local vs:Byte Ptr = vsCode.ToUTF8String()
+	Local fs:Byte Ptr = fsCode.ToUTF8String()
+	Local result:RShader = bmx_raylib_LoadShaderFromMemory(vs, fs)
+	MemFree(vs)
+	MemFree(fs)
+	Return result
+End Function
+
+Function IsShaderValid:Int(shader:RShader)
+	Return bmx_raylib_IsShaderValid(shader)
+End Function
+
+Function GetShaderLocation:Int(shader:RShader, uniformName:String)
+	Local n:Byte Ptr = uniformName.ToUTF8String()
+	Local result:Int = bmx_raylib_GetShaderLocation(shader, n)
+	MemFree(n)
+	Return result
+End Function
+
+Function GetShaderLocationAttrib:Int(shader:RShader, attribName:String)
+	Local n:Byte Ptr = attribName.ToUTF8String()
+	Local result:Int = bmx_raylib_GetShaderLocationAttrib(shader, n)
+	MemFree(n)
+	Return result
+End Function
+
+Function SetShaderValue(shader:RShader, loc:Int, value:Byte Ptr, uniformType:Int)
+	bmx_raylib_SetShaderValue(shader, loc, value, uniformType)
+End Function
+
+Function SetShaderValueV(shader:RShader, loc:Int, value:Byte Ptr, uniformType:Int, count:Int)
+	bmx_raylib_SetShaderValueV(shader, loc, value, uniformType, count)
+End Function
+
+Function SetShaderValueMatrix(shader:RShader, loc:Int, mat:RMatrix)
+	bmx_raylib_SetShaderValueMatrix(shader, loc, mat)
+End Function
+
+Function SetShaderValueTexture(shader:RShader, loc:Int, texture:RTexture2D)
+	bmx_raylib_SetShaderValueTexture(shader, loc, texture)
+End Function
+
+Function UnloadShader(shader:RShader)
+	bmx_raylib_UnloadShader(shader)
+End Function
+
 ' Screen-space-related functions
 Rem
 bbdoc: Returns a ray trace from mouse position.
 End Rem
-Function GetMouseRay:RRay(mousePosition:RVector2, camera:RCamera)
-	Return bmx_raylib_GetMouseRay(mousePosition, camera)
+Function GetScreenToWorldRay:RRay(mousePosition:RVector2, camera:RCamera)
+	Return bmx_raylib_GetScreenToWorldRay(mousePosition, camera)
 End Function
 
 Rem
-bbdoc: Returns camera transform matrix (view matrix).
+bbdoc: Gets a ray trace from screen position (i.e mouse) in a viewport.
 End Rem
-Function GetCameraMatrix:RMatrix(camera:RCamera)
-	Return bmx_raylib_GetCameraMatrix(camera)
-End Function
-
-Rem
-bbdoc: Returns camera 2d transform matrix.
-End Rem
-Function GetCameraMatrix2D:RMatrix(camera:RCamera2D)
-	Return bmx_raylib_GetCameraMatrix2D(camera)
+Function GetScreenToWorldRayEx:RRay(mousePosition:RVector2, camera:RCamera, width:Int, height:Int)
+	Return bmx_raylib_GetScreenToWorldRayEx(mousePosition, camera, width, height)
 End Function
 
 Rem
@@ -452,6 +648,20 @@ Function GetScreenToWorld2D:RVector2(position:RVector2, camera:RCamera2D)
 	Return bmx_raylib_GetScreenToWorld2D(position, camera)
 End Function
 
+Rem
+bbdoc: Returns camera transform matrix (view matrix).
+End Rem
+Function GetCameraMatrix:RMatrix(camera:RCamera)
+	Return bmx_raylib_GetCameraMatrix(camera)
+End Function
+
+Rem
+bbdoc: Returns camera 2d transform matrix.
+End Rem
+Function GetCameraMatrix2D:RMatrix(camera:RCamera2D)
+	Return bmx_raylib_GetCameraMatrix2D(camera)
+End Function
+
 
 ' Timing-related functions
 Rem
@@ -459,13 +669,6 @@ bbdoc: Sets target FPS (maximum).
 End Rem
 Function SetTargetFPS(fps:Int)
 	bmx_raylib_SetTargetFPS(fps)
-End Function
-
-Rem
-bbdoc: Returns current FPS.
-End Rem
-Function GetFPS:Int()
-	Return bmx_raylib_GetFPS()
 End Function
 
 Rem
@@ -482,57 +685,68 @@ Function GetTime:Double()
 	Return bmx_raylib_GetTime()
 End Function
 
-' Text Drawing functions
 Rem
-bbdoc: Shows current FPS.
+bbdoc: Returns current FPS.
 End Rem
-Function DrawFPS(posX:Int, posY:Int)
-	bmx_raylib_DrawFPS(posX, posY)
+Function GetFPS:Int()
+	Return bmx_raylib_GetFPS()
+End Function
+
+' Custom frame control functions
+Rem
+bbdoc: Swaps back buffer with front buffer (screen drawing).
+End Rem
+Function SwapScreenBuffer()
+	bmx_raylib_SwapScreenBuffer()
 End Function
 
 Rem
-bbdoc: Draws text (using default font).
+bbdoc: Registers all input events.
 End Rem
-Function DrawText(txt:String, posX:Int, posY:Int, FontSize:Int, color:RColor)
-	Local t:Byte Ptr = txt.ToUTF8String()
-	bmx_raylib_DrawText(t, posX, posY, FontSize, color)
-	MemFree(t)
+Function PollInputEvents()
+	bmx_raylib_PollInputEvents()
 End Function
 
 Rem
-bbdoc: Draws text using font and additional parameters.
+bbdoc: Waits for some time (halt program execution).
 End Rem
-Function DrawTextEx(font:RFont, txt:String, position:RVector2, FontSize:Float, spacing:Float, tint:RColor)
-	Local t:Byte Ptr = txt.ToUTF8String()
-	bmx_raylib_DrawTextEx(font, t, position, FontSize, spacing, tint)
-	MemFree(t)
+Function WaitTime(seconds:Double)
+	bmx_raylib_WaitTime(seconds)
+End Function
+
+
+' Random values generation functions
+Function SetRandomSeed(seed:UInt)
+	bmx_raylib_SetRandomSeed(seed)
 End Function
 
 Rem
-bbdoc: Draw text using font inside rectangle limits.
+bbdoc: Returns a random value between min and max (both included).
 End Rem
-Function DrawTextRec(font:RFont, txt:String, rec:RRectangle, FontSize:Float, spacing:Float, wordWrap:Int, tint:RColor)
-	Local t:Byte Ptr = txt.ToUTF8String()
-	bmx_raylib_DrawTextRec(font, t, rec, FontSize, spacing, wordWrap, tint)
-	MemFree(t)
+Function GetRandomValue:Int(minimum:Int, maximum:Int)
+	Return bmx_raylib_GetRandomValue(minimum, maximum)
 End Function
 
 Rem
-bbdoc: Draws text using font inside rectangle limits with support for text selection.
+bbdoc: Returns a random value between min and max (both included).
 End Rem
-Function DrawTextRecEx(font:RFont, txt:String, rec:RRectangle, FontSize:Float, spacing:Float, wordWrap:Int, tint:RColor, selectStart:Int, selectLength:Int, selectTint:RColor, selectBackTint:RColor)
-	Local t:Byte Ptr = txt.ToUTF8String()
-	bmx_raylib_DrawTextRecEx(font, t, rec, FontSize, spacing, wordWrap, tint, selectStart, selectLength, selectTint, selectBackTint)
-	MemFree(t)
+Function GetRandomValue:Int(minimum:Float, maximum:Float)
+	Return bmx_raylib_GetRandomValue(Int(minimum), Int(maximum))
 End Function
 
 Rem
-bbdoc: Draws one character (codepoint).
+bbdoc: Loads random values sequence, no values repeated.
 End Rem
-Function DrawTextCodepoint(font:RFont, codepoint:Int, position:RVector2, scale:Float, tint:RColor)
-	bmx_raylib_DrawTextCodepoint(font, codepoint, position, scale, tint)
+Function LoadRandomSequence:Int Ptr(count:UInt, min:Int, max:Int)
+	Return bmx_raylib_LoadRandomSequence(count, min, max)
 End Function
 
+Rem
+bbdoc: Unloads random values sequence.
+End Rem
+Function UnloadRandomSequence(sequence:Int Ptr)
+	bmx_raylib_UnloadRandomSequence(sequence)
+End Function
 
 ' Misc. functions
 Rem
@@ -552,17 +766,435 @@ Function TakeScreenshot(fileName:String)
 End Function
 
 Rem
-bbdoc: Returns a random value between min and max (both included).
+bbdoc: Opens URL with default system browser (if available).
 End Rem
-Function GetRandomValue:Int(minimum:Int, maximum:Int)
-	Return bmx_raylib_GetRandomValue(minimum, maximum)
+Function OpenURL(url:String)
+	Local u:Byte Ptr = url.ToUTF8String()
+	bmx_raylib_OpenURL(u)
+	MemFree(u)
 End Function
 
 Rem
-bbdoc: Returns a random value between min and max (both included).
+bbdoc: Internal memory allocator.
 End Rem
-Function GetRandomValue:Int(minimum:Float, maximum:Float)
-	Return bmx_raylib_GetRandomValue(Int(minimum), Int(maximum))
+Function RMemAlloc:Byte Ptr(size:UInt)
+	Return bmx_raylib_MemAlloc(size)
+End Function
+
+Rem
+bbc: Internal memory reallocator.
+End Rem
+Function RMemRealloc:Byte Ptr(data:Byte Ptr, size:UInt)
+	Return bmx_raylib_MemRealloc(data, size)
+End Function
+
+Rem
+bbdoc: Internal memory free.
+End Rem
+Function RMemFree(data:Byte Ptr)
+	bmx_raylib_MemFree(data)
+End Function
+
+' Files management functions
+Rem
+bbdoc: Loads file data as bytes (read)
+End Rem
+Function LoadFileData:Byte Ptr(fileName:String, dataSize:Int Var)
+	Local f:Byte Ptr = fileName.ToUTF8String()
+	Local result:Byte Ptr = bmx_raylib_LoadFileData(f, dataSize)
+	MemFree(f)
+	Return result
+End Function
+
+Rem
+bbdoc: Unloads file data allocated by LoadFileData()
+End Rem
+Function UnloadFileData(data:Byte Ptr)
+	bmx_raylib_UnloadFileData(data)
+End Function
+
+Rem
+bbdoc: Saves data to file from bytes (write), returns #True on success
+End Rem
+Function SaveFileData:Int(fileName:String, data:Byte Ptr, dataSize:Int)
+	Local f:Byte Ptr = fileName.ToUTF8String()
+	Local result:Int = bmx_raylib_SaveFileData(f, data, dataSize)
+	MemFree(f)
+	Return result
+End Function
+
+' Input-related functions: keyboard
+Rem
+bbdoc: Detects if a key has been pressed once.
+End Rem
+Function IsKeyPressed:Int(key:Int)
+	Return bmx_raylib_IsKeyPressed(key)
+End Function
+
+Rem
+bbdoc: Checks if a key has been pressed again.
+End Rem
+Function IsKeyPressedRepeat:Int(key:Int)
+	Return bmx_raylib_IsKeyPressedRepeat(key)
+End Function
+
+Rem
+bbdoc: Detects if a key is being pressed.
+End Rem
+Function IsKeyDown:Int(key:Int)
+	Return bmx_raylib_IsKeyDown(key)
+End Function
+
+Rem
+bbdoc: Detects if a key has been released once.
+End Rem
+Function IsKeyReleased:Int(key:Int)
+	Return bmx_raylib_IsKeyReleased(key)
+End Function
+
+Rem
+bbdoc: Detects if a key is NOT being pressed.
+End Rem
+Function IsKeyUp:Int(key:Int)
+	Return bmx_raylib_IsKeyUp(key)
+End Function
+
+Rem
+bbdoc: Gets key pressed, call it multiple times for chars queued.
+End Rem
+Function GetKeyPressed:Int()
+	Return bmx_raylib_GetKeyPressed()
+End Function
+
+Rem
+bbdoc: Gets char pressed (unicode), call it multiple times for chars queued, returns 0 when the queue is empty
+End Rem
+Function GetCharPressed:Int()
+	Return bmx_raylib_GetCharPressed()
+End Function
+
+Rem
+bbdoc: Sets a custom key to exit program (default is ESC).
+End Rem
+Function SetExitKey(key:Int)
+	bmx_raylib_SetExitKey(Key)
+End Function
+
+' Input-related functions: gamepads
+Rem
+bbdoc: Detects if a gamepad is available.
+End Rem
+Function IsGamepadAvailable:Int(gamepad:Int)
+	Return bmx_raylib_IsGamepadAvailable(gamepad:Int)
+End Function
+
+' Rem
+' bbdoc: Checks gamepad name (if available).
+' End Rem
+' Function IsGamepadName:Int(gamepad:Int, name:String)
+' 	Local n:Byte Ptr = name.ToUTF8String()
+' 	Local res:Int = bmx_raylib_IsGamepadName(gamepad:Int, n)
+' 	MemFree(n)
+' 	Return res
+' End Function
+
+Rem
+bbdoc: Returns gamepad internal name id.
+End Rem
+Function GetGamepadName:String(gamepad:Int)
+	Return String.FromUTF8String(bmx_raylib_GetGamepadName(gamepad:Int))
+End Function
+
+Rem
+bbdoc: Detects if a gamepad button has been pressed once.
+End Rem
+Function IsGamepadButtonPressed:Int(gamepad:Int, button:Int)
+	Return bmx_raylib_IsGamepadButtonPressed(gamepad:Int, button:Int)
+End Function
+
+Rem
+bbdoc: Detects if a gamepad button is being pressed.
+End Rem
+Function IsGamepadButtonDown:Int(gamepad:Int, button:Int)
+	Return bmx_raylib_IsGamepadButtonDown(gamepad:Int, button:Int)
+End Function
+
+Rem
+bbdoc: Detects if a gamepad button has been released once.
+End Rem
+Function IsGamepadButtonReleased:Int(gamepad:Int, button:Int)
+	Return bmx_raylib_IsGamepadButtonReleased(gamepad:Int, button:Int)
+End Function
+
+Rem
+bbdoc: Detects if a gamepad button is NOT being pressed.
+End Rem
+Function IsGamepadButtonUp:Int(gamepad:Int, button:Int)
+	Return bmx_raylib_IsGamepadButtonUp(gamepad:Int, button:Int)
+End Function
+
+Rem
+bbdoc: Gets the last gamepad button pressed.
+End Rem
+Function GetGamepadButtonPressed:Int()
+	Return bmx_raylib_GetGamepadButtonPressed()
+End Function
+
+Rem
+bbdoc: Returns gamepad axis count for a gamepad.
+End Rem
+Function GetGamepadAxisCount:Int(gamepad:Int)
+	Return bmx_raylib_GetGamepadAxisCount(gamepad:Int)
+End Function
+
+Rem
+bbdoc: Returns axis movement value for a gamepad axis.
+End Rem
+Function GetGamepadAxisMovement:Float(gamepad:Int, axis:Int)
+	Return bmx_raylib_GetGamepadAxisMovement(gamepad:Int, axis:Int)
+End Function
+
+Rem
+bbdoc: Sets internal gamepad mappings (SDL_GameControllerDB)
+End Rem
+Function SetGamepadMappings:Int(mappings:String)
+	Local m:Byte Ptr = mappings.ToUTF8String()
+	Local res:Int = bmx_raylib_SetGamepadMappings(m)
+	MemFree(m)
+	Return res
+End Function
+
+Rem
+bbdoc: Sets gamepad vibration for both motors (duration in seconds)
+End Rem
+Function SetGamepadVibration(gamepad:Int, leftMotor:Float, rightMotor:Float, duration:Float)
+	bmx_raylib_SetGamepadVibration(gamepad, leftMotor, rightMotor, duration)
+End Function
+
+' Input-related functions: mouse
+Rem
+bbdoc: Detects if a mouse button has been pressed once.
+End Rem
+Function IsMouseButtonPressed:Int(button:Int)
+	Return bmx_raylib_IsMouseButtonPressed(button:Int)
+End Function
+
+Rem
+bbdoc: Detects if a mouse button is being pressed.
+End Rem
+Function IsMouseButtonDown:Int(button:Int)
+	Return bmx_raylib_IsMouseButtonDown(button:Int)
+End Function
+
+Rem
+bbdoc: Detects if a mouse button has been released once.
+End Rem
+Function IsMouseButtonReleased:Int(button:Int)
+	Return bmx_raylib_IsMouseButtonReleased(button:Int)
+End Function
+
+Rem
+bbdoc: Detects if a mouse button is NOT being pressed.
+End Rem
+Function IsMouseButtonUp:Int(button:Int)
+	Return bmx_raylib_IsMouseButtonUp(button:Int)
+End Function
+
+Rem
+bbdoc: Returns mouse position X.
+End Rem
+Function GetMouseX:Int()
+	Return bmx_raylib_GetMouseX()
+End Function
+
+Rem
+bbdoc: Returns mouse position Y.
+End Rem
+Function GetMouseY:Int()
+	Return bmx_raylib_GetMouseY()
+End Function
+
+Rem
+bbdoc: Returns mouse position XY.
+End Rem
+Function GetMousePosition:RVector2()
+	Return bmx_raylib_GetMousePosition()
+End Function
+
+Rem
+bbdoc: 
+End Rem
+Function GetMouseDelta:RVector2()
+	Return bmx_raylib_GetMouseDelta()
+End Function
+
+Rem
+bbdoc: Sets mouse position XY.
+End Rem
+Function SetMousePosition(x:Int, y:Int)
+	bmx_raylib_SetMousePosition(x:Int, y:Int)
+End Function
+
+Rem
+bbdoc: Sets mouse offset.
+End Rem
+Function SetMouseOffset(offsetX:Int, offsetY:Int)
+	bmx_raylib_SetMouseOffset(offsetX:Int, offsetY:Int)
+End Function
+
+Rem
+bbdoc: Sets mouse scaling.
+End Rem
+Function SetMouseScale(scaleX:Float, scaleY:Float)
+	bmx_raylib_SetMouseScale(scaleX:Float, scaleY:Float)
+End Function
+
+Rem
+bbdoc: Gets mouse wheel movement for X or Y, whichever is larger.
+End Rem
+Function GetMouseWheelMove:Float()
+	Return bmx_raylib_GetMouseWheelMove()
+End Function
+
+Rem
+bbdoc: Gets mouse wheel movement for both X and Y.
+End Rem
+Function GetMouseWheelMoveV:RVector2()
+	Return bmx_raylib_GetMouseWheelMoveV()
+End Function
+
+Rem
+bbdoc: Sets mouse cursor.
+End Rem
+Function SetMouseCursor(cursor:Int)
+	bmx_raylib_SetMouseCursor(cursor)
+End Function
+
+' Input-related functions: touch
+Rem
+bbdoc: Returns touch position X for touch point 0 (relative to screen size).
+End Rem
+Function GetTouchX:Int()
+	Return bmx_raylib_GetTouchX()
+End Function
+
+Rem
+bbdoc: Returns touch position Y for touch point 0 (relative to screen size).
+End Rem
+Function GetTouchY:Int()
+	Return bmx_raylib_GetTouchY()
+End Function
+
+Rem
+bbdoc: Returns touch position XY for a touch point index (relative to screen size).
+End Rem
+Function GetTouchPosition:RVector2(index:Int)
+	Return bmx_raylib_GetTouchPosition(index)
+End Function
+
+Rem
+bbdoc: Gets touch point identifier for given index.
+End Rem
+Function GetTouchPointId:Int(index:Int)
+	Return bmx_raylib_GetTouchPointId(index)
+End Function
+
+Rem
+bbdoc: Gets number of touch points.
+End Rem
+Function GetTouchPointCount:Int()
+	Return bmx_raylib_GetTouchPointCount()
+End Function
+
+' Gestures and Touch Handling Functions (Module: gestures)
+Rem
+bbdoc: Enables a set of gestures using flags.
+End Rem
+Function SetGesturesEnabled(gestureFlags:UInt)
+	bmx_raylib_SetGesturesEnabled(gestureFlags)
+End Function
+
+Rem
+bbdoc: Checks if a gesture have been detected.
+End Rem
+Function IsGestureDetected:Int(gesture:Int)
+	Return bmx_raylib_IsGestureDetected(gesture)
+End Function
+
+Rem
+bbdoc: Gets latest detected gesture.
+End Rem
+Function GetGestureDetected:Int()
+	Return bmx_raylib_GetGestureDetected()
+End Function
+
+Rem
+bbdoc: Gets gesture hold time in milliseconds.
+End Rem
+Function GetGestureHoldDuration:Float()
+	Return bmx_raylib_GetGestureHoldDuration()
+End Function
+
+Rem
+bbdoc: Gets gesture drag vector.
+End Rem
+Function GetGestureDragVector:RVector2()
+	Return bmx_raylib_GetGestureDragVector()
+End Function
+
+Rem
+bbdoc: Gets gesture drag angle.
+End Rem
+Function GetGestureDragAngle:Float()
+	Return bmx_raylib_GetGestureDragAngle()
+End Function
+
+Rem
+bbdoc: Gets gesture pinch delta.
+End Rem
+Function GetGesturePinchVector:RVector2()
+	Return bmx_raylib_GetGesturePinchVector()
+End Function
+
+Rem
+bbdoc: Gets gesture pinch angle.
+End Rem
+Function GetGesturePinchAngle:Float()
+	Return bmx_raylib_GetGesturePinchAngle()
+End Function
+
+' Camera System Functions (Module: rcamera)
+Rem
+bbdoc: Updates camera position for selected mode.
+End Rem
+Function UpdateCamera(camera:RCamera Var, mode:Int)
+	bmx_raylib_UpdateCamera(camera, mode:Int)
+End Function
+
+Function UpdateCameraPro(camera:RCamera Var, movement:RVector3, rotation:RVector3, zoom:Float)
+	bmx_raylib_UpdateCameraPro(camera, movement, rotation, zoom)
+End Function
+
+' Basic Shapes Drawing Functions (Module: shapes)
+Rem
+bbdoc: Defines default texture used to draw shapes.
+End Rem
+Function SetShapesTexture(texture:RTexture2D, source:RRectangle)
+	bmx_raylib_SetShapesTexture(texture, source)
+End Function
+
+Rem
+bbdoc: Gets texture to draw shapes.
+End Rem
+Function GetShapesTexture:RTexture2D()
+	Return bmx_raylib_GetShapesTexture()
+End Function
+
+Rem
+bbdoc: Gets texture rectangle to draw shapes.
+End Rem
+Function GetShapesTextureRectangle:RRectangle()
+	Return bmx_raylib_GetShapesTextureRectangle()
 End Function
 
 ' Basic shapes drawing functions
@@ -602,17 +1234,17 @@ Function DrawLineEx(startPos:RVector2, endPos:RVector2, thick:Float, color:RColo
 End Function
 
 Rem
-bbdoc: Draws a line using cubic-bezier curves in-out.
-End Rem
-Function DrawLineBezier(startPos:RVector2, endPos:RVector2, thick:Float, color:RColor)
-	bmx_raylib_DrawLineBezier(startPos, endPos, thick, color)
-End Function
-
-Rem
 bbdoc: Draws lines sequence.
 End Rem
 Function DrawLineStrip(points:RVector2 Ptr, numPoints:Int, color:RColor)
 	bmx_raylib_DrawLineStrip(points, numPoints, color)
+End Function
+
+Rem
+bbdoc: Draws a line using cubic-bezier curves in-out.
+End Rem
+Function DrawLineBezier(startPos:RVector2, endPos:RVector2, thick:Float, color:RColor)
+	bmx_raylib_DrawLineBezier(startPos, endPos, thick, color)
 End Function
 
 Rem
@@ -625,14 +1257,14 @@ End Function
 Rem
 bbdoc: Draws a piece of a circle.
 End Rem
-Function DrawCircleSector(center:RVector2, radius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
+Function DrawCircleSector(center:RVector2, radius:Float, startAngle:Float, endAngle:Float, segments:Int, color:RColor)
 	bmx_raylib_DrawCircleSector(center, radius, startAngle, endAngle, segments, color)
 End Function
 
 Rem
 bbdoc: Draws circle sector outline.
 End Rem
-Function DrawCircleSectorLines(center:RVector2, radius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
+Function DrawCircleSectorLines(center:RVector2, radius:Float, startAngle:Float, endAngle:Float, segments:Int, color:RColor)
 	bmx_raylib_DrawCircleSectorLines(center, radius, startAngle, endAngle, segments, color)
 End Function
 
@@ -657,6 +1289,10 @@ Function DrawCircleLines(centerX:Int, centerY:Int, radius:Float, color:RColor)
 	bmx_raylib_DrawCircleLines(centerX, centerY, radius, color)
 End Function
 
+Function DrawCircleLinesV(center:RVector2, radius:Float, color:RColor)
+	bmx_raylib_DrawCircleLinesV(center, radius, color)
+End Function
+
 Rem
 bbdoc: Draws an ellipse.
 End Rem
@@ -674,14 +1310,14 @@ End Function
 Rem
 bbdoc: Draws a ring.
 End Rem
-Function DrawRing(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
+Function DrawRing(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Float, endAngle:Float, segments:Int, color:RColor)
 	bmx_raylib_DrawRing(center, innerRadius, outerRadius, startAngle, endAngle, segments, color:RColor)
 End Function
 
 Rem
 bbdoc: Draws ring outline.
 End Rem
-Function DrawRingLines(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Int, endAngle:Int, segments:Int, color:RColor)
+Function DrawRingLines(center:RVector2, innerRadius:Float, outerRadius:Float, startAngle:Float, endAngle:Float, segments:Int, color:RColor)
 	bmx_raylib_DrawRingLines(center, innerRadius, outerRadius, startAngle, endAngle, segments, color)
 End Function
 
@@ -758,8 +1394,12 @@ End Function
 Rem
 bbdoc: Draws a rectangle with rounded edges outline.
 End Rem
-Function DrawRectangleRoundedLines(rec:RRectangle, roundness:Float, segments:Int, lineThick:Int, color:RColor)
-	bmx_raylib_DrawRectangleRoundedLines(rec, roundness, segments, lineThick, color)
+Function DrawRectangleRoundedLines(rec:RRectangle, roundness:Float, segments:Int, color:RColor)
+	bmx_raylib_DrawRectangleRoundedLines(rec, roundness, segments, color)
+End Function
+
+Function DrawRectangleRoundedLinesEx(rec:RRectangle, roundness:Float, segments:Int, lineThick:Float, color:RColor)
+	bmx_raylib_DrawRectangleRoundedLinesEx(rec, roundness, segments, lineThick, color)
 End Function
 
 Rem
@@ -804,6 +1444,73 @@ Function DrawPolyLines(center:RVector2, sides:Int, radius:Float, Rotation:Float,
 	bmx_raylib_DrawPolyLines(center, sides, radius, Rotation, color)
 End Function
 
+Function DrawPolyLinesEx(center:RVector2, sides:Int, radius:Float, rotation:Float, lineThick:Int, color:RColor)
+	bmx_raylib_DrawPolyLinesEx(center, sides, radius, rotation, lineThick, color)
+End Function
+
+' Splines drawing functions
+Function DrawSplineLinear(points:RVector2 Ptr, pointCount:Int, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineLinear(points, pointCount, thick, color)
+End Function
+
+Function DrawSplineBasis(points:RVector2 Ptr, pointCount:Int, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineBasis(points, pointCount, thick, color)
+End Function
+
+Function DrawSplineCatmullRom(points:RVector2 Ptr, pointCount:Int, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineCatmullRom(points, pointCount, thick, color)
+End Function
+
+Function DrawSplineBezierQuadratic(points:RVector2 Ptr, pointCount:Int, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineBezierQuadratic(points, pointCount, thick, color)
+End Function
+
+Function DrawSplineBezierCubic(points:RVector2 Ptr, pointCount:Int, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineBezierCubic(points, pointCount, thick, color)
+End Function
+
+Function DrawSplineSegmentLinear(p1:RVector2, p2:RVector2, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineSegmentLinear(p1, p2, thick, color)
+End Function
+
+Function DrawSplineSegmentBasis(p1:RVector2, p2:RVector2, p3:RVector2, p4:RVector2, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineSegmentBasis(p1, p2, p3, p4, thick, color)
+End Function
+
+Function DrawSplineSegmentCatmullRom(p1:RVector2, p2:RVector2, p3:RVector2, p4:RVector2, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineSegmentCatmullRom(p1, p2, p3, p4, thick, color)
+End Function
+
+Function DrawSplineSegmentBezierQuadratic(p1:RVector2, p2:RVector2, p3:RVector2, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineSegmentBezierQuadratic(p1, p2, p3, thick, color)
+End Function
+
+Function DrawSplineSegmentBezierCubic(p1:RVector2, c2:RVector2, c3:RVector2, p4:RVector2, thick:Float, color:RColor)
+	bmx_raylib_DrawSplineSegmentBezierCubic(p1, c2, c3, p4, thick, color)
+End Function
+
+
+' Spline segment point evaluation functions, for a given t [0.0f .. 1.0f]
+Function GetSplinePointLinear:RVector2(startPos:RVector2, endPos:RVector2, t:Float)
+	Return bmx_raylib_GetSplinePointLinear(startPos, endPos, t)
+End Function
+
+Function GetSplinePointBasis:RVector2(p1:RVector2, p2:RVector2, p3:RVector2, p4:RVector2, t:Float)
+	Return bmx_raylib_GetSplinePointBasis(p1, p2, p3, p4, t)
+End Function
+
+Function GetSplinePointCatmullRom:RVector2(p1:RVector2, p2:RVector2, p3:RVector2, p4:RVector2, t:Float)
+	Return bmx_raylib_GetSplinePointCatmullRom(p1, p2, p3, p4, t)
+End Function
+
+Function GetSplinePointBezierQuad:RVector2(p1:RVector2, p2:RVector2, p3:RVector2, t:Float)
+	Return bmx_raylib_GetSplinePointBezierQuad(p1, p2, p3, t)
+End Function
+
+Function GetSplinePointBezierCubic:RVector2(p1:RVector2, p2:RVector2, p3:RVector2, p4:RVector2, t:Float)
+	Return bmx_raylib_GetSplinePointBezierCubic(p1, p2, p3, p4, t)
+End Function
+
 ' Basic shapes collision detection functions
 Rem
 bbdoc: Checks collision between two rectangles.
@@ -826,11 +1533,8 @@ Function CheckCollisionCircleRec:Int(center:RVector2, radius:Float, rec:RRectang
 	Return bmx_raylib_CheckCollisionCircleRec(center, radius, rec)
 End Function
 
-Rem
-bbdoc: Gets collision rectangle for two rectangles collision.
-End Rem
-Function GetCollisionRec:RRectangle(rec1:RRectangle, rec2:RRectangle)
-	Return bmx_raylib_GetCollisionRec(rec1, rec2)
+Function CheckCollisionCircleLine:Int(center:RVector2, radius:Float, p1:RVector2, p2:RVector2)
+	Return bmx_raylib_CheckCollisionCircleLine(center, radius, p1, p2)
 End Function
 
 Rem
@@ -854,419 +1558,35 @@ Function CheckCollisionPointTriangle:Int(point:RVector2, p1:RVector2, p2:RVector
 	Return bmx_raylib_CheckCollisionPointTriangle(point, p1, p2, p3)
 End Function
 
-
-' Input-related functions: keyboard
 Rem
-bbdoc: Detects if a key has been pressed once.
+bbdoc: Checks if point belongs to line created between two points @p1 and @p2 with defined margin in pixels @threshold.
 End Rem
-Function IsKeyPressed:Int(key:Int)
-	Return bmx_raylib_IsKeyPressed(key)
+Function CheckCollisionPointLine:Int(point:RVector2, p1:RVector2, p2:RVector2, threshold:Int)
+	Return bmx_raylib_CheckCollisionPointLine(point, p1, p2, threshold)
 End Function
 
 Rem
-bbdoc: Detects if a key is being pressed.
+bbdoc: Checks if point is within a polygon described by array of vertices.
 End Rem
-Function IsKeyDown:Int(key:Int)
-	Return bmx_raylib_IsKeyDown(key)
+Function CheckCollisionPointPoly:Int(point:RVector2, points:RVector2 Ptr, pointCount:Int)
+	Return bmx_raylib_CheckCollisionPointPoly(point, points, pointCount)
 End Function
 
 Rem
-bbdoc: Detects if a key has been released once.
+bbdoc: Checks the collision between two lines defined by two points each, returns collision point by reference
 End Rem
-Function IsKeyReleased:Int(key:Int)
-	Return bmx_raylib_IsKeyReleased(key)
+Function CheckCollisionLines:Int(startPos1:RVector2, endPos1:RVector2, startPos2:RVector2, endPos2:RVector2, collisionPoint:RVector2 Var)
+	Return bmx_raylib_CheckCollisionLines(startPos1, endPos1, startPos2, endPos2, collisionPoint)
 End Function
 
 Rem
-bbdoc: Detects if a key is NOT being pressed.
+bbdoc: Gets collision rectangle for two rectangles collision.
 End Rem
-Function IsKeyUp:Int(key:Int)
-	Return bmx_raylib_IsKeyUp(key)
+Function GetCollisionRec:RRectangle(rec1:RRectangle, rec2:RRectangle)
+	Return bmx_raylib_GetCollisionRec(rec1, rec2)
 End Function
 
-Rem
-bbdoc: Sets a custom key to exit program (default is ESC).
-End Rem
-Function SetExitKey(key:Int)
-	bmx_raylib_SetExitKey(Key)
-End Function
-
-Rem
-bbdoc: Gets key pressed, call it multiple times for chars queued.
-End Rem
-Function GetKeyPressed:Int()
-	Return bmx_raylib_GetKeyPressed()
-End Function
-
-' Input-related functions: gamepads
-Rem
-bbdoc: Detects if a gamepad is available.
-End Rem
-Function IsGamepadAvailable:Int(gamepad:Int)
-	Return bmx_raylib_IsGamepadAvailable(gamepad:Int)
-End Function
-
-Rem
-bbdoc: Checks gamepad name (if available).
-End Rem
-Function IsGamepadName:Int(gamepad:Int, name:String)
-	Local n:Byte Ptr = name.ToUTF8String()
-	Local res:Int = bmx_raylib_IsGamepadName(gamepad:Int, n)
-	MemFree(n)
-	Return res
-End Function
-
-Rem
-bbdoc: Returns gamepad internal name id.
-End Rem
-Function GetGamepadName:String(gamepad:Int)
-	Return String.FromUTF8String(bmx_raylib_GetGamepadName(gamepad:Int))
-End Function
-
-Rem
-bbdoc: Detects if a gamepad button has been pressed once.
-End Rem
-Function IsGamepadButtonPressed:Int(gamepad:Int, button:Int)
-	Return bmx_raylib_IsGamepadButtonPressed(gamepad:Int, button:Int)
-End Function
-
-Rem
-bbdoc: Detects if a gamepad button is being pressed.
-End Rem
-Function IsGamepadButtonDown:Int(gamepad:Int, button:Int)
-	Return bmx_raylib_IsGamepadButtonDown(gamepad:Int, button:Int)
-End Function
-
-Rem
-bbdoc: Detects if a gamepad button has been released once.
-End Rem
-Function IsGamepadButtonReleased:Int(gamepad:Int, button:Int)
-	Return bmx_raylib_IsGamepadButtonReleased(gamepad:Int, button:Int)
-End Function
-
-Rem
-bbdoc: Detects if a gamepad button is NOT being pressed.
-End Rem
-Function IsGamepadButtonUp:Int(gamepad:Int, button:Int)
-	Return bmx_raylib_IsGamepadButtonUp(gamepad:Int, button:Int)
-End Function
-
-Rem
-bbdoc: Gets the last gamepad button pressed.
-End Rem
-Function GetGamepadButtonPressed:Int()
-	Return bmx_raylib_GetGamepadButtonPressed()
-End Function
-
-Rem
-bbdoc: Returns gamepad axis count for a gamepad.
-End Rem
-Function GetGamepadAxisCount:Int(gamepad:Int)
-	Return bmx_raylib_GetGamepadAxisCount(gamepad:Int)
-End Function
-
-Rem
-bbdoc: Returns axis movement value for a gamepad axis.
-End Rem
-Function GetGamepadAxisMovement:Float(gamepad:Int, axis:Int)
-	Return bmx_raylib_GetGamepadAxisMovement(gamepad:Int, axis:Int)
-End Function
-
-' Input-related functions: mouse
-Rem
-bbdoc: Detects if a mouse button has been pressed once.
-End Rem
-Function IsMouseButtonPressed:Int(button:Int)
-	Return bmx_raylib_IsMouseButtonPressed(button:Int)
-End Function
-
-Rem
-bbdoc: Detects if a mouse button is being pressed.
-End Rem
-Function IsMouseButtonDown:Int(button:Int)
-	Return bmx_raylib_IsMouseButtonDown(button:Int)
-End Function
-
-Rem
-bbdoc: Detects if a mouse button has been released once.
-End Rem
-Function IsMouseButtonReleased:Int(button:Int)
-	Return bmx_raylib_IsMouseButtonReleased(button:Int)
-End Function
-
-Rem
-bbdoc: Detects if a mouse button is NOT being pressed.
-End Rem
-Function IsMouseButtonUp:Int(button:Int)
-	Return bmx_raylib_IsMouseButtonUp(button:Int)
-End Function
-
-Rem
-bbdoc: Returns mouse position X.
-End Rem
-Function GetMouseX:Int()
-	Return bmx_raylib_GetMouseX()
-End Function
-
-Rem
-bbdoc: Returns mouse position Y.
-End Rem
-Function GetMouseY:Int()
-	Return bmx_raylib_GetMouseY()
-End Function
-
-Rem
-bbdoc: Returns mouse position XY.
-End Rem
-Function GetMousePosition:RVector2()
-	Return bmx_raylib_GetMousePosition()
-End Function
-
-Rem
-bbdoc: Sets mouse position XY.
-End Rem
-Function SetMousePosition(x:Int, y:Int)
-	bmx_raylib_SetMousePosition(x:Int, y:Int)
-End Function
-
-Rem
-bbdoc: Sets mouse offset.
-End Rem
-Function SetMouseOffset(offsetX:Int, offsetY:Int)
-	bmx_raylib_SetMouseOffset(offsetX:Int, offsetY:Int)
-End Function
-
-Rem
-bbdoc: Sets mouse scaling.
-End Rem
-Function SetMouseScale(scaleX:Float, scaleY:Float)
-	bmx_raylib_SetMouseScale(scaleX:Float, scaleY:Float)
-End Function
-
-Rem
-bbdoc: Returns mouse wheel movement Y.
-End Rem
-Function GetMouseWheelMove:Int()
-	Return bmx_raylib_GetMouseWheelMove()
-End Function
-
-' Color-related functions
-Rem
-bbdoc: Returns the hexadecimal value for an #RColor.
-End Rem
-Function ColorToInt:Int(color:RColor)
-	Return bmx_raylib_ColorToInt(color)
-End Function
-
-Rem
-bbdoc: Returns @color normalized as float [0..1]
-End Rem
-Function ColorNormalize:RVector4(color:RColor)
-	Return bmx_raylib_ColorNormalize(color)
-End Function
-
-Rem
-bbdoc: Returns @color from normalized values [0..1]
-End Rem
-Function ColorFromNormalized:RColor(normalized:RVector4)
-	Return bmx_raylib_ColorFromNormalized(normalized)
-End Function
-
-Rem
-bbdoc: Returns HSV values for an #RColor.
-End Rem
-Function ColorToHSV:RVector3(color:RColor)
-	Return bmx_raylib_ColorToHSV(color)
-End Function
-
-Rem
-bbdoc: Returns an #RColor from HSV values.
-End Rem
-Function ColorFromHSV:RColor(hsv:RVector3)
-	Return bmx_raylib_ColorFromHSV(hsv)
-End Function
-
-Rem
-bbdoc: Returns an #RColor from a hexadecimal value.
-End Rem
-Function GetColor:RColor(hexValue:Int)
-	Return bmx_raylib_GetColor(hexValue)
-End Function
-
-Rem
-bbdoc: Color fade-in or fade-out.
-about: @alpha goes from 0.0 to 1.0.
-End Rem
-Function Fade:RColor(color:RColor, alpha:Float)
-	Return bmx_raylib_Fade(color, alpha)
-End Function
-
-
-
-' Camera System Functions (Module: camera)
-Rem
-bbdoc: Sets camera mode (multiple camera modes available).
-End Rem
-Function SetCameraMode(camera:RCamera, Mode:Int)
-	bmx_raylib_SetCameraMode(camera, Mode)
-End Function
-
-Rem
-bbdoc: Updates camera position for selected mode.
-End Rem
-Function UpdateCamera(camera:RCamera Var)
-	bmx_raylib_UpdateCamera(camera)
-End Function
-
-Rem
-bbdoc: Sets camera pan key to combine with mouse movement (free camera).
-End Rem
-Function SetCameraPanControl(panKey:Int)
-	bmx_raylib_SetCameraPanControl(panKey)
-End Function
-
-Rem
-bbdoc: Sets camera alt key to combine with mouse movement (free camera).
-End Rem
-Function SetCameraAltControl(altKey:Int)
-	bmx_raylib_SetCameraAltControl(altKey)
-End Function
-
-Rem
-bbdoc: Sets camera smooth zoom key to combine with mouse (free camera).
-End Rem
-Function SetCameraSmoothZoomControl(szKey:Int)
-	bmx_raylib_SetCameraSmoothZoomControl(szKey)
-End Function
-
-Rem
-bbdoc: Set camera move controls (1st person and 3rd person cameras).
-End Rem
-Function SetCameraMoveControls(frontKey:Int, backKey:Int, rightKey:Int, leftKey:Int, upKey:Int, downKey:Int)
-	bmx_raylib_SetCameraMoveControls(frontKey, backKey, rightKey, leftKey, upKey, downKey)
-End Function
-
-' Basic geometric 3D shapes drawing functions
-Rem
-bbdoc: Draws a line in 3D world space.
-End Rem
-Function DrawLine3D(startPos:RVector3, endPos:RVector3, color:RColor)
-	bmx_raylib_DrawLine3D(startPos, endPos, color)
-End Function
-
-Rem
-bbdoc: Draws a point in 3D space, actually a small line.
-End Rem
-Function DrawPoint3D(position:RVector3, color:RColor)
-	bmx_raylib_DrawPoint3D(position, color)
-End Function
-
-Rem
-bbdoc: Draws a circle in 3D world space.
-End Rem
-Function DrawCircle3D(center:RVector3, radius:Float, rotationAxis:RVector3, rotationAngle:Float, color:RColor)
-	bmx_raylib_DrawCircle3D(center, radius, rotationAxis, rotationAngle, color)
-End Function
-
-Rem
-bbdoc: Draws a cube.
-End Rem
-Function DrawCube(position:RVector3, width:Float, height:Float, length:Float, color:RColor)
-	bmx_raylib_DrawCube(position, width, height, length, color)
-End Function
-
-Rem
-bbdoc: Draws a cube (Vector version).
-End Rem
-Function DrawCubeV(position:RVector3, size:RVector3, color:RColor)
-	bmx_raylib_DrawCubeV(position, size, color)
-End Function
-
-Rem
-bbdoc: Draws cube wires.
-End Rem
-Function DrawCubeWires(position:RVector3, width:Float, height:Float, length:Float, color:RColor)
-	bmx_raylib_DrawCubeWires(position, width, height, length, color)
-End Function
-
-Rem
-bbdoc: Draws cube wires (Vector version).
-End Rem
-Function DrawCubeWiresV(position:RVector3, size:RVector3, color:RColor)
-	bmx_raylib_DrawCubeWiresV(position, size, color)
-End Function
-
-Rem
-bbdoc: Draws a textured cube.
-End Rem
-Function DrawCubeTexture(texture:RTexture2D, position:RVector3, width:Float, height:Float, length:Float, color:RColor)
-	bmx_raylib_DrawCubeTexture(texture, position, width, height, length, color)
-End Function
-
-Rem
-bbdoc: Draws a sphere.
-End Rem
-Function DrawSphere(centerPos:RVector3, radius:Float, color:RColor)
-	bmx_raylib_DrawSphere(centerPos, radius, color)
-End Function
-
-Rem
-bbdoc: Draws a sphere with extended parameters.
-End Rem
-Function DrawSphereEx(centerPos:RVector3, radius:Float, rings:Int, slices:Int, color:RColor)
-	bmx_raylib_DrawSphereEx(centerPos, radius, rings, slices, color)
-End Function
-
-Rem
-bbdoc: Draws sphere wires.
-End Rem
-Function DrawSphereWires(centerPos:RVector3, radius:Float, rings:Int, slices:Int, color:RColor)
-	bmx_raylib_DrawSphereWires(centerPos, radius, rings, slices, color)
-End Function
-
-Rem
-bbdoc: Draws a cylinder/cone.
-End Rem
-Function DrawCylinder(position:RVector3, radiusTop:Float, radiusBottom:Float, height:Float, slices:Int, color:RColor)
-	bmx_raylib_DrawCylinder(position, radiusTop, radiusBottom, height, slices, color)
-End Function
-
-Rem
-bbdoc: Draws a cylinder/cone wires.
-End Rem
-Function DrawCylinderWires(position:RVector3, radiusTop:Float, radiusBottom:Float, height:Float, slices:Int, color:RColor)
-	bmx_raylib_DrawCylinderWires(position, radiusTop, radiusBottom, height, slices, color)
-End Function
-
-Rem
-bbdoc: Draws a plane XZ.
-End Rem
-Function DrawPlane(centerPos:RVector3, size:RVector2, color:RColor)
-	bmx_raylib_DrawPlane(centerPos, size, color)
-End Function
-
-Rem
-bbdoc: Draws a ray line.
-End Rem
-Function DrawRay(ray:RRay, color:RColor)
-	bmx_raylib_DrawRay(ray, color)
-End Function
-
-Rem
-bbdoc: Draws a grid (centered at (0, 0, 0)).
-End Rem
-Function DrawGrid(slices:Int, spacing:Float)
-	bmx_raylib_DrawGrid(slices, spacing)
-End Function
-
-Rem
-bbdoc: Draws a simple gizmo.
-End Rem
-Function DrawGizmo(position:RVector3)
-	bmx_raylib_DrawGizmo(position)
-End Function
-
-' Image/Texture2D data loading/unloading/saving functions
+' Image loading functions
 Rem
 bbdoc: Loads image from file into CPU memory (RAM).
 End Rem
@@ -1275,20 +1595,6 @@ Function LoadImage:RImage(filename:String)
 	Local image:RImage = bmx_raylib_LoadImage(f)
 	MemFree(f)
 	Return image
-End Function
-
-Rem
-bbdoc: Loads image from Color array data (RGBA - 32bit).
-End Rem
-Function LoadImageEx:RImage(pixels:RColor Ptr, width:Int, height:Int)
-	Return bmx_raylib_LoadImageEx(pixels, width, height)
-End Function
-
-Rem
-bbdoc: Loads image from raw data with parameters.
-End Rem
-Function LoadImagePro:RImage(data:Byte Ptr, width:Int, height:Int, format:Int)
-	Return bmx_raylib_LoadImagePro(data, width, height, format)
 End Function
 
 Rem
@@ -1301,6 +1607,46 @@ Function LoadImageRaw:RImage(filename:String, width:Int, height:Int, format:Int,
 	Return image
 End Function
 
+Function LoadImageAnim:RImage(filename:String, frames:Int Var)
+	Local f:Byte Ptr = filename.ToUTF8String()
+	Local image:RImage = bmx_raylib_LoadImageAnim(f, frames)
+	MemFree(f)
+	Return image
+End Function
+
+Function LoadImageAnimFromMemory:RImage(fileType:String, data:Byte Ptr, dataSize:Int, frames:Int Var)
+	Local f:Byte Ptr = fileType.ToUTF8String()
+	Local image:RImage = bmx_raylib_LoadImageAnimFromMemory(f, data, dataSize, frames)
+	MemFree(f)
+	Return image
+End Function
+
+Function LoadImageFromMemory:RImage(fileType:String, data:Byte Ptr, dataSize:Int)
+	Local f:Byte Ptr = fileType.ToUTF8String()
+	Local image:RImage = bmx_raylib_LoadImageFromMemory(f, data, dataSize)
+	MemFree(f)
+	Return image
+End Function
+
+Function LoadImageFromTexture:RImage(texture:RTexture2D)
+	Return bmx_raylib_LoadImageFromTexture(texture)
+End Function
+
+Function LoadImageFromScreen:RImage()
+	Return bmx_raylib_LoadImageFromScreen()
+End Function
+
+Function IsImageValid:Int(image:RImage)
+	Return bmx_raylib_IsImageValid(image)
+End Function
+
+Rem
+bbdoc: Unloads image from CPU memory (RAM).
+End Rem
+Function UnloadImage(image:RImage)
+	bmx_raylib_UnloadImage(image)
+End Function
+
 Rem
 bbdoc: Exports image data to file.
 End Rem
@@ -1308,6 +1654,15 @@ Function ExportImage(image:RImage, filename:String)
 	Local f:Byte Ptr = filename.ToUTF8String()
 	bmx_raylib_ExportImage(image, f)
 	MemFree(f)
+End Function
+
+Function ExportImageToMemory:Byte Ptr(image:RImage, fileType:String Var, size:Int Var)
+	Local f:Byte Ptr
+	Local s:Int
+	Local data:Byte Ptr = bmx_raylib_ExportImageToMemory(image, f, s)
+	fileType = String.FromUTF8String(f)
+	size = s
+	Return data
 End Function
 
 Rem
@@ -1319,6 +1674,452 @@ Function ExportImageAsCode(image:RImage, filename:String)
 	MemFree(f)
 End Function
 
+' Image generation functions
+Rem
+bbdoc: Generates an image: plain color.
+End Rem
+Function GenImageColor:RImage(width:Int, height:Int, color:RColor)
+	Return bmx_raylib_GenImageColor(width, height, color)
+End Function
+
+' Rem
+' bbdoc: Generates an image: vertical gradient.
+' End Rem
+' Function GenImageGradientV:RImage(width:Int, height:Int, top:RColor, bottom:RColor)
+' 	Return bmx_raylib_GenImageGradientV(width:Int, height:Int, top:RColor, bottom:RColor)
+' End Function
+
+Rem
+bbdoc: 
+End Rem
+Function GenImageGradientLinear:RImage(width:Int, height:Int, direction:Int, startColor:RColor, endColor:RColor)
+	Return bmx_raylib_GenImageGradientLinear(width, height, direction, startColor, endColor)
+End Function
+
+Rem
+bbdoc: Generates an image: radial gradient.
+End Rem
+Function GenImageGradientRadial:RImage(width:Int, height:Int, density:Float, inner:RColor, outer:RColor)
+	Return bmx_raylib_GenImageGradientRadial(width, height, density, inner, outer)
+End Function
+
+Function GenImageGradientSquare:RImage(width:Int, height:Int, density:Float, inner:RColor, outer:RColor)
+	Return bmx_raylib_GenImageGradientSquare(width, height, density, inner, outer)
+End Function
+
+Rem
+bbdoc: Generates an image: checked.
+End Rem
+Function GenImageChecked:RImage(width:Int, height:Int, checksX:Int, checksY:Int, col1:RColor, col2:RColor)
+	Return bmx_raylib_GenImageChecked(width, height, checksX, checksY, col1, col2)
+End Function
+
+Rem
+bbdoc: Generates an image: white noise.
+End Rem
+Function GenImageWhiteNoise:RImage(width:Int, height:Int, factor:Float)
+	Return bmx_raylib_GenImageWhiteNoise(width, height, factor)
+End Function
+
+Rem
+bbdoc: Generates an image: perlin noise.
+End Rem
+Function GenImagePerlinNoise:RImage(width:Int, height:Int, offsetX:Int, offsetY:Int, scale:Float)
+	Return bmx_raylib_GenImagePerlinNoise(width, height, offsetX, offsetY, scale)
+End Function
+
+Rem
+bbdoc: Generates an image: cellular algorithm. Bigger tileSize means bigger cells.
+End Rem
+Function GenImageCellular:RImage(width:Int, height:Int, tileSize:Int)
+	Return bmx_raylib_GenImageCellular(width, height, tileSize)
+End Function
+
+Function GenImageText:RImage(width:Int, height:Int, text:String)
+	Local t:Byte Ptr = text.ToUTF8String()
+	Local image:RImage = bmx_raylib_GenImageText(width, height, t)
+	MemFree(t)
+	Return image
+End Function
+
+' Image manipulation functions
+Rem
+bbdoc: Creates an image duplicate (useful for transformations).
+End Rem
+Function ImageCopy:RImage(image:RImage)
+	Return bmx_raylib_ImageCopy(image)
+End Function
+
+Rem
+bbdoc: Creates an image from another image piece.
+End Rem
+Function ImageFromImage:RImage(image:RImage, rec:RRectangle)
+	Return bmx_raylib_ImageFromImage(image, rec)
+End Function
+
+Function ImageFromChannel:RImage(image:RImage, selectedChannel:Int)
+	Return bmx_raylib_ImageFromChannel(image, selectedChannel)
+End Function
+
+Rem
+bbdoc: Creates an image from text (default font).
+End Rem
+Function ImageText:RImage(txt:String, FontSize:Int, color:RColor)
+	Local length:Size_T = txt.length * 3 + 1
+	Local t:Byte Ptr = StackAlloc(length)
+	txt.ToUTF8StringBuffer(t, length)
+	Return bmx_raylib_ImageText(t, FontSize, color)
+End Function
+
+Rem
+bbdoc: Creates an image from text (custom sprite font).
+End Rem
+Function ImageTextEx:RImage(font:RFont, txt:String, FontSize:Float, spacing:Float, tint:RColor)
+	Local length:Size_T = txt.length * 3 + 1
+	Local t:Byte Ptr = StackAlloc(length)
+	txt.ToUTF8StringBuffer(t, length)
+	Return bmx_raylib_ImageTextEx(font, t, FontSize, spacing, tint)
+End Function
+
+Rem
+bbdoc: Converts image data to desired format.
+End Rem
+Function ImageFormat(image:RImage Var, newFormat:Int)
+	bmx_raylib_ImageFormat(image, newFormat)
+End Function
+
+Rem
+bbdoc: Converts image to POT (power-of-two).
+End Rem
+Function ImageToPOT(image:RImage Var, fillColor:RColor)
+	bmx_raylib_ImageToPOT(image, fillColor)
+End Function
+
+Rem
+bbdoc: Crops an image to a defined rectangle.
+End Rem
+Function ImageCrop(image:RImage Var, crop:RRectangle)
+	bmx_raylib_ImageCrop(image, crop)
+End Function
+
+Rem
+bbdoc: Crops image depending on alpha value.
+End Rem
+Function ImageAlphaCrop(image:RImage Var, threshold:Float)
+	bmx_raylib_ImageAlphaCrop(image, threshold)
+End Function
+
+Rem
+bbdoc: Clears alpha channel to desired color.
+End Rem
+Function ImageAlphaClear(image:RImage Var, color:RColor, threshold:Float)
+	bmx_raylib_ImageAlphaClear(image, color, threshold)
+End Function
+
+Rem
+bbdoc: Applys alpha mask to image.
+End Rem
+Function ImageAlphaMask(image:RImage Var, alphaMask:RImage)
+	bmx_raylib_ImageAlphaMask(image, alphaMask)
+End Function
+
+Rem
+bbdoc: Premultiplies alpha channel.
+End Rem
+Function ImageAlphaPremultiply(image:RImage Var)
+	bmx_raylib_ImageAlphaPremultiply(image)
+End Function
+
+Function ImageBlurGaussian(image:RImage Var, blurSize:Int)
+	bmx_raylib_ImageBlurGaussian(image, blurSize)
+End Function
+
+Function ImageKernelConvolution(image:RImage Var, kernel:Float Ptr, kernelSize:Int)
+	bmx_raylib_ImageKernelConvolution(image, kernel, kernelSize)
+End Function
+
+Rem
+bbdoc: Resizes image (Bicubic scaling algorithm).
+End Rem
+Function ImageResize(image:RImage Var, newWidth:Int, newHeight:Int)
+	bmx_raylib_ImageResize(image, newWidth, newHeight)
+End Function
+
+Rem
+bbdoc: Resizes image (Nearest-Neighbor scaling algorithm).
+End Rem
+Function ImageResizeNN(image:RImage Var, newWidth:Int, newHeight:Int)
+	bmx_raylib_ImageResizeNN(image, newWidth, newHeight)
+End Function
+
+Rem
+bbdoc: Resizes canvas and fill with color.
+End Rem
+Function ImageResizeCanvas(image:RImage Var, newWidth:Int, newHeight:Int, offsetX:Int, offsetY:Int, color:RColor)
+	bmx_raylib_ImageResizeCanvas(image, newWidth, newHeight, offsetX, offsetY, color)
+End Function
+
+Rem
+bbdoc: Generates all mipmap levels for a provided image.
+End Rem
+Function ImageMipmaps(image:RImage Var)
+	bmx_raylib_ImageMipmaps(image)
+End Function
+
+Rem
+bbdoc: Dithers image data to 16bpp or lower (Floyd-Steinberg dithering).
+End Rem
+Function ImageDither(image:RImage Var, rBpp:Int, gBpp:Int, bBpp:Int, aBpp:Int)
+	bmx_raylib_ImageDither(image, rBpp, gBpp, bBpp, aBpp)
+End Function
+
+Rem
+bbdoc: Flips image vertically.
+End Rem
+Function ImageFlipVertical(image:RImage Var)
+	bmx_raylib_ImageFlipVertical(image)
+End Function
+
+Rem
+bbdoc: Flips image horizontally.
+End Rem
+Function ImageFlipHorizontal(image:RImage Var)
+	bmx_raylib_ImageFlipHorizontal(image)
+End Function
+
+Function ImageRotate(image:RImage Var, degrees:Int)
+	bmx_raylib_ImageRotate(image, degrees)
+End Function
+
+Rem
+bbdoc: Rotates image clockwise 90deg.
+End Rem
+Function ImageRotateCW(image:RImage Var)
+	bmx_raylib_ImageRotateCW(image)
+End Function
+
+Rem
+bbdoc: Rotates image counter-clockwise 90deg.
+End Rem
+Function ImageRotateCCW(image:RImage Var)
+	bmx_raylib_ImageRotateCCW(image)
+End Function
+
+Rem
+bbdoc: Modifies image color: tint.
+End Rem
+Function ImageColorTint(image:RImage Var, color:RColor)
+	bmx_raylib_ImageColorTint(image, color)
+End Function
+
+Rem
+bbdoc: Modifies image color: invert.
+End Rem
+Function ImageColorInvert(image:RImage Var)
+	bmx_raylib_ImageColorInvert(image)
+End Function
+
+Rem
+bbdoc: Modifies image color: grayscale.
+End Rem
+Function ImageColorGrayscale(image:RImage Var)
+	bmx_raylib_ImageColorGrayscale(image)
+End Function
+
+Rem
+bbdoc: Modifies image color: contrast (-100 to 100).
+End Rem
+Function ImageColorContrast(image:RImage Var, contrast:Float)
+	bmx_raylib_ImageColorContrast(image, contrast)
+End Function
+
+Rem
+bbdoc: Modifies image color: brightness (-255 to 255).
+End Rem
+Function ImageColorBrightness(image:RImage Var, brightness:Int)
+	bmx_raylib_ImageColorBrightness(image, brightness)
+End Function
+
+Rem
+bbdoc: Modifies image color: replace color.
+End Rem
+Function ImageColorReplace(image:RImage Var, color:RColor, Replace:RColor)
+	bmx_raylib_ImageColorReplace(image, color, Replace)
+End Function
+
+Function LoadImageColors:RColor Ptr(image:RImage)
+	Return bmx_raylib_LoadImageColors(image)
+End Function
+
+Function LoadImagePalette:RColor Ptr(image:RImage, maxPaletteSize:Int, colorCount:Int Var)
+	Return bmx_raylib_LoadImagePalette(image, maxPaletteSize, colorCount)
+End Function
+
+Function UnloadImageColors(colors:RColor Ptr)
+	bmx_raylib_UnloadImageColors(colors)
+End Function
+
+Function UnloadImagePalette(palette:RColor Ptr)
+	bmx_raylib_UnloadImagePalette(palette)
+End Function
+
+Function GetImageAlphaBorder:RRectangle(image:RImage, threshold:Float)
+	Return bmx_raylib_GetImageAlphaBorder(image, threshold)
+End Function
+
+Function GetImageColor:RColor(image:RImage, x:Int, y:Int)
+	Return bmx_raylib_GetImageColor(image, x, y)
+End Function
+
+' Image drawing functions
+' NOTE: Image software-rendering functions (CPU)
+
+Rem
+bbdoc: Clears image background with given color.
+End Rem
+Function ImageClearBackground(dst:RImage Var, color:RColor)
+	bmx_raylib_ImageClearBackground(dst, color)
+End Function
+
+Rem
+bbdoc: Draws pixel within an image.
+End Rem
+Function ImageDrawPixel(dst:RImage Var, posX:Int, posY:Int, color:RColor)
+	bmx_raylib_ImageDrawPixel(dst, posX, posY, color)
+End Function
+
+Rem
+bbdoc: Draws pixel within an image (Vector version).
+End Rem
+Function ImageDrawPixelV(dst:RImage Var, position:RVector2, color:RColor)
+	bmx_raylib_ImageDrawPixelV(dst, position, color)
+End Function
+
+Rem
+bbdoc: Draws line within an image.
+End Rem
+Function ImageDrawLine(dst:RImage Var, startPosX:Int, startPosY:Int, endPosX:Int, endPosY:Int, color:RColor)
+	bmx_raylib_ImageDrawLine(dst, startPosX, startPosY, endPosX, endPosY, color)
+End Function
+
+Rem
+bbdoc: Draws line within an image (Vector version).
+End Rem
+Function ImageDrawLineV(dst:RImage Var, lineStart:RVector2, lineEnd:RVector2, color:RColor)
+	bmx_raylib_ImageDrawLineV(dst, lineStart, lineEnd, color)
+End Function
+
+Function ImageDrawLineEx(dst:RImage Var, lineStart:RVector2, lineEnd:RVector2, thick:Int, color:RColor)
+	bmx_raylib_ImageDrawLineEx(dst, lineStart, lineEnd, thick, color)
+End Function
+
+Rem
+bbdoc: Draws circle within an image.
+End Rem
+Function ImageDrawCircle(dst:RImage Var, centerX:Int, centerY:Int, radius:Int, color:RColor)
+	bmx_raylib_ImageDrawCircle(dst, centerX, centerY, radius, color)
+End Function
+
+Rem
+bbdoc: Draws circle within an image (Vector version).
+End Rem
+Function ImageDrawCircleV(dst:RImage Var, center:RVector2, radius:Int, color:RColor)
+	bmx_raylib_ImageDrawCircleV(dst, center, radius, color)
+End Function
+
+Function ImageDrawCircleLines(dst:RImage Var, centerX:Int, centerY:Int, radius:Int, color:RColor)
+	bmx_raylib_ImageDrawCircleLines(dst, centerX, centerY, radius, color)
+End Function
+
+Function ImageDrawCircleLinesV(dst:RImage Var, center:RVector2, radius:Int, color:RColor)
+	bmx_raylib_ImageDrawCircleLinesV(dst, center, radius, color)
+End Function
+
+Rem
+bbdoc: Draws a rectangle within an image.
+End Rem
+Function ImageDrawRectangle(dst:RImage Var, posX:Int, posY:Int, width:Int, height:Int, color:RColor)
+	bmx_raylib_ImageDrawRectangle(dst, posX, posY, width, height, color)
+End Function
+
+Rem
+bbdoc: Draws rectangle within an image (Vector version).
+End Rem
+Function ImageDrawRectangleV(dst:RImage Var, position:RVector2, size:RVector2, color:RColor)
+	bmx_raylib_ImageDrawRectangleV(dst, position, size, color)
+End Function
+
+Rem
+bbdoc: Draws rectangle within an image.
+End Rem
+Function ImageDrawRectangleRec(dst:RImage Var, rec:RRectangle, color:RColor)
+	bmx_raylib_ImageDrawRectangleRec(dst, rec, color)
+End Function
+
+Rem
+bbdoc: Draws rectangle lines within an image.
+End Rem
+Function ImageDrawRectangleLines(dst:RImage Var, rec:RRectangle, thick:Int, color:RColor)
+	bmx_raylib_ImageDrawRectangleLines(dst, rec, thick, color)
+End Function
+
+Rem
+bbdoc: Draws triangle within an image.
+End Rem
+Function ImageDrawTriangle(dst:RImage Var, v1:RVector2, v2:RVector2, v3:RVector2, color:RColor)
+	bmx_raylib_ImageDrawTriangle(dst, v1, v2, v3, color)
+End Function
+
+Rem
+bbdoc: Draws triangle with interpolated colors within an image.
+End Rem
+Function ImageDrawTriangleEx(dst:RImage Var, v1:RVector2, v2:RVector2, v3:RVector2, c1:RColor, c2:RColor, c3:RColor)
+	bmx_raylib_ImageDrawTriangleEx(dst, v1, v2, v3, c1, c2, c3)
+End Function
+
+Rem
+bbdoc: Draws triangle outline within an image.
+End Rem
+Function ImageDrawTriangleLines(dst:RImage Var, v1:RVector2, v2:RVector2, v3:RVector2, color:RColor)
+	bmx_raylib_ImageDrawTriangleLines(dst, v1, v2, v3, color)
+End Function
+
+Rem
+bbdoc: Draws a triangle fan defined by points within an image (first vertex is the center).
+End Rem
+Function ImageDrawTriangleFan(dst:RImage Var, points:RVector2 Ptr, pointCount:Int, color:RColor)
+	bmx_raylib_ImageDrawTriangleFan(dst, points, pointCount, color)
+End Function
+
+Rem
+bbdoc: Draws a triangle strip defined by points within an image.
+End Rem
+Function ImageDrawTriangleStrip(dst:RImage Var, points:RVector2 Ptr, pointCount:Int, color:RColor)
+	bmx_raylib_ImageDrawTriangleStrip(dst, points, pointCount, color)
+End Function
+
+Rem
+bbdoc: Draws a source image within a destination image (tint applied to source).
+End Rem
+Function ImageDraw(dst:RImage Var, src:RImage, srcRec:RRectangle, dstRec:RRectangle, tint:RColor)
+	bmx_raylib_ImageDraw(dst, src, srcRec, dstRec, tint)
+End Function
+
+Rem
+bbdoc: Draws text (default font) within an image (destination).
+End Rem
+Function ImageDrawText(dst:RImage Var, txt:String, posX:Int, posY:Int, fontSize:Int, color:RColor)
+	bmx_raylib_ImageDrawText(dst, txt, posX, posY, fontSize, color)
+End Function
+
+Rem
+bbdoc: Draws text (custom sprite font) within an image (destination).
+End Rem
+Function ImageDrawTextEx(dst:RImage Var, font:RFont, txt:String, position:RVector2, fontSize:Float, spacing:Float, color:RColor)
+	bmx_raylib_ImageDrawTextEx(dst, font, txt, position, fontSize, spacing, color)
+End Function
+
+' Texture loading functions
 Rem
 bbdoc: Loads texture from file into GPU memory (VRAM).
 End Rem
@@ -1337,13 +2138,6 @@ Function LoadTextureFromImage:RTexture2D(image:RImage)
 End Function
 
 Rem
-bbdoc: Loads cubemap from image, multiple image cubemap layouts supported.
-End Rem
-Function LoadRenderTexture:RRenderTexture2D(width:Int, height:Int)
-	Return bmx_raylib_LoadRenderTexture(width, height)
-End Function
-
-Rem
 bbdoc: Loads texture for rendering (framebuffer).
 End Rem
 Function LoadTextureCubemap:RTextureCubemap(image:RImage, layoutType:Int)
@@ -1351,10 +2145,17 @@ Function LoadTextureCubemap:RTextureCubemap(image:RImage, layoutType:Int)
 End Function
 
 Rem
-bbdoc: Unloads image from CPU memory (RAM).
+bbdoc: Loads cubemap from image, multiple image cubemap layouts supported.
 End Rem
-Function UnloadImage(image:RImage)
-	bmx_raylib_UnloadImage(image)
+Function LoadRenderTexture:RRenderTexture2D(width:Int, height:Int)
+	Return bmx_raylib_LoadRenderTexture(width, height)
+End Function
+
+Rem
+bbdoc: Checks if a texture is valid (loaded in GPU).
+End Rem
+Function IsTextureValid:Int(texture:RTexture2D)
+	Return bmx_raylib_IsTextureValid(texture)
 End Function
 
 Rem
@@ -1365,52 +2166,17 @@ Function UnloadTexture(texture:RTexture2D)
 End Function
 
 Rem
+bbdoc: Checks if a render texture is valid (loaded in GPU).
+End Rem
+Function IsRenderTextureValid:Int(target:RRenderTexture2D)
+	Return bmx_raylib_IsRenderTextureValid(target)
+End Function
+
+Rem
 bbdoc: Unloads render texture from GPU memory (VRAM).
 End Rem
 Function UnloadRenderTexture(target:RRenderTexture2D)
 	bmx_raylib_UnloadRenderTexture(target)
-End Function
-
-Rem
-bbdoc: Gets pixel data from image as an #RColor array.
-End Rem
-Function GetImageData:RColor Ptr(image:RImage)
-	Return bmx_raylib_GetImageData(image)
-End Function
-
-Rem
-bbdoc: Gets pixel data from image as an RVector4 array (float normalized).
-End Rem
-Function GetImageDataNormalized:RVector4 Ptr(image:RImage)
-	Return bmx_raylib_GetImageDataNormalized(image)
-End Function
-
-Rem
-bbdoc: Gets image alpha border rectangle.
-End Rem
-Function GetImageAlphaBorder:RRectangle(image:RImage, threshold:Float)
-	Return bmx_raylib_GetImageAlphaBorder(image, threshold)
-End Function
-
-Rem
-bbdoc: Gets pixel data size in bytes (image or texture).
-End Rem
-Function GetPixelDataSize:Int(width:Int, height:Int, format:Int)
-	Return bmx_raylib_GetPixelDataSize(width, height, format)
-End Function
-
-Rem
-bbdoc: Gets pixel data from GPU texture and return an #RImage.
-End Rem
-Function GetTextureData:RImage(texture:RTexture2D)
-	Return bmx_raylib_GetTextureData(texture)
-End Function
-
-Rem
-bbdoc: Gets pixel data from screen buffer and return an #RImage (screenshot).
-End Rem
-Function GetScreenData:RImage()
-	Return bmx_raylib_GetScreenData()
 End Function
 
 Rem
@@ -1420,64 +2186,12 @@ Function UpdateTexture(texture:RTexture2D, pixels:Byte Ptr)
 	bmx_raylib_UpdateTexture(texture, pixels)
 End Function
 
-' Image generation functions
-
 Rem
-bbdoc: Generates an image: plain color.
+bbdoc: Updates GPU texture rectangle with new data.
 End Rem
-Function GenImageColor:RImage(width:Int, height:Int, color:RColor)
-	Return bmx_raylib_GenImageColor(width:Int, height:Int, color:RColor)
+Function UpdateTextureRec(texture:RTexture2D, rec:RRectangle, pixels:Byte Ptr)
+	bmx_raylib_UpdateTextureRec(texture, rec, pixels)
 End Function
-
-Rem
-bbdoc: Generates an image: vertical gradient.
-End Rem
-Function GenImageGradientV:RImage(width:Int, height:Int, top:RColor, bottom:RColor)
-	Return bmx_raylib_GenImageGradientV(width:Int, height:Int, top:RColor, bottom:RColor)
-End Function
-
-Rem
-bbdoc: Generates an image: horizontal gradient.
-End Rem
-Function GenImageGradientH:RImage(width:Int, height:Int, Left:RColor, Right:RColor)
-	Return bmx_raylib_GenImageGradientH(width:Int, height:Int, Left:RColor, Right:RColor)
-End Function
-
-Rem
-bbdoc: Generates an image: radial gradient.
-End Rem
-Function GenImageGradientRadial:RImage(width:Int, height:Int, density:Float, inner:RColor, outer:RColor)
-	Return bmx_raylib_GenImageGradientRadial(width:Int, height:Int, density:Float, inner:RColor, outer:RColor)
-End Function
-
-Rem
-bbdoc: Generates an image: checked.
-End Rem
-Function GenImageChecked:RImage(width:Int, height:Int, checksX:Int, checksY:Int, col1:RColor, col2:RColor)
-	Return bmx_raylib_GenImageChecked(width:Int, height:Int, checksX:Int, checksY:Int, col1:RColor, col2:RColor)
-End Function
-
-Rem
-bbdoc: Generates an image: white noise.
-End Rem
-Function GenImageWhiteNoise:RImage(width:Int, height:Int, factor:Float)
-	Return bmx_raylib_GenImageWhiteNoise(width:Int, height:Int, factor:Float)
-End Function
-
-Rem
-bbdoc: Generates an image: perlin noise.
-End Rem
-Function GenImagePerlinNoise:RImage(width:Int, height:Int, offsetX:Int, offsetY:Int, scale:Float)
-	Return bmx_raylib_GenImagePerlinNoise(width:Int, height:Int, offsetX:Int, offsetY:Int, scale:Float)
-End Function
-
-Rem
-bbdoc: Generates an image: cellular algorithm. Bigger tileSize means bigger cells.
-End Rem
-Function GenImageCellular:RImage(width:Int, height:Int, tileSize:Int)
-	Return bmx_raylib_GenImageCellular(width:Int, height:Int, tileSize:Int)
-End Function
-
 
 ' Texture2D configuration functions
 Rem
@@ -1531,13 +2245,6 @@ Function DrawTextureRec(texture:RTexture2D, sourceRec:RRectangle, position:RVect
 End Function
 
 Rem
-bbdoc: Draws a texture quad with tiling and offset parameters.
-End Rem
-Function DrawTextureQuad(texture:RTexture2D, tiling:RVector2, offset:RVector2, quad:RRectangle, tint:RColor)
-	bmx_raylib_DrawTextureQuad(texture, tiling, offset, quad, tint)
-End Function
-
-Rem
 bbdoc: Draws a part of a texture defined by a rectangle with 'pro' parameters.
 End Rem
 Function DrawTexturePro(texture:RTexture2D, sourceRec:RRectangle, destRec:RRectangle, origin:RVector2, Rotation:Float, tint:RColor)
@@ -1551,93 +2258,450 @@ Function DrawTextureNPatch(texture:RTexture2D, nPatchInfo:RNPatchInfo, destRec:R
 	bmx_raylib_DrawTextureNPatch(texture, nPatchInfo, destRec, origin, Rotation, tint)
 End Function
 
-' Input-related functions: touch
+' Color/pixel related functions
 Rem
-bbdoc: Returns touch position X for touch point 0 (relative to screen size).
+bbdoc: 
 End Rem
-Function GetTouchX:Int()
-	Return bmx_raylib_GetTouchX()
+Function ColorIsEqual:Int(color1:RColor, color2:RColor)
+	Return bmx_raylib_ColorIsEqual(color1, color2)
 End Function
 
 Rem
-bbdoc: Returns touch position Y for touch point 0 (relative to screen size).
+bbdoc: Color fade-in or fade-out.
+about: @alpha goes from 0.0 to 1.0.
 End Rem
-Function GetTouchY:Int()
-	Return bmx_raylib_GetTouchY()
+Function Fade:RColor(color:RColor, alpha:Float)
+	Return bmx_raylib_Fade(color, alpha)
 End Function
 
 Rem
-bbdoc: Returns touch position XY for a touch point index (relative to screen size).
+bbdoc: Returns the hexadecimal value for an #RColor.
 End Rem
-Function GetTouchPosition:RVector2(index:Int)
-	Return bmx_raylib_GetTouchPosition(index)
-End Function
-
-' Gestures and Touch Handling Functions (Module: gestures)
-Rem
-bbdoc: Enables a set of gestures using flags.
-End Rem
-Function SetGesturesEnabled(gestureFlags:UInt)
-	bmx_raylib_SetGesturesEnabled(gestureFlags)
+Function ColorToInt:Int(color:RColor)
+	Return bmx_raylib_ColorToInt(color)
 End Function
 
 Rem
-bbdoc: Checks if a gesture have been detected.
+bbdoc: Returns @color normalized as float [0..1]
 End Rem
-Function IsGestureDetected:Int(gesture:Int)
-	Return bmx_raylib_IsGestureDetected(gesture)
+Function ColorNormalize:RVector4(color:RColor)
+	Return bmx_raylib_ColorNormalize(color)
 End Function
 
 Rem
-bbdoc: Gets latest detected gesture.
+bbdoc: Returns @color from normalized values [0..1]
 End Rem
-Function GetGestureDetected:Int()
-	Return bmx_raylib_GetGestureDetected()
+Function ColorFromNormalized:RColor(normalized:RVector4)
+	Return bmx_raylib_ColorFromNormalized(normalized)
 End Function
 
 Rem
-bbdoc: Gets touch points count.
+bbdoc: Returns HSV values for an #RColor.
 End Rem
-Function GetTouchPointsCount:Int()
-	Return bmx_raylib_GetTouchPointsCount()
+Function ColorToHSV:RVector3(color:RColor)
+	Return bmx_raylib_ColorToHSV(color)
 End Function
 
 Rem
-bbdoc: Gets gesture hold time in milliseconds.
+bbdoc: Returns an #RColor from HSV values.
 End Rem
-Function GetGestureHoldDuration:Float()
-	Return bmx_raylib_GetGestureHoldDuration()
+Function ColorFromHSV:RColor(hsv:RVector3)
+	Return bmx_raylib_ColorFromHSV(hsv)
+End Function
+
+Function ColorTint:RColor(color:RColor, tint:RColor)
+	Return bmx_raylib_ColorTint(color, tint)
+End Function
+
+Function ColorBrightness:RColor(color:RColor, factor:Float)
+	Return bmx_raylib_ColorBrightness(color, factor)
+End Function
+
+Function ColorContrast:RColor(color:RColor, contrast:Float)
+	Return bmx_raylib_ColorContrast(color, contrast)
+End Function
+
+Function ColorAlpha:RColor(color:RColor, alpha:Float)
+	Return bmx_raylib_ColorAlpha(color, alpha)
+End Function
+
+Function ColorAlphaBlend:RColor(color:RColor, src:RColor, tint:RColor)
+	Return bmx_raylib_ColorAlphaBlend(color, src, tint)
+End Function
+
+Function ColorLerp:RColor(color1:RColor, color2:RColor, factor:Float)
+	Return bmx_raylib_ColorLerp(color1, color2, factor)
 End Function
 
 Rem
-bbdoc: Gets gesture drag vector.
+bbdoc: Returns an #RColor from a hexadecimal value.
 End Rem
-Function GetGestureDragVector:RVector2()
-	Return bmx_raylib_GetGestureDragVector()
+Function GetColor:RColor(hexValue:Int)
+	Return bmx_raylib_GetColor(hexValue)
+End Function
+
+Function GetPixelColor:RColor(src:Byte Ptr, format:Int)
+	Return bmx_raylib_GetPixelColor(src, format)
+End Function
+
+Function SetPixelColor(src:Byte Ptr, color:RColor, format:Int)
+	bmx_raylib_SetPixelColor(src, color, format)
 End Function
 
 Rem
-bbdoc: Gets gesture drag angle.
+bbdoc: Gets pixel data size in bytes (image or texture).
 End Rem
-Function GetGestureDragAngle:Float()
-	Return bmx_raylib_GetGestureDragAngle()
+Function GetPixelDataSize:Int(width:Int, height:Int, format:Int)
+	Return bmx_raylib_GetPixelDataSize(width, height, format)
+End Function
+
+' Font loading/unloading functions
+Rem
+bbdoc: Gets the default Font.
+End Rem
+Function GetFontDefault:RFont()
+	Return bmx_raylib_GetFontDefault()
 End Function
 
 Rem
-bbdoc: Gets gesture pinch delta.
+bbdoc: Loads font from file into GPU memory (VRAM).
 End Rem
-Function GetGesturePinchVector:RVector2()
-	Return bmx_raylib_GetGesturePinchVector()
+Function LoadFont:RFont(filename:String)
+	Return bmx_raylib_LoadFont(filename)
 End Function
 
 Rem
-bbdoc: Gets gesture pinch angle.
+bbdoc: Loads font from file with extended parameters.
 End Rem
-Function GetGesturePinchAngle:Float()
-	Return bmx_raylib_GetGesturePinchAngle()
+Function LoadFontEx:RFont(filename:String, FontSize:Int, fontChars:Int Ptr, charsCount:Int)
+	Return bmx_raylib_LoadFontEx(filename, FontSize, fontChars, charsCount)
 End Function
 
-' Model loading/unloading functions
+Rem
+bbdoc: Loads font from Image (XNA style).
+End Rem
+Function LoadFontFromImage:RFont(image:RImage, key:RColor, firstChar:Int)
+	Return bmx_raylib_LoadFontFromImage(image, key, firstChar)
+End Function
+
+Rem
+bbdoc: Loads font from memory buffer, fileType refers to extension: i.e. '.ttf'.
+End Rem
+Function LoadFontFromMemory:RFont(fileType:String, data:Byte Ptr, dataSize:Int, fontSize:Int, codepoints:Int Ptr, codepointCount:Int)
+	Local f:Byte Ptr = fileType.ToUTF8String()
+	Local font:RFont = bmx_raylib_LoadFontFromMemory(f, data, dataSize, fontSize, codepoints, codepointCount)
+	MemFree(f)
+	Return font
+End Function
+
+Rem
+bbdoc: Checks if a font is valid (font data loaded, WARNING: GPU texture not checked).
+End Rem
+Function IsFontValid:Int(font:RFont)
+	Return bmx_raylib_IsFontValid(font)
+End Function
+
+Rem
+bbdoc: Loads font data for further use.
+End Rem
+Function LoadFontData:RGlyphInfo Ptr(fileData:Byte Ptr, dataSize:Int, fontSize:Int, codepoints:Int Ptr, codepointCount:Int, fontType:Int)
+	Return bmx_raylib_LoadFontData(fileData, dataSize, fontSize, codepoints, codepointCount, fontType)
+End Function
+
+Rem
+bbdoc: Generates image font atlas using chars info.
+End Rem
+Function GenImageFontAtlas:RImage(chars:RGlyphInfo Ptr, recs:RRectangle Ptr Ptr, charsCount:Int, FontSize:Int, padding:Int, packMethod:Int)
+	Return bmx_raylib_GenImageFontAtlas(chars, recs, charsCount, FontSize, padding, packMethod)
+End Function
+
+Function UnloadFontData(chars:RGlyphInfo Ptr, charsCount:Int)
+	bmx_raylib_UnloadFontData(chars, charsCount)
+End Function
+
+Rem
+bbdoc: Unloads Font from GPU memory (VRAM).
+End Rem
+Function UnloadFont(font:RFont)
+	bmx_raylib_UnloadFont(font)
+End Function
+
+Rem
+bbdoc: Exports font as code file, returns true on success.
+End Rem
+Function ExportFontAsCode:Int(font:RFont, filename:String)
+	Local f:Byte Ptr = filename.ToUTF8String()
+	Local res:Int = bmx_raylib_ExportFontAsCode(font, f)
+	MemFree(f)
+	Return res
+End Function
+
+' Text Drawing functions
+Rem
+bbdoc: Shows current FPS.
+End Rem
+Function DrawFPS(posX:Int, posY:Int)
+	bmx_raylib_DrawFPS(posX, posY)
+End Function
+
+Rem
+bbdoc: Draws text (using default font).
+End Rem
+Function DrawText(txt:String, posX:Int, posY:Int, FontSize:Int, color:RColor)
+	Local t:Byte Ptr = txt.ToUTF8String()
+	bmx_raylib_DrawText(t, posX, posY, FontSize, color)
+	MemFree(t)
+End Function
+
+Rem
+bbdoc: Draws text using font and additional parameters.
+End Rem
+Function DrawTextEx(font:RFont, txt:String, position:RVector2, FontSize:Float, spacing:Float, tint:RColor)
+	Local t:Byte Ptr = txt.ToUTF8String()
+	bmx_raylib_DrawTextEx(font, t, position, FontSize, spacing, tint)
+	MemFree(t)
+End Function
+
+Function DrawTextPro(font:RFont, txt:String, position:RVector2, origin:RVector2, rotation:Float, fontSize:Float, spacing:Float, tint:RColor)
+	Local t:Byte Ptr = txt.ToUTF8String()
+	bmx_raylib_DrawTextPro(font, t, position, origin, fontSize, spacing, tint)
+	MemFree(t)
+End Function
+
+Rem
+bbdoc: Draws one character (codepoint).
+End Rem
+Function DrawTextCodepoint(font:RFont, codepoint:Int, position:RVector2, scale:Float, tint:RColor)
+	bmx_raylib_DrawTextCodepoint(font, codepoint, position, scale, tint)
+End Function
+
+Function DrawTextCodepoints(font:RFont, codepoints:Int Ptr, count:Int, position:RVector2, fontSize:Float, spacing:Float, tint:RColor)
+	bmx_raylib_DrawTextCodepoints(font, codepoints, count, position, fontSize, spacing, tint)
+End Function
+
+' Text font info functions
+Function SetTextLineSpacing(spacing:Int)
+	bmx_raylib_SetTextLineSpacing(spacing)
+End Function
+
+Rem
+bbdoc: Measures #String width for default font.
+End Rem
+Function MeasureText:Int(txt:String, FontSize:Int)
+	Local t:Byte Ptr = txt.ToUTF8String()
+	Local res:Int = bmx_raylib_MeasureText(t, FontSize)
+	MemFree(t)
+	Return res
+End Function
+
+Rem
+bbdoc: Measures #String size for Font.
+End Rem
+Function MeasureTextEx:RVector2(font:RFont, txt:String, FontSize:Float, spacing:Float)
+	Local t:Byte Ptr = txt.ToUTF8String()
+	Local res:RVector2 = bmx_raylib_MeasureTextEx(font, txt, FontSize, spacing)
+	MemFree(t)
+	Return res
+End Function
+
+Rem
+bbdoc: Gets index position for a unicode character on font.
+End Rem
+Function GetGlyphIndex:Int(font:RFont, codepoint:Int)
+	Return bmx_raylib_GetGlyphIndex(font, codepoint)
+End Function
+
+Rem
+bbdoc: Gets glyph font info data for a codepoint (unicode character), fallback to '?' if not found.
+End Rem
+Function GetGlyphInfo:RGlyphInfo(font:RFont, codepoint:Int)
+	Return bmx_raylib_GetGlyphInfo(font, codepoint)
+End Function
+
+Rem
+bbdoc: Gets glyph rectangle in font atlas for a codepoint (unicode character), fallback to '?' if not found.
+End Rem
+Function GetGlyphAtlasRec:RRectangle(font:RFont, codepoint:Int)
+	Return bmx_raylib_GetGlyphAtlasRec(font, codepoint)
+End Function
+
+' Text codepoints management functions (unicode characters)
+Function LoadUTF8:Byte Ptr(codepoints:Int Ptr, length:Int)
+	Return bmx_raylib_LoadUTF8(codepoints, length)
+End Function
+
+Function UnloadUTF8(utf8:Byte Ptr)
+	bmx_raylib_UnloadUTF8(utf8)
+End Function
+
+Function LoadCodepoints:Byte Ptr(text:String, count:Int Var)
+	Local t:Byte Ptr = text.ToUTF8String()
+	Local res:Byte Ptr = bmx_raylib_LoadCodepoints(t, count)
+	MemFree(t)
+	Return res
+End Function
+
+Function UnloadCodepoints(codepoints:Byte Ptr)
+	bmx_raylib_UnloadCodepoints(codepoints)
+End Function
+
+' There are equivalent built-in String methods for these
+' GetCodepointCount(const char *text);                          // Get total number of codepoints in a UTF-8 encoded string
+' GetCodepoint(const char *text, int *codepointSize);           // Get next codepoint in a UTF-8 encoded string, 0x3f('?') is returned on failure
+' GetCodepointNext(const char *text, int *codepointSize);       // Get next codepoint in a UTF-8 encoded string, 0x3f('?') is returned on failure
+' GetCodepointPrevious(const char *text, int *codepointSize);   // Get previous codepoint in a UTF-8 encoded string, 0x3f('?') is returned on failure
+' CodepointToUTF8(int codepoint, int *utf8Size);
+
+
+' Basic geometric 3D shapes drawing functions
+Rem
+bbdoc: Draws a line in 3D world space.
+End Rem
+Function DrawLine3D(startPos:RVector3, endPos:RVector3, color:RColor)
+	bmx_raylib_DrawLine3D(startPos, endPos, color)
+End Function
+
+Rem
+bbdoc: Draws a point in 3D space, actually a small line.
+End Rem
+Function DrawPoint3D(position:RVector3, color:RColor)
+	bmx_raylib_DrawPoint3D(position, color)
+End Function
+
+Rem
+bbdoc: Draws a circle in 3D world space.
+End Rem
+Function DrawCircle3D(center:RVector3, radius:Float, rotationAxis:RVector3, rotationAngle:Float, color:RColor)
+	bmx_raylib_DrawCircle3D(center, radius, rotationAxis, rotationAngle, color)
+End Function
+
+Rem
+bbdoc: Draws a color-filled triangle (vertex in counter-clockwise order!)
+End Rem
+Function DrawTriangle3D(v1:RVector3, v2:RVector3, v3:RVector3, color:RColor)
+	bmx_raylib_DrawTriangle3D(v1, v2, v3, color)
+End Function
+
+Rem
+bbdoc: Draw a triangle strip defined by points
+End Rem
+Function DrawTriangleStrip3D(points:RVector3 Ptr, pointsCount:Int, color:RColor)
+	bmx_raylib_DrawTriangleStrip3D(points, pointsCount, color)
+End Function
+
+Rem
+bbdoc: Draws a cube.
+End Rem
+Function DrawCube(position:RVector3, width:Float, height:Float, length:Float, color:RColor)
+	bmx_raylib_DrawCube(position, width, height, length, color)
+End Function
+
+Rem
+bbdoc: Draws a cube (Vector version).
+End Rem
+Function DrawCubeV(position:RVector3, size:RVector3, color:RColor)
+	bmx_raylib_DrawCubeV(position, size, color)
+End Function
+
+Rem
+bbdoc: Draws cube wires.
+End Rem
+Function DrawCubeWires(position:RVector3, width:Float, height:Float, length:Float, color:RColor)
+	bmx_raylib_DrawCubeWires(position, width, height, length, color)
+End Function
+
+Rem
+bbdoc: Draws cube wires (Vector version).
+End Rem
+Function DrawCubeWiresV(position:RVector3, size:RVector3, color:RColor)
+	bmx_raylib_DrawCubeWiresV(position, size, color)
+End Function
+
+Rem
+bbdoc: Draws a sphere.
+End Rem
+Function DrawSphere(centerPos:RVector3, radius:Float, color:RColor)
+	bmx_raylib_DrawSphere(centerPos, radius, color)
+End Function
+
+Rem
+bbdoc: Draws a sphere with extended parameters.
+End Rem
+Function DrawSphereEx(centerPos:RVector3, radius:Float, rings:Int, slices:Int, color:RColor)
+	bmx_raylib_DrawSphereEx(centerPos, radius, rings, slices, color)
+End Function
+
+Rem
+bbdoc: Draws sphere wires.
+End Rem
+Function DrawSphereWires(centerPos:RVector3, radius:Float, rings:Int, slices:Int, color:RColor)
+	bmx_raylib_DrawSphereWires(centerPos, radius, rings, slices, color)
+End Function
+
+Rem
+bbdoc: Draws a cylinder/cone.
+End Rem
+Function DrawCylinder(position:RVector3, radiusTop:Float, radiusBottom:Float, height:Float, slices:Int, color:RColor)
+	bmx_raylib_DrawCylinder(position, radiusTop, radiusBottom, height, slices, color)
+End Function
+
+Rem
+bbdoc: Draws a cylinder with base at @startPos and top at @endPos.
+End Rem
+Function DrawCylinderEx(startPos:RVector3, endPos:RVector3, startRadius:Float, endRadius:Float, sides:Int, color:RColor)
+	bmx_raylib_DrawCylinderEx(startPos, endPos, startRadius, endRadius, sides, color)
+End Function
+
+Rem
+bbdoc: Draws a cylinder/cone wires.
+End Rem
+Function DrawCylinderWires(position:RVector3, radiusTop:Float, radiusBottom:Float, height:Float, slices:Int, color:RColor)
+	bmx_raylib_DrawCylinderWires(position, radiusTop, radiusBottom, height, slices, color)
+End Function
+
+Rem
+bbdoc: Draws a cylinder wires with base at @startPos and top at @endPos.
+End Rem
+Function DrawCylinderWiresEx(startPos:RVector3, endPos:RVector3, startRadius:Float, endRadius:Float, sides:Int, color:RColor)
+	bmx_raylib_DrawCylinderWiresEx(startPos, endPos, startRadius, endRadius, sides, color)
+End Function
+
+Rem
+bbdoc: Draws a capsule with the center of its sphere caps at @startPos and @endPos.
+End Rem
+Function DrawCapsule(startPos:RVector3, endPos:RVector3, radius:Float, slices:Int, rings:Int, color:RColor)
+	bmx_raylib_DrawCapsule(startPos, endPos, radius, slices, rings, color)
+End Function
+
+Rem
+bbdoc: Draws capsule wireframe with the center of its sphere caps at @startPos and @endPos.
+End Rem
+Function DrawCapsuleWires(startPos:RVector3, endPos:RVector3, radius:Float, slices:Int, rings:Int, color:RColor)
+	bmx_raylib_DrawCapsuleWires(startPos, endPos, radius, slices, rings, color)
+End Function
+
+Rem
+bbdoc: Draws a plane XZ.
+End Rem
+Function DrawPlane(centerPos:RVector3, size:RVector2, color:RColor)
+	bmx_raylib_DrawPlane(centerPos, size, color)
+End Function
+
+Rem
+bbdoc: Draws a ray line.
+End Rem
+Function DrawRay(ray:RRay, color:RColor)
+	bmx_raylib_DrawRay(ray, color)
+End Function
+
+Rem
+bbdoc: Draws a grid (centered at (0, 0, 0)).
+End Rem
+Function DrawGrid(slices:Int, spacing:Float)
+	bmx_raylib_DrawGrid(slices, spacing)
+End Function
+
+' Model management functions
 Rem
 bbdoc: Loads model from files (meshes and materials)
 End Rem
@@ -1656,28 +2720,99 @@ Function LoadModelFromMesh:RModel(mesh:RMesh)
 End Function
 
 Rem
+bbdoc: Check if a model is valid (loaded in GPU, VAO/VBOs)
+End Rem
+Function IsModelValid:Int(model:RModel)
+	Return bmx_raylib_IsModelValid(model)
+End Function
+
+Rem
 bbdoc: Unloads model from memory (RAM and/or VRAM)
 End Rem
 Function UnloadModel(model:RModel)
 	bmx_raylib_UnloadModel(model)
 End Function
 
-' Mesh loading/unloading functions
 Rem
-bbdoc: Loads meshes from model file.
+bbdoc: Compute model bounding box limits (considers all meshes)
 End Rem
-Function LoadMeshes:RMesh Ptr(filename:String, meshCount:Int Var)
-	Local f:Byte Ptr = filename.ToUTF8String()
-	Local meshes:RMesh Ptr = bmx_raylib_LoadMeshes(f, meshCount)
-	MemFree(f)
-	Return meshes
+Function GetModelBoundingBox:RBoundingBox(model:RModel)
+	Return bmx_raylib_GetModelBoundingBox(model)
+End Function
+
+' Model drawing functions
+Rem
+bbdoc: Draws a model (with texture if set).
+End Rem
+Function DrawModel(model:RModel, position:RVector3, scale:Float, tint:RColor)
+	bmx_raylib_DrawModel(model, position, scale, tint)
 End Function
 
 Rem
-bbdoc: Exports mesh data to file.
+bbdoc: Draws a model with extended parameters.
 End Rem
-Function ExportMesh(mesh:RMesh, filename:String)
-	bmx_raylib_ExportMesh(mesh, filename)
+Function DrawModelEx(model:RModel, position:RVector3, rotationAxis:RVector3, rotationAngle:Float, scale:RVector3, tint:RColor)
+	bmx_raylib_DrawModelEx(model, position, rotationAxis, rotationAngle, scale, tint)
+End Function
+
+Rem
+bbdoc: Draws a model wires (with texture if set).
+End Rem
+Function DrawModelWires(model:RModel, position:RVector3, scale:Float, tint:RColor)
+	bmx_raylib_DrawModelWires(model, position, scale, tint)
+End Function
+
+Rem
+bbdoc: Draws a model wires (with texture if set) with extended parameters.
+End Rem
+Function DrawModelWiresEx(model:RModel, position:RVector3, rotationAxis:RVector3, rotationAngle:Float, scale:RVector3, tint:RColor)
+	bmx_raylib_DrawModelWiresEx(model, position, rotationAxis, rotationAngle, scale, tint)
+End Function
+
+Function DrawModelPoints(model:RModel, position:RVector3, scale:Float, tint:RColor)
+	bmx_raylib_DrawModelPoints(model, position, scale, tint)
+End Function
+
+Function DrawModelPointsEx(model:RModel, position:RVector3, rotationAxis:RVector3, rotationAngle:Float, scale:RVector3, tint:RColor)
+	bmx_raylib_DrawModelPointsEx(model, position, rotationAxis, rotationAngle, scale, tint)
+End Function
+
+Rem
+bbdoc: Draws a bounding box (wires).
+End Rem
+Function DrawBoundingBox(box:RBoundingBox, color:RColor)
+	bmx_raylib_DrawBoundingBox(box, color)
+End Function
+
+Rem
+bbdoc: Draws a billboard texture.
+End Rem
+Function DrawBillboard(camera:RCamera, texture:RTexture2D, position:RVector3, scale:Float, tint:RColor)
+	bmx_raylib_DrawBillboard(camera, texture, position, scale, tint)
+End Function
+
+Rem
+bbdoc: Draws a billboard texture defined by sourceRec.
+End Rem
+Function DrawBillboardRec(camera:RCamera, texture:RTexture2D, source:RRectangle, position:RVector3, size:RVector2, tint:RColor)
+	bmx_raylib_DrawBillboardRec(camera, texture, source, position, size, tint)
+End Function
+
+Rem
+bbdoc: Draws a billboard texture defined by source and rotation.
+End Rem
+Function DrawBillboardPro(camera:RCamera, texture:RTexture2D, source:RRectangle, position:RVector3, up:RVector3, size:RVector2, origin:RVector2, rotation:Float, tint:RColor)
+	bmx_raylib_DrawBillboardPro(camera, texture, source, position, up, size, origin, rotation, tint)
+End Function
+
+' Mesh management functions
+
+Function UploadMesh(mesh:RMesh Var, dynamic:Int)
+	bmx_raylib_UploadMesh(mesh, dynamic)
+End Function
+
+Function UpdateMeshBuffer(mesh:RMesh, index:Int, data:Byte Ptr, dataSize:Int, offset:Int)
+	bmx_raylib_UpdateMeshBuffer(mesh, index, data, dataSize, offset)
 End Function
 
 Rem
@@ -1687,75 +2822,39 @@ Function UnloadMesh(mesh:RMesh)
 	bmx_raylib_UnloadMesh(mesh)
 End Function
 
-' Material loading/unloading functions
+Function DrawMesh(mesh:RMesh, material:RMaterial, transform:RMatrix)
+	bmx_raylib_DrawMesh(mesh, material, transform)
+End Function
+
+Function DrawMeshInstanced(mesh:RMesh, material:RMaterial, transforms:RMatrix Ptr, instances:Int)
+	bmx_raylib_DrawMeshInstanced(mesh, material, transforms, instances)
+End Function
+
 Rem
-bbdoc: Loads materials from model file.
+bbdoc: Computes mesh bounding box limits.
 End Rem
-Function LoadMaterials:RMaterial Ptr(filename:String, materialCount:Int Var)
+Function GetMeshBoundingBox:RBoundingBox(mesh:RMesh)
+	Return bmx_raylib_GetMeshBoundingBox(mesh)
+End Function
+
+Rem
+bbdoc: Computes mesh tangents.
+End Rem
+Function GenMeshTangents(mesh:RMesh Var)
+	bmx_raylib_GenMeshTangents(mesh)
+End Function
+
+Rem
+bbdoc: Exports mesh data to file.
+End Rem
+Function ExportMesh(mesh:RMesh, filename:String)
+	bmx_raylib_ExportMesh(mesh, filename)
+End Function
+
+Function ExportMeshAsCode(mesh:RMesh, filename:String)
 	Local f:Byte Ptr = filename.ToUTF8String()
-	Local materials:RMaterial Ptr = bmx_raylib_LoadMaterials(f, materialCount)
+	bmx_raylib_ExportMeshAsCode(mesh, f)
 	MemFree(f)
-	Return materials
-End Function
-
-Rem
-bbdoc: Loads default material (Supports: DIFFUSE, SPECULAR, NORMAL maps).
-End Rem
-Function LoadMaterialDefault:RMaterial()
-	Return bmx_raylib_LoadMaterialDefault()
-End Function
-
-Rem
-bbdoc: Unloads material from GPU memory (VRAM).
-End Rem
-Function UnloadMaterial(material:RMaterial)
-	bmx_raylib_UnloadMaterial(material:RMaterial)
-End Function
-
-Rem
-bbdoc: Sets texture for a material map type (MAP_DIFFUSE, MAP_SPECULAR...).
-End Rem
-Function SetMaterialTexture(material:RMaterial Var, mapType:Int, texture:RTexture2D)
-	bmx_raylib_SetMaterialTexture(material, mapType, texture)
-End Function
-
-Rem
-bbdoc: Sets material for a mesh.
-End Rem
-Function SetModelMeshMaterial(model:RModel Var, meshId:Int, materialId:Int)
-	bmx_raylib_SetModelMeshMaterial(model, meshId, materialId)
-End Function
-
-' Model animations loading/unloading functions
-Rem
-bbdoc: Loads model animations from file.
-End Rem
-Function LoadModelAnimations:RModelAnimation Ptr(filename:String, animsCount:Int Var)
-	Local f:Byte Ptr = filename.ToUTF8String()
-	Local animations:RModelAnimation Ptr = bmx_raylib_LoadModelAnimations(f, animsCount)
-	MemFree(f)
-	Return animations
-End Function
-
-Rem
-bbdoc: Updates model animation pose.
-End Rem
-Function UpdateModelAnimation(model:RModel, anim:RModelAnimation, frame:Int)
-	bmx_raylib_UpdateModelAnimation(model, anim, frame)
-End Function
-
-Rem
-bbdoc: Unloads animation data.
-End Rem
-Function UnloadModelAnimation(anim:RModelAnimation)
-	bmx_raylib_UnloadModelAnimation(anim)
-End Function
-
-Rem
-bbdoc: Checks model animation skeleton match.
-End Rem
-Function IsModelAnimationValid:Int(model:RModel, anim:RModelAnimation)
-	Return bmx_raylib_IsModelAnimationValid(model, anim)
 End Function
 
 ' Mesh generation functions
@@ -1829,86 +2928,95 @@ Function GenMeshCubicmap:RMesh(cubicmap:RImage, cubeSize:RVector3)
 	Return bmx_raylib_GenMeshCubicmap(cubicmap, cubeSize)
 End Function
 
-
-' Mesh manipulation functions
+' Material loading/unloading functions
 Rem
-bbdoc: Computes mesh bounding box limits.
+bbdoc: Loads materials from model file.
 End Rem
-Function MeshBoundingBox:RBoundingBox(mesh:RMesh)
-	Return bmx_raylib_MeshBoundingBox(mesh)
+Function LoadMaterials:RMaterial Ptr(filename:String, materialCount:Int Var)
+	Local f:Byte Ptr = filename.ToUTF8String()
+	Local materials:RMaterial Ptr = bmx_raylib_LoadMaterials(f, materialCount)
+	MemFree(f)
+	Return materials
 End Function
 
 Rem
-bbdoc: Computes mesh tangents.
+bbdoc: Loads default material (Supports: DIFFUSE, SPECULAR, NORMAL maps).
 End Rem
-Function MeshTangents(mesh:RMesh Var)
-	bmx_raylib_MeshTangents(mesh)
+Function LoadMaterialDefault:RMaterial()
+	Return bmx_raylib_LoadMaterialDefault()
+End Function
+
+Function IsMaterialValid:Int(material:RMaterial)
+	Return bmx_raylib_IsMaterialValid(material)
 End Function
 
 Rem
-bbdoc: Computes mesh binormals.
+bbdoc: Unloads material from GPU memory (VRAM).
 End Rem
-Function MeshBinormals(mesh:RMesh Var)
-	bmx_raylib_MeshBinormals(mesh)
-End Function
-
-
-' Model drawing functions
-Rem
-bbdoc: Draws a model (with texture if set).
-End Rem
-Function DrawModel(model:RModel, position:RVector3, scale:Float, tint:RColor)
-	bmx_raylib_DrawModel(model, position, scale, tint)
+Function UnloadMaterial(material:RMaterial)
+	bmx_raylib_UnloadMaterial(material:RMaterial)
 End Function
 
 Rem
-bbdoc: Draws a model with extended parameters.
+bbdoc: Sets texture for a material map type (MAP_DIFFUSE, MAP_SPECULAR...).
 End Rem
-Function DrawModelEx(model:RModel, position:RVector3, rotationAxis:RVector3, rotationAngle:Float, scale:RVector3, tint:RColor)
-	bmx_raylib_DrawModelEx(model, position, rotationAxis, rotationAngle, scale, tint)
+Function SetMaterialTexture(material:RMaterial Var, mapType:Int, texture:RTexture2D)
+	bmx_raylib_SetMaterialTexture(material, mapType, texture)
 End Function
 
 Rem
-bbdoc: Draws a model wires (with texture if set).
+bbdoc: Sets material for a mesh.
 End Rem
-Function DrawModelWires(model:RModel, position:RVector3, scale:Float, tint:RColor)
-	bmx_raylib_DrawModelWires(model, position, scale, tint)
+Function SetModelMeshMaterial(model:RModel Var, meshId:Int, materialId:Int)
+	bmx_raylib_SetModelMeshMaterial(model, meshId, materialId)
+End Function
+
+' Model animations loading/unloading functions
+Rem
+bbdoc: Loads model animations from file.
+End Rem
+Function LoadModelAnimations:RModelAnimation Ptr(filename:String, animsCount:Int Var)
+	Local f:Byte Ptr = filename.ToUTF8String()
+	Local animations:RModelAnimation Ptr = bmx_raylib_LoadModelAnimations(f, animsCount)
+	MemFree(f)
+	Return animations
 End Function
 
 Rem
-bbdoc: Draws a model wires (with texture if set) with extended parameters.
+bbdoc: Updates model animation pose.
 End Rem
-Function DrawModelWiresEx(model:RModel, position:RVector3, rotationAxis:RVector3, rotationAngle:Float, scale:RVector3, tint:RColor)
-	bmx_raylib_DrawModelWiresEx(model, position, rotationAxis, rotationAngle, scale, tint)
+Function UpdateModelAnimation(model:RModel, anim:RModelAnimation, frame:Int)
+	bmx_raylib_UpdateModelAnimation(model, anim, frame)
+End Function
+
+Function UpdateModelAnimationBones(model:RModel, anim:RModelAnimation, frame:Int)
+	bmx_raylib_UpdateModelAnimationBones(model, anim, frame)
 End Function
 
 Rem
-bbdoc: Draws a bounding box (wires).
+bbdoc: Unloads animation data.
 End Rem
-Function DrawBoundingBox(box:RBoundingBox, color:RColor)
-	bmx_raylib_DrawBoundingBox(box, color)
+Function UnloadModelAnimation(anim:RModelAnimation)
+	bmx_raylib_UnloadModelAnimation(anim)
+End Function
+
+Function UnloadModelAnimations(animations:RModelAnimation Ptr, animCount:Int)
+	bmx_raylib_UnloadModelAnimations(animations, animCount)
 End Function
 
 Rem
-bbdoc: Draws a billboard texture.
+bbdoc: Checks model animation skeleton match.
 End Rem
-Function DrawBillboard(camera:RCamera, texture:RTexture2D, center:RVector3, size:Float, tint:RColor)
-	bmx_raylib_DrawBillboard(camera, texture, center, size, tint)
-End Function
-
-Rem
-bbdoc: Draws a billboard texture defined by sourceRec.
-End Rem
-Function DrawBillboardRec(camera:RCamera, texture:RTexture2D, sourceRec:RRectangle, center:RVector3, size:Float, tint:RColor)
-	bmx_raylib_DrawBillboardRec(camera, texture, sourceRec, center, size, tint)
+Function IsModelAnimationValid:Int(model:RModel, anim:RModelAnimation)
+	Return bmx_raylib_IsModelAnimationValid(model, anim)
 End Function
 
 ' Collision detection functions
 Rem
 bbdoc: Detects collision between two spheres.
 End Rem
-Function CheckCollisionSpheres:Int(centerA:RVector3, radiusA:Float, centerB:RVector3, radiusB:Float)
-	Return bmx_raylib_CheckCollisionSpheres(centerA, radiusA, centerB, radiusB)
+Function CheckCollisionSpheres:Int(center1:RVector3, radius1:Float, center2:RVector3, radius2:Float)
+	Return bmx_raylib_CheckCollisionSpheres(center1, radius1, center2, radius2)
 End Function
 
 Rem
@@ -1925,75 +3033,141 @@ Function CheckCollisionBoxSphere:Int(box:RBoundingBox, center:RVector3, radius:F
 	Return bmx_raylib_CheckCollisionBoxSphere(box, center, radius)
 End Function
 
-Rem
-bbdoc: Detects collision between ray and sphere.
-End Rem
-Function CheckCollisionRaySphere:Int(ray:RRay, center:RVector3, radius:Float)
-	Return bmx_raylib_CheckCollisionRaySphere(ray, center, radius)
+Function GetRayCollisionSphere:RRayCollision(ray:RRay, center:RVector3, radius:Float)
+	Return bmx_raylib_GetRayCollisionSphere(ray, center, radius)
+End Function
+
+Function GetRayCollisionBox:RRayCollision(ray:RRay, box:RBoundingBox)
+	Return bmx_raylib_GetRayCollisionBox(ray, box)
+End Function
+
+Function GetRayCollisionMesh:RRayCollision(ray:RRay, mesh:RMesh, transform:RMatrix)
+	Return bmx_raylib_GetRayCollisionMesh(ray, mesh, transform)
+End Function
+
+Function GetRayCollisionTriangle:RRayCollision(ray:RRay, p1:RVector3, p2:RVector3, p3:RVector3)
+	Return bmx_raylib_GetRayCollisionTriangle(ray, p1, p2, p3)
+End Function
+
+Function GetRayCollisionQuad:RRayCollision(ray:RRay, p1:RVector3, p2:RVector3, p3:RVector3, p4:RVector3)
+	Return bmx_raylib_GetRayCollisionQuad(ray, p1, p2, p3, p4)
 End Function
 
 Rem
-bbdoc: Detects collision between ray and sphere, returns collision point.
+bbdoc: Checks if a file has been dropped into window.
 End Rem
-Function CheckCollisionRaySphereEx:Int(ray:RRay, center:RVector3, radius:Float, collisionPoint:RVector3 Var)
-	Return bmx_raylib_CheckCollisionRaySphereEx(ray, center, radius, collisionPoint)
+Function IsFileDropped:Int()
+	Return bmx_raylib_IsFileDropped()
 End Function
 
 Rem
-bbdoc: Detects collision between ray and box.
+bbdoc: Loads dropped files names.
 End Rem
-Function CheckCollisionRayBox:Int(ray:RRay, box:RBoundingBox)
-	Return bmx_raylib_CheckCollisionRayBox(ray, box)
+Function LoadDroppedFiles:String[]()
+	Return bmx_raylib_LoadDroppedFiles()
+End Function
+
+
+' camera functions
+Rem
+bbdoc: Returns the cameras forward vector (normalized).
+End Rem
+Function GetCameraForward:RVector3(camera:RCamera)
+	Return bmx_raylib_GetCameraForward(camera)
 End Function
 
 Rem
-bbdoc: Gets collision info between ray and model.
+bbdoc: Returns the cameras up vector (normalized).
+about: Note: The up vector might not be perpendicular to the forward vector
 End Rem
-Function GetCollisionRayModel:RRayHitInfo(ray:RRay, model:RModel)
-	Return bmx_raylib_GetCollisionRayModel(ray, model)
+Function GetCameraUp:RVector3(camera:RCamera)
+	Return bmx_raylib_GetCameraUp(camera)
 End Function
 
 Rem
-bbdoc: Gets collision info between ray and triangle.
+bbdoc: Returns the cameras right vector (normalized).
 End Rem
-Function GetCollisionRayTriangle:RRayHitInfo(ray:RRay, p1:RVector3, p2:RVector3, p3:RVector3)
-	Return bmx_raylib_GetCollisionRayTriangle(ray, p1, p2, p3)
+Function GetCameraRight:RVector3(camera:RCamera)
+	Return bmx_raylib_GetCameraRight(camera)
+End Function
+
+' camera movement
+Rem
+bbdoc: Moves the camera in its forward direction.
+End Rem
+Function CameraMoveForward(camera:RCamera, distance:Float, moveInWorldPlane:Int)
+	bmx_raylib_CameraMoveForward(camera, distance, moveInWorldPlane)
 End Function
 
 Rem
-bbdoc: Gets collision info between ray and ground plane (Y-normal plane).
+bbdoc: Moves the camera in its up direction.
 End Rem
-Function GetCollisionRayGround:RRayHitInfo(ray:RRay, groundHeight:Float)
-	Return bmx_raylib_GetCollisionRayGround(ray, groundHeight)
-End Function
-
-' Text misc. functions
-Rem
-bbdoc: Measures #String width for default font.
-End Rem
-Function MeasureText:Int(txt:String, FontSize:Int)
-	Local t:Byte Ptr = txt.ToUTF8String()
-	Local res:Int = bmx_raylib_MeasureText(t, FontSize)
-	MemFree(t)
-	Return res
+Function CameraMoveUp(camera:RCamera, distance:Float)
+	bmx_raylib_CameraMoveUp(camera, distance)
 End Function
 
 Rem
-bbdoc: Measures #String size for Font.
+bbdoc: Moves the camera target in its current right direction.
 End Rem
-Function MeasureTextEx:RVector2(font:RFont, txt:String, FontSize:Float, spacing:Float)
-	Local t:Byte Ptr = txt.ToUTF8String()
-	Local res:RVector2 = bmx_raylib_MeasureTextEx(font, txt, FontSize, spacing)
-	MemFree(t)
-	Return res
+Function CameraMoveRight(camera:RCamera, distance:Float, moveInWorldPlane:Int)
+	bmx_raylib_CameraMoveRight(camera, distance, moveInWorldPlane)
 End Function
 
 Rem
-bbdoc: Gets index position for a unicode character on font.
+bbdoc: Moves the camera position closer/farther to/from the camera target.
 End Rem
-Function GetGlyphIndex:Int(font:RFont, codepoint:Int)
-	Return bmx_raylib_GetGlyphIndex(font, codepoint)
+Function CameraMoveToTarget(camera:RCamera, delta:Float)
+	bmx_raylib_CameraMoveToTarget(camera, delta)
 End Function
+
+' camera rotation
+Rem
+bbdoc: Rotates the camera around its up vector
+about: Yaw is "looking left and right"
+If @rotateAroundTarget is #False, the camera rotates around its position
+
+Note: angle must be provided in radians
+End Rem
+Function CameraYaw(camera:RCamera, angleInRadians:Float, rotateAroundTarget:Int)
+	bmx_raylib_CameraYaw(camera, angleInRadians, rotateAroundTarget)
+End Function
+
+Rem
+bbdoc: Rotates the camera around its right vector, pitch is "looking up and down"
+about: @lockView prevents camera overrotation (aka "somersaults")
+@rotateAroundTarget defines if rotation is around target or around its position
+@rotateUp rotates the up direction as well (typically only usefull in CAMERA_FREE)
+
+NOTE: angle must be provided in radians
+End Rem
+Function CameraPitch(camera:RCamera, angleInRadians:Float, lockView:Int, rotateAroundTarget:Int, rotateUp:Int)
+	bmx_raylib_CameraPitch(camera, angleInRadians, lockView, rotateAroundTarget, rotateUp)
+End Function
+
+Rem
+bbdoc: Rotates the camera around its forward vector.
+about: Roll is "turning your head sideways to the left or right"
+
+Note: angle must be provided in radians
+End Rem
+Function CameraRoll(camera:RCamera, angleInRadians:Float)
+	bmx_raylib_CameraRoll(camera, angleInRadians)
+End Function
+
+Rem
+bbdoc: Returns the camera view matrix.
+End Rem
+Function GetCameraViewMatrix:RMatrix(camera:RCamera)
+	Return bmx_raylib_GetCameraViewMatrix(camera)
+End Function
+
+Rem
+bbdoc: Returns the camera projection matrix.
+End Rem
+Function GetCameraProjectionMatrix:RMatrix(camera:RCamera, aspect:Float)
+	Return bmx_raylib_GetCameraProjectionMatrix(camera, aspect)
+End Function
+
 
 ' Linear Easing functions
 Function EaseLinearNone:Float(t:Float, b:Float, c:Float, d:Float) Inline
@@ -2127,569 +3301,4 @@ End Function
 
 Function EaseElasticInOut:Float(t:Float, b:Float, c:Float, d:Float) Inline
 	Return bmx_raylib_EaseElasticInOut(t, b, c, d)
-End Function
-
-
-' Image manipulation functions
-
-Rem
-bbdoc: Creates an image duplicate (useful for transformations).
-End Rem
-Function ImageCopy:RImage(image:RImage)
-	Return bmx_raylib_ImageCopy(image)
-End Function
-
-Rem
-bbdoc: Creates an image from another image piece.
-End Rem
-Function ImageFromImage:RImage(image:RImage, rec:RRectangle)
-	Return bmx_raylib_ImageFromImage(image, rec)
-End Function
-
-Rem
-bbdoc: Converts image to POT (power-of-two).
-End Rem
-Function ImageToPOT(image:RImage Var, fillColor:RColor)
-	bmx_raylib_ImageToPOT(image, fillColor)
-End Function
-
-Rem
-bbdoc: Converts image data to desired format.
-End Rem
-Function ImageFormat(image:RImage Var, newFormat:Int)
-	bmx_raylib_ImageFormat(image, newFormat)
-End Function
-
-Rem
-bbdoc: Applys alpha mask to image.
-End Rem
-Function ImageAlphaMask(image:RImage Var, alphaMask:RImage)
-	bmx_raylib_ImageAlphaMask(image, alphaMask)
-End Function
-
-Rem
-bbdoc: Clears alpha channel to desired color.
-End Rem
-Function ImageAlphaClear(image:RImage Var, color:RColor, threshold:Float)
-	bmx_raylib_ImageAlphaClear(image, color, threshold)
-End Function
-
-Rem
-bbdoc: Crops image depending on alpha value.
-End Rem
-Function ImageAlphaCrop(image:RImage Var, threshold:Float)
-	bmx_raylib_ImageAlphaCrop(image, threshold)
-End Function
-
-Rem
-bbdoc: Premultiplies alpha channel.
-End Rem
-Function ImageAlphaPremultiply(image:RImage Var)
-	bmx_raylib_ImageAlphaPremultiply(image)
-End Function
-
-Rem
-bbdoc: Crops an image to a defined rectangle.
-End Rem
-Function ImageCrop(image:RImage Var, crop:RRectangle)
-	bmx_raylib_ImageCrop(image, crop)
-End Function
-
-Rem
-bbdoc: Resizes image (Bicubic scaling algorithm).
-End Rem
-Function ImageResize(image:RImage Var, newWidth:Int, newHeight:Int)
-	bmx_raylib_ImageResize(image, newWidth, newHeight)
-End Function
-
-Rem
-bbdoc: Resizes image (Nearest-Neighbor scaling algorithm).
-End Rem
-Function ImageResizeNN(image:RImage Var, newWidth:Int, newHeight:Int)
-	bmx_raylib_ImageResizeNN(image, newWidth, newHeight)
-End Function
-
-Rem
-bbdoc: Resizes canvas and fill with color.
-End Rem
-Function ImageResizeCanvas(image:RImage Var, newWidth:Int, newHeight:Int, offsetX:Int, offsetY:Int, color:RColor)
-	bmx_raylib_ImageResizeCanvas(image, newWidth, newHeight, offsetX, offsetY, color)
-End Function
-
-Rem
-bbdoc: Generates all mipmap levels for a provided image.
-End Rem
-Function ImageMipmaps(image:RImage Var)
-	bmx_raylib_ImageMipmaps(image)
-End Function
-
-Rem
-bbdoc: Dithers image data to 16bpp or lower (Floyd-Steinberg dithering).
-End Rem
-Function ImageDither(image:RImage Var, rBpp:Int, gBpp:Int, bBpp:Int, aBpp:Int)
-	bmx_raylib_ImageDither(image, rBpp, gBpp, bBpp, aBpp)
-End Function
-
-'Function ImageExtractPalette:RColor Ptr(image:RImage, maxPaletteSize:Int, extractCount:Int Ptr)
-
-Rem
-bbdoc: Creates an image from text (default font).
-End Rem
-Function ImageText:RImage(txt:String, FontSize:Int, color:RColor)
-	Return bmx_raylib_ImageText(txt, FontSize, color)
-End Function
-
-Rem
-bbdoc: Creates an image from text (custom sprite font).
-End Rem
-Function ImageTextEx:RImage(font:RFont, txt:String, FontSize:Float, spacing:Float, tint:RColor)
-	Return bmx_raylib_ImageTextEx(font, txt, FontSize, spacing, tint)
-End Function
-
-Rem
-bbdoc: Draws a source image within a destination image (tint applied to source).
-End Rem
-Function ImageDraw(dst:RImage Var, src:RImage, srcRec:RRectangle, dstRec:RRectangle, tint:RColor)
-	bmx_raylib_ImageDraw(dst, src, srcRec, dstRec, tint)
-End Function
-
-Rem
-bbdoc: Draws a rectangle within an image.
-End Rem
-Function ImageDrawRectangle(dst:RImage Var, posX:Int, posY:Int, width:Int, height:Int, color:RColor)
-	bmx_raylib_ImageDrawRectangle(dst, posX, posY, width, height, color)
-End Function
-
-Rem
-bbdoc: Draws rectangle lines within an image.
-End Rem
-Function ImageDrawRectangleLines(dst:RImage Var, rec:RRectangle, thick:Int, color:RColor)
-	bmx_raylib_ImageDrawRectangleLines(dst, rec, thick, color)
-End Function
-
-Rem
-bbdoc: Draws text (default font) within an image (destination).
-End Rem
-Function ImageDrawText(dst:RImage Var, position:RVector2, txt:String, FontSize:Int, color:RColor)
-	bmx_raylib_ImageDrawText(dst, position, txt, FontSize, color)
-End Function
-
-Rem
-bbdoc: Draws text (custom sprite font) within an image (destination).
-End Rem
-Function ImageDrawTextEx(dst:RImage Var, position:RVector2, font:RFont, txt:String, FontSize:Float, spacing:Float, color:RColor)
-	bmx_raylib_ImageDrawTextEx(dst, position, font, txt, FontSize, spacing, color)
-End Function
-
-Rem
-bbdoc: Flips image vertically.
-End Rem
-Function ImageFlipVertical(image:RImage Var)
-	bmx_raylib_ImageFlipVertical(image)
-End Function
-
-Rem
-bbdoc: Flips image horizontally.
-End Rem
-Function ImageFlipHorizontal(image:RImage Var)
-	bmx_raylib_ImageFlipHorizontal(image)
-End Function
-
-Rem
-bbdoc: Rotates image clockwise 90deg.
-End Rem
-Function ImageRotateCW(image:RImage Var)
-	bmx_raylib_ImageRotateCW(image)
-End Function
-
-Rem
-bbdoc: Rotates image counter-clockwise 90deg.
-End Rem
-Function ImageRotateCCW(image:RImage Var)
-	bmx_raylib_ImageRotateCCW(image)
-End Function
-
-Rem
-bbdoc: Modifies image color: tint.
-End Rem
-Function ImageColorTint(image:RImage Var, color:RColor)
-	bmx_raylib_ImageColorTint(image, color)
-End Function
-
-Rem
-bbdoc: Modifies image color: invert.
-End Rem
-Function ImageColorInvert(image:RImage Var)
-	bmx_raylib_ImageColorInvert(image)
-End Function
-
-Rem
-bbdoc: Modifies image color: grayscale.
-End Rem
-Function ImageColorGrayscale(image:RImage Var)
-	bmx_raylib_ImageColorGrayscale(image)
-End Function
-
-Rem
-bbdoc: Modifies image color: contrast (-100 to 100).
-End Rem
-Function ImageColorContrast(image:RImage Var, contrast:Float)
-	bmx_raylib_ImageColorContrast(image, contrast)
-End Function
-
-Rem
-bbdoc: Modifies image color: brightness (-255 to 255).
-End Rem
-Function ImageColorBrightness(image:RImage Var, brightness:Int)
-	bmx_raylib_ImageColorBrightness(image, brightness)
-End Function
-
-Rem
-bbdoc: Modifies image color: replace color.
-End Rem
-Function ImageColorReplace(image:RImage Var, color:RColor, Replace:RColor)
-	bmx_raylib_ImageColorReplace(image, color, Replace)
-End Function
-
-' Shader loading/unloading functions
-Rem
-bbdoc: Loads shader from files and binds default locations.
-End Rem
-Function LoadShader:RShader(vsFilename:String, fsFilename:String)
-	Local v:Byte Ptr = vsFilename.ToUTF8String()
-	Local f:Byte Ptr = fsFilename.ToUTF8String()
-	Local shader:RShader = bmx_raylib_LoadShader(v, f)
-	MemFree(f)
-	MemFree(v)
-	Return shader
-End Function
-
-Rem
-bbdoc: Loads shader from code strings and binds default locations.
-End Rem
-Function LoadShaderCode:RShader(vsCode:String, fsCode:String)
-	Local v:Byte Ptr = vsCode.ToUTF8String()
-	Local f:Byte Ptr = fsCode.ToUTF8String()
-	Local shader:RShader = bmx_raylib_LoadShaderCode(v, f)
-	MemFree(f)
-	MemFree(v)
-	Return shader
-End Function
-
-Rem
-bbdoc: Unloads shader from GPU memory (VRAM).
-End Rem
-Function UnloadShader(shader:RShader)
-	bmx_raylib_UnloadShader(shader)
-End Function
-
-Rem
-bbdoc: Gets default shader.
-End Rem
-Function GetShaderDefault:RShader()
-	Return bmx_raylib_GetShaderDefault()
-End Function
-
-Rem
-bbdoc: Gets default texture.
-End Rem
-Function GetTextureDefault:RTexture2D()
-	Return bmx_raylib_GetTextureDefault()
-End Function
-
-Rem
-bbdoc: Gets texture to draw shapes.
-End Rem
-Function GetShapesTexture:RTexture2D()
-	Return bmx_raylib_GetShapesTexture()
-End Function
-
-Rem
-bbdoc: Gets texture rectangle to draw shapes.
-End Rem
-Function GetShapesTextureRec:RRectangle()
-	Return bmx_raylib_GetShapesTextureRec()
-End Function
-
-Rem
-bbdoc: Defines default texture used to draw shapes.
-End Rem
-Function SetShapesTexture(texture:RTexture2D, source:RRectangle)
-	bmx_raylib_SetShapesTexture(texture, source)
-End Function
-
-' Shader configuration functions
-Rem
-bbdoc: Gets shader uniform location.
-End Rem
-Function GetShaderLocation:Int(shader:RShader, uniformName:String)
-	Local u:Byte Ptr = uniformName.ToUTF8String()
-	Local res:Int = bmx_raylib_GetShaderLocation(shader, u)
-	MemFree(u)
-	Return res
-End Function
-
-Rem
-bbdoc: Sets shader uniform value.
-End Rem
-Function SetShaderValue(shader:RShader, uniformLoc:Int, value:Byte Ptr, uniformType:Int)
-	bmx_raylib_SetShaderValue(shader, uniformLoc, value, uniformType)
-End Function
-
-Rem
-bbdoc: Sets shader uniform value vector.
-End Rem
-Function SetShaderValueV(shader:RShader, uniformLoc:Int, value:Byte Ptr, uniformType:Int, count:Int)
-	bmx_raylib_SetShaderValueV(shader, uniformLoc, value, uniformType, count)
-End Function
-
-Rem
-bbdoc: Sets shader uniform value (matrix 4x4).
-End Rem
-Function SetShaderValueMatrix(shader:RShader, uniformLoc:Int, mat:RMatrix)
-	bmx_raylib_SetShaderValueMatrix(shader, uniformLoc, mat)
-End Function
-
-Rem
-bbdoc: Sets shader uniform value for texture.
-End Rem
-Function SetShaderValueTexture(shader:RShader, uniformLoc:Int, texture:RTexture2D)
-	bmx_raylib_SetShaderValueTexture(shader, uniformLoc, texture)
-End Function
-
-Rem
-bbdoc: Sets a custom projection matrix (replaces internal projection matrix).
-End Rem
-Function SetMatrixProjection(proj:RMatrix)
-	bmx_raylib_SetMatrixProjection(proj)
-End Function
-
-Rem
-bbdoc: Sets a custom modelview matrix (replaces internal modelview matrix).
-End Rem
-Function SetMatrixModelview(view:RMatrix)
-	bmx_raylib_SetMatrixModelview(view)
-End Function
-
-Rem
-bbdoc: Gets internal modelview matrix.
-End Rem
-Function GetMatrixModelview:RMatrix()
-	Return bmx_raylib_GetMatrixModelview()
-End Function
-
-Rem
-bbdoc: Gets internal projection matrix.
-End Rem
-Function GetMatrixProjection:RMatrix()
-	Return bmx_raylib_GetMatrixProjection()
-End Function
-
-' Texture maps generation (PBR)
-' NOTE: Required shaders should be provided
-Rem
-bbdoc: Generates cubemap texture from 2D texture.
-End Rem
-Function GenTextureCubemap:RTexture2D(shader:RShader, map:RTexture2D, size:Int)
-	Return bmx_raylib_GenTextureCubemap(shader, map, size)
-End Function
-
-Rem
-bbdoc: Generates irradiance texture using cubemap data.
-End Rem
-Function GenTextureIrradiance:RTexture2D(shader:RShader, cubemap:RTexture2D, size:Int)
-	Return bmx_raylib_GenTextureIrradiance(shader, cubemap, size)
-End Function
-
-Rem
-bbdoc: Generates prefilter texture using cubemap data.
-End Rem
-Function GenTexturePrefilter:RTexture2D(shader:RShader, cubemap:RTexture2D, size:Int)
-	Return bmx_raylib_GenTexturePrefilter(shader, cubemap, size)
-End Function
-
-Rem
-bbdoc: Generates BRDF texture.
-End Rem
-Function GenTextureBRDF:RTexture2D(shader:RShader, size:Int)
-	Return bmx_raylib_GenTextureBRDF(shader, size)
-End Function
-
-' Shading begin/end functions
-Rem
-bbdoc: Begins custom shader drawing.
-End Rem
-Function BeginShaderMode(shader:RShader)
-	bmx_raylib_BeginShaderMode(shader)
-End Function
-
-Rem
-bbdoc: Ends custom shader drawing (use default shader).
-End Rem
-Function EndShaderMode()
-	bmx_raylib_EndShaderMode()
-End Function
-
-Rem
-bbdoc: Begins blending mode (alpha, additive, multiplied).
-End Rem
-Function BeginBlendMode(Mode:Int)
-	bmx_raylib_BeginBlendMode(Mode)
-End Function
-
-Rem
-bbdoc: Ends blending mode (reset to default: alpha blending).
-End Rem
-Function EndBlendMode()
-	bmx_raylib_EndBlendMode()
-End Function
-
-Rem
-bbdoc: Frees previously allocated raylib structure.
-End Rem
-Function RLFree(obj:Byte Ptr)
-	bmx_raylib_RLFree(obj)
-End Function
-
-' Font loading/unloading functions
-Rem
-bbdoc: Gets the default Font.
-End Rem
-Function GetFontDefault:RFont()
-	Return bmx_raylib_GetFontDefault()
-End Function
-
-Rem
-bbdoc: Loads font from file into GPU memory (VRAM).
-End Rem
-Function LoadFont:RFont(filename:String)
-	Return bmx_raylib_LoadFont(filename)
-End Function
-
-Rem
-bbdoc: Loads font from file with extended parameters.
-End Rem
-Function LoadFontEx:RFont(filename:String, FontSize:Int, fontChars:Int Ptr, charsCount:Int)
-	Return bmx_raylib_LoadFontEx(filename, FontSize, fontChars, charsCount)
-End Function
-
-Rem
-bbdoc: Loads font from Image (XNA style).
-End Rem
-Function LoadFontFromImage:RFont(image:RImage, key:RColor, firstChar:Int)
-	Return bmx_raylib_LoadFontFromImage(image, key, firstChar)
-End Function
-
-Rem
-bbdoc: Loads font data for further use.
-End Rem
-Function LoadFontData:RCharInfo Ptr(filename:String, FontSize:Int, fontChars:Int Ptr, charsCount:Int, fontType:Int)
-	Return bmx_raylib_LoadFontData(filename, FontSize, fontChars, charsCount, fontType)
-End Function
-
-Rem
-bbdoc: Generates image font atlas using chars info.
-End Rem
-Function GenImageFontAtlas:RImage(chars:RCharInfo Ptr, recs:RRectangle Ptr Ptr, charsCount:Int, FontSize:Int, padding:Int, packMethod:Int)
-	Return bmx_raylib_GenImageFontAtlas(chars, recs, charsCount, FontSize, padding, packMethod)
-End Function
-
-Rem
-bbdoc: Unloads Font from GPU memory (VRAM).
-End Rem
-Function UnloadFont(font:RFont)
-	bmx_raylib_UnloadFont(font)
-End Function
-
-Rem
-bbdoc: Checks if a file has been dropped into window.
-End Rem
-Function IsFileDropped:Int()
-	Return bmx_raylib_IsFileDropped()
-End Function
-
-Rem
-bbdoc: Gets dropped files names.
-End Rem
-Function GetDroppedFiles:String[]()
-	Local count:Int
-	Local fptr:Byte Ptr Ptr = bmx_raylib_GetDroppedFiles(count)
-	If count = 0 Then
-		Return Null
-	End If
-	
-	Local files:String[count]
-	For Local i:Int = 0 Until count
-		files[i] = String.FromUTF8String(fptr[i])
-	Next
-	
-	bmx_raylib_ClearDroppedFiles()
-	
-	Return files
-End Function
-
-' Image drawing functions
-' NOTE: Image software-rendering functions (CPU)
-
-Rem
-bbdoc: Clears image background with given color.
-End Rem
-Function ImageClearBackground(dst:RImage, color:RColor)
-	bmx_raylib_ImageClearBackground(dst, color)
-End Function
-
-Rem
-bbdoc: Draws pixel within an image.
-End Rem
-Function ImageDrawPixel(dst:RImage, posX:Int, posY:Int, color:RColor)
-	bmx_raylib_ImageDrawPixel(dst, posX, posY, color)
-End Function
-
-Rem
-bbdoc: Draws pixel within an image (Vector version).
-End Rem
-Function ImageDrawPixelV(dst:RImage, position:RVector2, color:RColor)
-	bmx_raylib_ImageDrawPixelV(dst, position, color)
-End Function
-
-Rem
-bbdoc: Draws line within an image.
-End Rem
-Function ImageDrawLine(dst:RImage, startPosX:Int, startPosY:Int, endPosX:Int, endPosY:Int, color:RColor)
-	bmx_raylib_ImageDrawLine(dst, startPosX, startPosY, endPosX, endPosY, color)
-End Function
-
-Rem
-bbdoc: Draws line within an image (Vector version).
-End Rem
-Function ImageDrawLineV(dst:RImage, lineStart:RVector2, lineEnd:RVector2, color:RColor)
-	bmx_raylib_ImageDrawLineV(dst, lineStart, lineEnd, color)
-End Function
-
-Rem
-bbdoc: Draws circle within an image.
-End Rem
-Function ImageDrawCircle(dst:RImage, centerX:Int, centerY:Int, radius:Int, color:RColor)
-	bmx_raylib_ImageDrawCircle(dst, centerX, centerY, radius, color)
-End Function
-
-Rem
-bbdoc: Draws circle within an image (Vector version).
-End Rem
-Function ImageDrawCircleV(dst:RImage, center:RVector2, radius:Int, color:RColor)
-	bmx_raylib_ImageDrawCircleV(dst, center, radius, color)
-End Function
-
-Rem
-bbdoc: Draws rectangle within an image (Vector version).
-End Rem
-Function ImageDrawRectangleV(dst:RImage, position:RVector2, size:RVector2, color:RColor)
-	bmx_raylib_ImageDrawRectangleV(dst, position, size, color)
-End Function
-
-Rem
-bbdoc: Draws rectangle within an image.
-End Rem
-Function ImageDrawRectangleRec(dst:RImage, rec:RRectangle, color:RColor)
-	bmx_raylib_ImageDrawRectangleRec(dst, rec, color)
 End Function

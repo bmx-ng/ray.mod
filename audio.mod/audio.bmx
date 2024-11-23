@@ -1,4 +1,4 @@
-' Copyright (c) 2020 Bruce A Henderson
+' Copyright (c) 2024 Bruce A Henderson
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -28,8 +28,8 @@ Module Ray.Audio
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2020 Bruce A Henderson"
-ModuleInfo "Copyright: raylib - 2013-2020 Ramon Santamaria"
+ModuleInfo "Copyright: Wrapper - 2024 Bruce A Henderson"
+ModuleInfo "Copyright: raylib - 2013-2024 Ramon Santamaria"
 
 ModuleInfo "History: 1.00"
 ModuleInfo "History: Initial Release."
@@ -85,6 +85,13 @@ Function SetMasterVolume(volume:Float)
 	bmx_raylib_SetMasterVolume(volume)
 End Function
 
+Rem
+bbdoc: Gets master volume (listener).
+End Rem
+Function GetMasterVolume:Float()
+	Return bmx_raylib_GetMasterVolume()
+End Function
+
 
 ' Wave/Sound loading/unloading functions
 Rem
@@ -95,6 +102,17 @@ Function LoadWave:RWave(filename:String)
 	Local wave:RWave = bmx_raylib_LoadWave(f)
 	MemFree(f)
 	Return wave
+End Function
+
+Function LoadWaveFromMemory:RWave(fileType:String, data:Byte Ptr, dataSize:Int)
+	Local f:Byte Ptr = fileType.ToUTF8String()
+	Local wave:RWave = bmx_raylib_LoadWaveFromMemory(f, data, dataSize)
+	MemFree(f)
+	Return wave
+End Function
+
+Function IsWaveValid:Int(wave:RWave)
+	Return bmx_raylib_IsWaveValid(wave)
 End Function
 
 Rem
@@ -112,6 +130,14 @@ bbdoc: Loads sound from wave data.
 End Rem
 Function LoadSoundFromWave:RSound(wave:RWave)
 	Return bmx_raylib_LoadSoundFromWave(wave)
+End Function
+
+Function LoadSoundAlias:RSound(source:RSound)
+	Return bmx_raylib_LoadSoundAlias(source)
+End Function
+
+Function IsSoundValid:Int(sound:RSound)
+	Return bmx_raylib_IsSoundValid(sound)
 End Function
 
 Rem
@@ -133,6 +159,10 @@ bbdoc: Unloads sound.
 End Rem
 Function UnloadSound(sound:RSound)
 	bmx_raylib_UnloadSound(sound)
+End Function
+
+Function UnloadSoundAlias(sound:RSound)
+	bmx_raylib_UnloadSoundAlias(sound)
 End Function
 
 Rem
@@ -184,27 +214,6 @@ Function ResumeSound(sound:RSound)
 End Function
 
 Rem
-bbdoc: Plays a sound (using multichannel buffer pool).
-End Rem
-Function PlaySoundMulti(sound:RSound)
-	bmx_raylib_PlaySoundMulti(sound)
-End Function
-
-Rem
-bbdoc: Stops any sound playing (using multichannel buffer pool).
-End Rem
-Function StopSoundMulti()
-	bmx_raylib_StopSoundMulti()
-End Function
-
-Rem
-bbdoc: Gets number of sounds playing in the multichannel.
-End Rem
-Function GetSoundsPlaying:Int()
-	Return bmx_raylib_GetSoundsPlaying()
-End Function
-
-Rem
 bbdoc: Checks if a sound is currently playing.
 End Rem
 Function IsSoundPlaying:Int(sound:RSound)
@@ -225,11 +234,8 @@ Function SetSoundPitch(sound:RSound, pitch:Float)
 	bmx_raylib_SetSoundPitch(sound, pitch)
 End Function
 
-Rem
-bbdoc: Converts wave data to desired format.
-End Rem
-Function WaveFormat(wave:RWave Var, sampleRate:Int, sampleSize:Int, channels:Int)
-	bmx_raylib_WaveFormat(wave, sampleRate, sampleSize, channels)
+Function SetSoundPan(sound:RSound, pan:Float)
+	bmx_raylib_SetSoundPan(sound, pan)
 End Function
 
 Rem
@@ -247,10 +253,21 @@ Function WaveCrop(wave:RWave Var, initSample:Int, finalSample:Int)
 End Function
 
 Rem
+bbdoc: Converts wave data to desired format.
+End Rem
+Function WaveFormat(wave:RWave Var, sampleRate:Int, sampleSize:Int, channels:Int)
+	bmx_raylib_WaveFormat(wave, sampleRate, sampleSize, channels)
+End Function
+
+Rem
 bbdoc: Gets samples data from wave as a floats array.
 End Rem
-Function GetWaveData:Float Ptr(wave:RWave)
-	Return bmx_raylib_GetWaveData(wave)
+Function LoadWaveSamples:Float Ptr(wave:RWave)
+	Return bmx_raylib_LoadWaveSamples(wave)
+End Function
+
+Function UnloadWaveSamples(data:Float Ptr)
+	bmx_raylib_UnloadWaveSamples(data)
 End Function
 
 ' Music management functions
@@ -262,6 +279,17 @@ Function LoadMusicStream:RMusic(filename:String)
 	Local music:RMusic = bmx_raylib_LoadMusicStream(f)
 	MemFree(f)
 	Return music
+End Function
+
+Function LoadMusicStreamFromMemory:RMusic(fileType:String, data:Byte Ptr, dataSize:Int)
+	Local f:Byte Ptr = fileType.ToUTF8String()
+	Local music:RMusic = bmx_raylib_LoadMusicStreamFromMemory(f, data, dataSize)
+	MemFree(f)
+	Return music
+End Function
+
+Function IsMusicValid:Int(music:RMusic)
+	Return bmx_raylib_IsMusicValid(music)
 End Function
 
 Rem
@@ -276,6 +304,10 @@ bbdoc: Starts music playing.
 End Rem
 Function PlayMusicStream(music:RMusic)
 	bmx_raylib_PlayMusicStream(music)
+End Function
+
+Function IsMusicStreamPlaying:Int(music:RMusic)
+	Return bmx_raylib_IsMusicStreamPlaying(music)
 End Function
 
 Rem
@@ -306,11 +338,8 @@ Function ResumeMusicStream(music:RMusic)
 	bmx_raylib_ResumeMusicStream(music)
 End Function
 
-Rem
-bbdoc: Checks if music is playing.
-End Rem
-Function IsMusicPlaying:Int(music:RMusic)
-	bmx_raylib_IsMusicPlaying(music)
+Function SeekMusicStream(music:RMusic, position:Float)
+	bmx_raylib_SeekMusicStream(music, position)
 End Function
 
 Rem
@@ -327,11 +356,8 @@ Function SetMusicPitch(music:RMusic, pitch:Float)
 	bmx_raylib_SetMusicPitch(music, pitch)
 End Function
 
-Rem
-bbdoc: Sets music loop count (loop repeats).
-End Rem
-Function SetMusicLoopCount(music:RMusic, count:Int)
-	bmx_raylib_SetMusicLoopCount(music, count)
+Function SetMusicPan(music:RMusic, pan:Float)
+	bmx_raylib_SetMusicPan(music, pan)
 End Function
 
 Rem
@@ -353,8 +379,22 @@ End Function
 Rem
 bbdoc: Inits audio stream (to stream raw audio pcm data).
 End Rem
-Function InitAudioStream:RAudioStream(sampleRate:UInt, sampleSize:UInt, channels:UInt)
-	Return bmx_raylib_InitAudioStream(sampleRate, sampleSize, channels)
+Function LoadAudioStream:RAudioStream(sampleRate:UInt, sampleSize:UInt, channels:UInt)
+	Return bmx_raylib_LoadAudioStream(sampleRate, sampleSize, channels)
+End Function
+
+Rem
+bbdoc: Checks if an audio stream is valid (buffers initialized).
+End Rem
+Function IsAudioStreamValid:Int(stream:RAudioStream)
+	Return bmx_raylib_IsAudioStreamValid(stream)
+End Function
+
+Rem
+bbdoc: Unloads audio stream and free memory.
+End Rem
+Function UnloadAudioStream(stream:RAudioStream)
+	bmx_raylib_UnloadAudioStream(stream)
 End Function
 
 Rem
@@ -362,13 +402,6 @@ bbdoc: Updates audio stream buffers with data.
 End Rem
 Function UpdateAudioStream(stream:RAudioStream, data:Byte Ptr, samplesCount:Int)
 	bmx_raylib_UpdateAudioStream(stream, data, samplesCount)
-End Function
-
-Rem
-bbdoc: Closes audio stream and free memory.
-End Rem
-Function CloseAudioStream(stream:RAudioStream)
-	bmx_raylib_CloseAudioStream(stream)
 End Function
 
 Rem
@@ -428,8 +461,50 @@ Function SetAudioStreamPitch(stream:RAudioStream, pitch:Float)
 End Function
 
 Rem
+bbdoc: Sets pan for audio stream (0.5 is centered).
+End Rem
+Function SetAudioStreamPan(stream:RAudioStream, pan:Float)
+	bmx_raylib_SetAudioStreamPan(stream, pan)
+End Function
+
+Rem
 bbdoc: Sets the default buffer size for new audio streams.
 End Rem
 Function SetAudioStreamBufferSizeDefault(size:Int)
 	bmx_raylib_SetAudioStreamBufferSizeDefault(size)
+End Function
+
+Rem
+bbdoc: Sets audio thread callback to request new data.
+End Rem
+Function SetAudioStreamCallback(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_SetAudioStreamCallback(stream, processor)
+End Function
+
+Rem
+bbdoc: Attaches audio stream processor to stream, receives the samples as 'float'.
+End Rem
+Function AttachAudioStreamProcessor(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_AttachAudioStreamProcessor(stream, processor)
+End Function
+
+Rem
+bbdoc: Detaches audio stream processor from stream.
+End Rem
+Function DetachAudioStreamProcessor(stream:RAudioStream, processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_DetachAudioStreamProcessor(stream, processor)
+End Function
+
+Rem
+bbdoc: Attaches audio stream processor to the entire audio pipeline, receives the samples as 'float'.
+End Rem
+Function AttachAudioMixedProcessor(processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_AttachAudioMixedProcessor(processor)
+End Function
+
+Rem
+bbdoc: Detaches audio stream processor from the entire audio pipeline.
+End Rem
+Function DetachAudioMixedProcessor(processor(data:Byte Ptr, frames:UInt))
+	bmx_raylib_DetachAudioMixedProcessor(processor)
 End Function

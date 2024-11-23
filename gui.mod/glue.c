@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2020 Bruce A Henderson
+  Copyright (c) 2024 Bruce A Henderson
 
   This software is provided 'as-is', without any express or implied
   warranty. In no event will the authors be held liable for any damages
@@ -23,3 +23,26 @@
 #define RAYGUI_IMPLEMENTATION
 #define RAYGUI_SUPPORT_ICONS
 #include "raygui.h"
+
+#include "brl.mod/blitz.mod/blitz.h"
+
+int bmx_raygui_GuiTabBar(Rectangle bounds, BBArray * p, int * active) {
+
+    int n=p->scales[0];
+	BBString **s=(BBString**)BBARRAYDATA( p,p->dims );
+
+    const char **text = (const char **)malloc(n * sizeof(char *));
+    for( int i=0;i<n;++i ){
+        text[i] = bbStringToUTF8String(s[i]);
+    }
+
+    int res = GuiTabBar(bounds, text, n, active);
+
+	for( int i=0;i<n;++i ){
+		bbMemFree( (void*)text[i] );
+	}
+
+    free( text );
+
+    return res;
+}

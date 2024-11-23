@@ -4,10 +4,12 @@
 *
 *   NOTE: Images are loaded in CPU memory (RAM); textures are loaded in GPU memory (VRAM)
 *
-*   This example has been created using raylib 1.4 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.4, last time updated with raylib 3.5
 *
-*   Copyright (c) 2016 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2016-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -15,7 +17,7 @@
 
 #include <stdlib.h>             // Required for: free()
 
-#define NUM_PROCESSES    8
+#define NUM_PROCESSES    9
 
 typedef enum {
     NONE = 0,
@@ -24,6 +26,7 @@ typedef enum {
     COLOR_INVERT,
     COLOR_CONTRAST,
     COLOR_BRIGHTNESS,
+    GAUSSIAN_BLUR,
     FLIP_VERTICAL,
     FLIP_HORIZONTAL
 } ImageProcess;
@@ -35,10 +38,14 @@ static const char *processText[] = {
     "COLOR INVERT",
     "COLOR CONTRAST",
     "COLOR BRIGHTNESS",
+    "GAUSSIAN BLUR",
     "FLIP VERTICAL",
     "FLIP HORIZONTAL"
 };
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -50,16 +57,19 @@ int main(void)
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
-    Image image = LoadImage("resources/parrots.png");   // Loaded in CPU memory (RAM)
-    ImageFormat(&image, UNCOMPRESSED_R8G8B8A8);         // Format image to RGBA 32bit (required for texture update) <-- ISSUE
-    Texture2D texture = LoadTextureFromImage(image);    // Image converted to texture, GPU memory (VRAM)
+    Image imOrigin = LoadImage("resources/parrots.png");   // Loaded in CPU memory (RAM)
+    ImageFormat(&imOrigin, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);         // Format image to RGBA 32bit (required for texture update) <-- ISSUE
+    Texture2D texture = LoadTextureFromImage(imOrigin);    // Image converted to texture, GPU memory (VRAM)
+
+    Image imCopy = ImageCopy(imOrigin);
 
     int currentProcess = NONE;
     bool textureReload = false;
 
-    Rectangle selectRecs[NUM_PROCESSES] = { 0 };
+    Rectangle toggleRecs[NUM_PROCESSES] = { 0 };
+    int mouseHoverRec = -1;
 
-    for (int i = 0; i < NUM_PROCESSES; i++) selectRecs[i] = (Rectangle){ 40.0f, (float)(50 + 32*i), 150.0f, 30.0f };
+    for (int i = 0; i < NUM_PROCESSES; i++) toggleRecs[i] = (Rectangle){ 40.0f, (float)(50 + 32*i), 150.0f, 30.0f };
 
     SetTargetFPS(60);
     //---------------------------------------------------------------------------------------
@@ -69,10 +79,29 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
+
+        // Mouse toggle group logic
+        for (int i = 0; i < NUM_PROCESSES; i++)
+        {
+            if (CheckCollisionPointRec(GetMousePosition(), toggleRecs[i]))
+            {
+                mouseHoverRec = i;
+
+                if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+                {
+                    currentProcess = i;
+                    textureReload = true;
+                }
+                break;
+            }
+            else mouseHoverRec = -1;
+        }
+
+        // Keyboard toggle group logic
         if (IsKeyPressed(KEY_DOWN))
         {
             currentProcess++;
-            if (currentProcess > 7) currentProcess = 0;
+            if (currentProcess > (NUM_PROCESSES - 1)) currentProcess = 0;
             textureReload = true;
         }
         else if (IsKeyPressed(KEY_UP))
@@ -82,29 +111,31 @@ int main(void)
             textureReload = true;
         }
 
+        // Reload texture when required
         if (textureReload)
         {
-            UnloadImage(image);                         // Unload current image data
-            image = LoadImage("resources/parrots.png"); // Re-load image data
+            UnloadImage(imCopy);                // Unload image-copy data
+            imCopy = ImageCopy(imOrigin);     // Restore image-copy from image-origin
 
             // NOTE: Image processing is a costly CPU process to be done every frame,
             // If image processing is required in a frame-basis, it should be done
             // with a texture and by shaders
             switch (currentProcess)
             {
-                case COLOR_GRAYSCALE: ImageColorGrayscale(&image); break;
-                case COLOR_TINT: ImageColorTint(&image, GREEN); break;
-                case COLOR_INVERT: ImageColorInvert(&image); break;
-                case COLOR_CONTRAST: ImageColorContrast(&image, -40); break;
-                case COLOR_BRIGHTNESS: ImageColorBrightness(&image, -80); break;
-                case FLIP_VERTICAL: ImageFlipVertical(&image); break;
-                case FLIP_HORIZONTAL: ImageFlipHorizontal(&image); break;
+                case COLOR_GRAYSCALE: ImageColorGrayscale(&imCopy); break;
+                case COLOR_TINT: ImageColorTint(&imCopy, GREEN); break;
+                case COLOR_INVERT: ImageColorInvert(&imCopy); break;
+                case COLOR_CONTRAST: ImageColorContrast(&imCopy, -40); break;
+                case COLOR_BRIGHTNESS: ImageColorBrightness(&imCopy, -80); break;
+                case GAUSSIAN_BLUR: ImageBlurGaussian(&imCopy, 10); break;
+                case FLIP_VERTICAL: ImageFlipVertical(&imCopy); break;
+                case FLIP_HORIZONTAL: ImageFlipHorizontal(&imCopy); break;
                 default: break;
             }
 
-            Color *pixels = GetImageData(image);        // Get pixel data from image (RGBA 32bit)
+            Color *pixels = LoadImageColors(imCopy);    // Load pixel data from image (RGBA 32bit)
             UpdateTexture(texture, pixels);             // Update texture with new image data
-            free(pixels);                               // Unload pixels data from RAM
+            UnloadImageColors(pixels);                  // Unload pixels data from RAM
 
             textureReload = false;
         }
@@ -121,9 +152,9 @@ int main(void)
             // Draw rectangles
             for (int i = 0; i < NUM_PROCESSES; i++)
             {
-                DrawRectangleRec(selectRecs[i], (i == currentProcess) ? SKYBLUE : LIGHTGRAY);
-                DrawRectangleLines((int)selectRecs[i].x, (int) selectRecs[i].y, (int) selectRecs[i].width, (int) selectRecs[i].height, (i == currentProcess) ? BLUE : GRAY);
-                DrawText( processText[i], (int)( selectRecs[i].x + selectRecs[i].width/2 - MeasureText(processText[i], 10)/2), (int) selectRecs[i].y + 11, 10, (i == currentProcess) ? DARKBLUE : DARKGRAY);
+                DrawRectangleRec(toggleRecs[i], ((i == currentProcess) || (i == mouseHoverRec)) ? SKYBLUE : LIGHTGRAY);
+                DrawRectangleLines((int)toggleRecs[i].x, (int) toggleRecs[i].y, (int) toggleRecs[i].width, (int) toggleRecs[i].height, ((i == currentProcess) || (i == mouseHoverRec)) ? BLUE : GRAY);
+                DrawText( processText[i], (int)( toggleRecs[i].x + toggleRecs[i].width/2 - MeasureText(processText[i], 10)/2), (int) toggleRecs[i].y + 11, 10, ((i == currentProcess) || (i == mouseHoverRec)) ? DARKBLUE : DARKGRAY);
             }
 
             DrawTexture(texture, screenWidth - texture.width - 60, screenHeight/2 - texture.height/2, WHITE);
@@ -136,7 +167,8 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadTexture(texture);       // Unload texture from VRAM
-    UnloadImage(image);           // Unload image from RAM
+    UnloadImage(imOrigin);        // Unload image-origin from RAM
+    UnloadImage(imCopy);          // Unload image-copy from RAM
 
     CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

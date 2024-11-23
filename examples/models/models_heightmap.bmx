@@ -10,7 +10,7 @@ Const screenHeight:Int = 450
 InitWindow(screenWidth, screenHeight, "raylib [models] example - heightmap loading and drawing")
 
 ' Define our custom camera to look into our 3d world
-Local camera:RCamera = New RCamera(New RVector3(18.0, 18.0, 18.0), New RVector3(0.0, 0.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, 0)
+Local camera:RCamera = New RCamera(New RVector3(18.0, 21.0, 18.0), New RVector3(0.0, 0.0, 0.0), New RVector3(0.0, 1.0, 0.0), 45.0, CAMERA_PERSPECTIVE)
 
 Local image:RImage = LoadImage("../../lib.mod/raylib/examples/models/resources/heightmap.png")             ' Load heightmap image (RAM)
 Local texture:RTexture2D = LoadTextureFromImage(image)                ' Convert image to texture (VRAM)
@@ -18,12 +18,10 @@ Local texture:RTexture2D = LoadTextureFromImage(image)                ' Convert 
 Local mesh:RMesh = GenMeshHeightmap(image, New RVector3(16, 8, 16))    ' Generate heightmap mesh (RAM and VRAM)
 Local model:RModel = LoadModelFromMesh(mesh)                          ' Load model from generated mesh
 
-model.materials[0].maps[MAP_DIFFUSE].texture = texture         ' Set map diffuse texture
+model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture         ' Set map diffuse texture
 Local mapPosition:RVector3 = New RVector3(-8.0, 0.0, -8.0)                   ' Define model position
 
 UnloadImage(image)                     ' Unload heightmap image from RAM, already uploaded to VRAM
-
-SetCameraMode(camera, CAMERA_ORBITAL)  ' Set an orbital camera mode
 
 SetTargetFPS(60)                       ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -32,7 +30,7 @@ SetTargetFPS(60)                       ' Set our game to run at 60 frames-per-se
 While Not WindowShouldClose()            ' Detect window close button or ESC key
 	' Update
 	'----------------------------------------------------------------------------------
-	UpdateCamera(camera)              ' Update camera
+	UpdateCamera(camera, CAMERA_ORBITAL)              ' Update camera
 	'----------------------------------------------------------------------------------
 
 	' Draw

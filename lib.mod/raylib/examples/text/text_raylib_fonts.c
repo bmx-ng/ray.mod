@@ -1,14 +1,16 @@
 /*******************************************************************************************
 *
-*   raylib [text] example - raylib font loading and usage
+*   raylib [text] example - raylib fonts loading
 *
 *   NOTE: raylib is distributed with some free to use fonts (even for commercial pourposes!)
 *         To view details and credits for those fonts, check raylib license file
 *
-*   This example has been created using raylib 1.7 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.7, last time updated with raylib 3.7
 *
-*   Copyright (c) 2017 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2017-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -16,6 +18,9 @@
 
 #define MAX_FONTS   8
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -52,8 +57,8 @@ int main(void)
 
     for (int i = 0; i < MAX_FONTS; i++)
     {
-        positions[i].x = screenWidth/2 - MeasureTextEx(fonts[i], messages[i], fonts[i].baseSize*2, spacings[i]).x/2;
-        positions[i].y = 60 + fonts[i].baseSize + 45*i;
+        positions[i].x = screenWidth/2.0f - MeasureTextEx(fonts[i], messages[i], fonts[i].baseSize*2.0f, (float)spacings[i]).x/2.0f;
+        positions[i].y = 60.0f + fonts[i].baseSize + 45.0f*i;
     }
 
     // Small Y position corrections
@@ -62,7 +67,7 @@ int main(void)
     positions[7].y -= 8;
 
     Color colors[MAX_FONTS] = { MAROON, ORANGE, DARKGREEN, DARKBLUE, DARKPURPLE, LIME, GOLD, RED };
-    
+
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
@@ -85,7 +90,7 @@ int main(void)
 
             for (int i = 0; i < MAX_FONTS; i++)
             {
-                DrawTextEx(fonts[i], messages[i], positions[i], fonts[i].baseSize*2, spacings[i], colors[i]);
+                DrawTextEx(fonts[i], messages[i], positions[i], fonts[i].baseSize*2.0f, (float)spacings[i], colors[i]);
             }
 
         EndDrawing();

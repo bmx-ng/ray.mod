@@ -1,18 +1,23 @@
 /*******************************************************************************************
 *
-*   raylib [textures] example - Retrieve image data from texture: GetTextureData()
+*   raylib [textures] example - Retrieve image data from texture: LoadImageFromTexture()
 *
 *   NOTE: Images are loaded in CPU memory (RAM); textures are loaded in GPU memory (VRAM)
 *
-*   This example has been created using raylib 1.3 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.3, last time updated with raylib 4.0
 *
-*   Copyright (c) 2015 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2015-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
 #include "raylib.h"
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -28,11 +33,13 @@ int main(void)
     Texture2D texture = LoadTextureFromImage(image);       // Image converted to texture, GPU memory (RAM -> VRAM)
     UnloadImage(image);                                    // Unload image data from CPU memory (RAM)
 
-    image = GetTextureData(texture);                       // Retrieve image data from GPU memory (VRAM -> RAM)
+    image = LoadImageFromTexture(texture);                 // Load image from GPU texture (VRAM -> RAM)
     UnloadTexture(texture);                                // Unload texture from GPU memory (VRAM)
 
     texture = LoadTextureFromImage(image);                 // Recreate texture from retrieved image data (RAM -> VRAM)
     UnloadImage(image);                                    // Unload retrieved image data from CPU memory (RAM)
+
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //---------------------------------------------------------------------------------------
 
     // Main game loop

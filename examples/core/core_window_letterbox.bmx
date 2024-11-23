@@ -1,6 +1,7 @@
 SuperStrict
 
 Framework Ray.Lib
+Import Ray.Math
 Import Text.Format
 
 Local defFormatter:TFormatter = TFormatter.Create("Default Mouse: [%i , %i]")
@@ -19,7 +20,7 @@ Local gameScreenHeight:Int = 480
 
 ' Render texture initialization, used to hold the rendering result so we can easily resize it
 Local target:RRenderTexture2D = LoadRenderTexture(gameScreenWidth, gameScreenHeight)
-SetTextureFilter(target.texture, FILTER_BILINEAR)  ' Texture scale filter to use
+SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR)  ' Texture scale filter to use
 
 Local colors:RColor[10]
 For Local i:Int = 0 Until 10
@@ -49,28 +50,28 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 	Local virtualMouse:RVector2
 	virtualMouse.x = (mouse.x - (GetScreenWidth() - (gameScreenWidth * scale)) * 0.5) / scale
 	virtualMouse.y = (mouse.y - (GetScreenHeight() - (gameScreenHeight * scale)) * 0.5) / scale
-	virtualMouse = ClampValue(virtualMouse, New RVector2(0, 0), New RVector2(gameScreenWidth, gameScreenHeight)) 
+	virtualMouse = Vector2Clamp(virtualMouse, New RVector2(0, 0), New RVector2(gameScreenWidth, gameScreenHeight)) 
 	
 	' Draw
 	'----------------------------------------------------------------------------------
+	' Draw everything in the render texture, note this will not be rendered on screen, yet
+	BeginTextureMode(target)
+
+		ClearBackground(RAYWHITE)         ' Clear render texture background color
+
+		For Local i:Int = 0 Until 10
+			DrawRectangle(0, (gameScreenHeight / 10) * i, gameScreenWidth, gameScreenHeight / 10, colors[i])
+		Next
+
+		DrawText("If executed inside a window,~nyou can resize the window,~nand see the screen scaling!", 10, 25, 20, WHITE)
+
+		DrawText(defFormatter.Clear().Arg(Int(mouse.x)).Arg(Int(mouse.y)).Format(), 350, 25, 20, GREEN)
+		DrawText(virFormatter.Clear().Arg(Int(virtualMouse.x)).Arg(Int(virtualMouse.y)).Format(), 350, 55, 20, YELLOW)
+
+	EndTextureMode()
+
 	BeginDrawing()
 		ClearBackground(BLACK)
-
-		' Draw everything in the render texture, note this will not be rendered on screen, yet
-		BeginTextureMode(target)
-
-			ClearBackground(RAYWHITE)         ' Clear render texture background color
-
-			For Local i:Int = 0 Until 10
-				DrawRectangle(0, (gameScreenHeight / 10) * i, gameScreenWidth, gameScreenHeight / 10, colors[i])
-			Next
-
-			DrawText("If executed inside a window,~nyou can resize the window,~nand see the screen scaling!", 10, 25, 20, WHITE)
-
-			DrawText(defFormatter.Clear().Arg(Int(mouse.x)).Arg(Int(mouse.y)).Format(), 350, 25, 20, GREEN)
-			DrawText(virFormatter.Clear().Arg(Int(virtualMouse.x)).Arg(Int(virtualMouse.y)).Format(), 350, 55, 20, YELLOW)
-
-		EndTextureMode()
 
 		' Draw RenderTexture2D to window, properly scaled
 		DrawTexturePro(target.texture, ..
@@ -89,26 +90,3 @@ UnloadRenderTexture(target)    ' Unload render texture
 CloseWindow()                  ' Close window and OpenGL context
 '--------------------------------------------------------------------------------------
 
-' Clamp Vector2 value with min and max and return a new vector2
-' NOTE: Required for virtual mouse, to clamp inside virtual game size
-Function ClampValue:RVector2(value:RVector2, minimum:RVector2, maximum:RVector2)
-	Local result:RVector2 = value
-
-	If result.x > maximum.x Then
-		result.x = maximum.x
-	End If
-	
-	If result.x < minimum.x Then
-		result.x = minimum.x
-	End If
-	
-	If result.y > maximum.y Then
-		result.y = maximum.y
-	End If
-	
-	If result.y < minimum.y Then
-		result.y = minimum.y
-	End If
-
-	Return result
-End Function

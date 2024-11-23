@@ -12,7 +12,7 @@ InitWindow(screenWidth, screenHeight, "raylib [textures] example - texture from 
 ' NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
 ' Load RAW image data (512x512, 32bit RGBA, no file header)
-Local fudesumiRaw:RImage = LoadImageRaw("../../lib.mod/raylib/examples/textures/resources/fudesumi.raw", 384, 512, UNCOMPRESSED_R8G8B8A8, 0)
+Local fudesumiRaw:RImage = LoadImageRaw("../../lib.mod/raylib/examples/textures/resources/fudesumi.raw", 384, 512, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 0)
 Local fudesumi:RTexture2D = LoadTextureFromImage(fudesumiRaw)  ' Upload CPU (RAM) image to GPU (VRAM)
 UnloadImage(fudesumiRaw)                                ' Unload CPU (RAM) image data
 
@@ -34,9 +34,9 @@ For Local y:Int = 0 Until height
 Next
 
 ' Load pixels data into an image structure and create texture
-Local checkedIm:RImage = LoadImageEx(pixels, width, height)
+Local checkedIm:RImage = New RImage(pixels, width, height, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8) ' We can assign pixels directly to data
 Local checked:RTexture2D = LoadTextureFromImage(checkedIm)
-UnloadImage(checkedIm)         ' Unload CPU (RAM) image data
+'UnloadImage(checkedIm)         ' Unload CPU (RAM) image data
 
 
 '---------------------------------------------------------------------------------------

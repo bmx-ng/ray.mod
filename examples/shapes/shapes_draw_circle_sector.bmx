@@ -12,9 +12,10 @@ InitWindow(screenWidth, screenHeight, "raylib [shapes] example - draw circle sec
 Local center:RVector2 = New RVector2((GetScreenWidth() - 300)/2, GetScreenHeight()/2)
 
 Local outerRadius:Float = 180
-Local startAngle:Int = 0
-Local endAngle:Int = 180
-Local segments:Int = 0
+Local startAngle:Float = 0
+Local endAngle:Float = 180
+Local segments:Float = 10
+Local minSegments:Int = 4
 
 SetTargetFPS(60)               ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -35,21 +36,22 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 		DrawLine(500, 0, 500, GetScreenHeight(), Fade(LIGHTGRAY, 0.6))
 		DrawRectangle(500, 0, GetScreenWidth() - 500, GetScreenHeight(), Fade(LIGHTGRAY, 0.3))
 
-		DrawCircleSector(center, outerRadius, startAngle, endAngle, segments, Fade(MAROON, 0.3))
-		DrawCircleSectorLines(center, outerRadius, startAngle, endAngle, segments, Fade(MAROON, 0.6))
+		DrawCircleSector(center, outerRadius, startAngle, endAngle, Int(segments), Fade(MAROON, 0.3))
+		DrawCircleSectorLines(center, outerRadius, startAngle, endAngle, Int(segments), Fade(MAROON, 0.6))
 		
 		' Draw GUI controls
 		'------------------------------------------------------------------------------
-		startAngle = GuiSliderBar(New RRectangle(600, 40, 120, 20), "StartAngle", "", startAngle, 0, 720)
-		endAngle = GuiSliderBar(New RRectangle(600, 70, 120, 20), "EndAngle", "", endAngle, 0, 720)
+		GuiSliderBar(New RRectangle(600, 40, 120, 20), "StartAngle", "", startAngle, 0, 720)
+		GuiSliderBar(New RRectangle(600, 70, 120, 20), "EndAngle", "", endAngle, 0, 720)
 		
-		outerRadius = GuiSliderBar(New RRectangle( 600, 140, 120, 20), "Radius", "", outerRadius, 0, 200)
-		segments = GuiSliderBar(New RRectangle(600, 170, 120, 20), "Segments", "", segments, 0, 100)
+		GuiSliderBar(New RRectangle( 600, 140, 120, 20), "Radius", "", outerRadius, 0, 200)
+		GuiSliderBar(New RRectangle(600, 170, 120, 20), "Segments", "", segments, 0, 100)
 		'------------------------------------------------------------------------------
 		
+		minSegments = Int(Int((endAngle - startAngle) / 90))
 		Local col:RColor
 		Local txt:String
-		If segments >= 4 Then
+		If segments >= minSegments Then
 			txt = "MODE: MANUAL"
 			col = MAROON
 		Else

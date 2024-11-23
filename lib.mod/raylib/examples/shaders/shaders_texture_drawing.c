@@ -2,14 +2,16 @@
 *
 *   raylib [textures] example - Texture drawing
 *
-*   This example illustrates how to draw on a blank texture using a shader
+*   NOTE: This example illustrates how to draw into a blank texture using a shader
 *
-*   This example has been created using raylib 2.0 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.0, last time updated with raylib 3.7
 *
 *   Example contributed by Michał Ciesielski and reviewed by Ramon Santamaria (@raysan5)
 *
-*   Copyright (c) 2019 Michał Ciesielski and Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2019-2024 Michał Ciesielski and Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -17,10 +19,13 @@
 
 #if defined(PLATFORM_DESKTOP)
     #define GLSL_VERSION            330
-#else   // PLATFORM_RPI, PLATFORM_ANDROID, PLATFORM_WEB
+#else   // PLATFORM_ANDROID, PLATFORM_WEB
     #define GLSL_VERSION            100
 #endif
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -35,11 +40,11 @@ int main(void)
     UnloadImage(imBlank);
 
     // NOTE: Using GLSL 330 shader version, on OpenGL ES 2.0 use GLSL 100 shader version
-    Shader shader = LoadShader(0, FormatText("resources/shaders/glsl%i/cubes_panning.fs", GLSL_VERSION));
+    Shader shader = LoadShader(0, TextFormat("resources/shaders/glsl%i/cubes_panning.fs", GLSL_VERSION));
 
     float time = 0.0f;
     int timeLoc = GetShaderLocation(shader, "uTime");
-    SetShaderValue(shader, timeLoc, &time, UNIFORM_FLOAT);
+    SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     // -------------------------------------------------------------------------------------------------------------
@@ -49,8 +54,8 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        time = GetTime();
-        SetShaderValue(shader, timeLoc, &time, UNIFORM_FLOAT);
+        time = (float)GetTime();
+        SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -72,6 +77,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadShader(shader);
+    UnloadTexture(texture);
 
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

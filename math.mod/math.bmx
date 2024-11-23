@@ -1,4 +1,4 @@
-' Copyright (c) 2020 Bruce A Henderson
+' Copyright (c) 2024 Bruce A Henderson
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -28,8 +28,8 @@ Module Ray.Math
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2020 Bruce A Henderson"
-ModuleInfo "Copyright: raylib - 2013-2020 Ramon Santamaria"
+ModuleInfo "Copyright: Wrapper - 2024 Bruce A Henderson"
+ModuleInfo "Copyright: raylib - 2013-2024 Ramon Santamaria"
 
 ModuleInfo "History: 1.00"
 ModuleInfo "History: Initial Release."
@@ -72,6 +72,24 @@ Function Lerp:Float(s:Float, e:Float, amount:Float)
 	Return bmx_raymath_Lerp(s, e, amount)
 End Function
 
+Function Normalize:Float(value:Float, s:Float, e:Float)
+	Return bmx_raymath_Normalize(value, s, e)
+End Function
+
+Function Remap:Float(value:Float, inputStart:Float, inputEnd:Float, outputStart:Float, outputEnd:Float)
+	Return bmx_raymath_Remap(value, inputStart, inputEnd, outputStart, outputEnd)
+End Function
+
+Function Wrap:Float(value:Float, mininum:Float, maximum:Float)
+	Return bmx_raymath_Wrap(value, mininum, maximum)
+End Function
+
+Function FloatEquals:Int(x:Float, y:Float)
+	Return bmx_raymath_FloatEquals(x, y)
+End Function
+
+' Vector2 math
+
 Rem
 bbdoc: #RVector with components value 0.0.
 End Rem
@@ -94,6 +112,13 @@ Function Vector2Add:RVector2(v1:RVector2, v2:RVector2)
 End Function
 
 Rem
+bbdoc: Adds vector and float value.
+End Rem
+Function Vector2AddValue:RVector2(v:RVector2, value:Float)
+	Return bmx_raymath_Vector2AddValue(v, value)
+End Function
+
+Rem
 bbdoc: Subtracts two vectors `(v1 - v2)`.
 End Rem
 Function Vector2Subtract:RVector2(v1:RVector2, v2:RVector2)
@@ -101,10 +126,24 @@ Function Vector2Subtract:RVector2(v1:RVector2, v2:RVector2)
 End Function
 
 Rem
+bbdoc: Subtracts vector by float value.
+End Rem
+Function Vector2SubtractValue:RVector2(v:RVector2, value:Float)
+	Return bmx_raymath_Vector2SubtractValue(v, value)
+End Function
+
+Rem
 bbdoc: Calculates vector length.
 End Rem
 Function Vector2Length:Float(v:RVector2)
 	Return bmx_raymath_Vector2Length(v)
+End Function
+
+Rem
+bbdoc: Calculates vector square length.
+End Rem
+Function Vector2LengthSqr:Float(v:RVector2)
+	Return bmx_raymath_Vector2LengthSqr(v)
 End Function
 
 Rem
@@ -119,6 +158,13 @@ bbdoc: Calculates distance between two vectors.
 End Rem
 Function Vector2Distance:Float(v1:RVector2, v2:RVector2)
 	Return bmx_raymath_Vector2Distance(v1, v2)
+End Function
+
+Rem
+bbdoc: Calculates square distance between two vectors.
+End Rem
+Function Vector2DistanceSqr:Float(v1:RVector2, v2:RVector2)
+	Return bmx_raymath_Vector2DistanceSqr(v1, v2)
 End Function
 
 Rem
@@ -138,8 +184,8 @@ End Function
 Rem
 bbdoc: Multiplies vector by vector.
 End Rem
-Function Vector2MultiplyV:RVector2(v1:RVector2, v2:RVector2)
-	Return bmx_raymath_Vector2MultiplyV(v1, v2)
+Function Vector2Multiply:RVector2(v1:RVector2, v2:RVector2)
+	Return bmx_raymath_Vector2Multiply(v1, v2)
 End Function
 
 Rem
@@ -150,17 +196,10 @@ Function Vector2Negate:RVector2(v:RVector2)
 End Function
 
 Rem
-bbdoc: Divides vector by a #Float value.
-End Rem
-Function Vector2Divide:RVector2(v:RVector2, div:Float)
-	Return bmx_raymath_Vector2Divide(v, div)
-End Function
-
-Rem
 bbdoc: Divides vector by vector.
 End Rem
-Function Vector2DivideV:RVector2(v1:RVector2, v2:RVector2)
-	Return bmx_raymath_Vector2DivideV(v1, v2)
+Function Vector2Divide:RVector2(v1:RVector2, v2:RVector2)
+	Return bmx_raymath_Vector2Divide(v1, v2)
 End Function
 
 Rem
@@ -178,11 +217,55 @@ Function Vector2Lerp:RVector2(v1:RVector2, v2:RVector2, amount:Float)
 End Function
 
 Rem
+bbdoc: Calculates reflected vector to normal.
+End Rem
+Function Vector2Reflect:RVector2(v:RVector2, normal:RVector2)
+	Return bmx_raymath_Vector2Reflect(v, normal)
+End Function
+
+Rem
 bbdoc: Rotates Vector by float in Degrees.
 End Rem
 Function Vector2Rotate:RVector2(v:RVector2, degs:Float)
 	Return bmx_raymath_Vector2Rotate(v, degs)
 End Function
+
+Rem
+bbdoc: Moves Vector towards target.
+End Rem
+Function Vector2MoveTowards:RVector2(v:RVector2, target:RVector2, maxDistance:Float)
+	Return bmx_raymath_Vector2MoveTowards(v, target, maxDistance)
+End Function
+
+Rem
+bbdoc: Returns the invrse of the vector.
+End Rem
+Function Vector2Invert:RVector2(v:RVector2)
+	Return bmx_raymath_Vector2Invert(v)
+End Function
+
+Rem
+bbdoc: Clamps the vector between @minimum and @maximum.
+End Rem
+Function Vector2Clamp:RVector2(v:RVector2, minimum:RVector2, maximum:RVector2)
+	Return bmx_raymath_Vector2Clamp(v, minimum, maximum)
+End Function
+
+Rem
+bbdoc: Clamps the vector between @minimum and @maximum.
+End Rem
+Function Vector2ClampValue:RVector2(v:RVector2, minimum:Float, maximum:Float)
+	Return bmx_raymath_Vector2ClampValue(v, minimum, maximum)
+End Function
+
+Rem
+bbdoc: Returns whether the two vectors are equal.
+End Rem
+Function Vector2Equals:Int(v1:RVector2, v2:RVector2)
+	Return bmx_raymath_Vector2Equals(v1, v2)
+End Function
+
+' Vector3 math
 
 Rem
 bbdoc: #RVector3 with components value 0.0.
@@ -205,11 +288,19 @@ Function Vector3Add:RVector3(v1:RVector3, v2:RVector3)
 	Return bmx_raymath_Vector3Add(v1, v2)
 End Function
 
+Function Vector3AddValue:RVector3(v:RVector3, add:Float)
+	Return bmx_raymath_Vector3AddValue(v, add)
+End Function
+
 Rem
 bbdoc: Subtracts two vectors.
 End Rem
 Function Vector3Subtract:RVector3(v1:RVector3, v2:RVector3)
 	Return bmx_raymath_Vector3Subtract(v1, v2)
+End Function
+
+Function Vector3SubtractValue:RVector3(v:RVector3, sub:Float)
+	Return bmx_raymath_Vector3SubtractValue(v, sub)
 End Function
 
 Rem
@@ -247,6 +338,10 @@ Function Vector3Length:Float(v:RVector3)
 	Return bmx_raymath_Vector3Length(v)
 End Function
 
+Function Vector3LengthSqr:Float(v:RVector3)
+	Return bmx_raymath_Vector3LengthSqr(v)
+End Function
+
 Rem
 bbdoc: Calculates two vectors dot product.
 End Rem
@@ -261,6 +356,14 @@ Function Vector3Distance:Float(v1:RVector3, v2:RVector3)
 	Return bmx_raymath_Vector3Distance(v1, v2)
 End Function
 
+Function Vector3DistanceSqr:Float(v1:RVector3, v2:RVector3)
+	Return bmx_raymath_Vector3DistanceSqr(v1, v2)
+End Function
+
+Function Vector3Angle:Float(v1:RVector3, v2:RVector3)
+	Return bmx_raymath_Vector3Angle(v1, v2)
+End Function
+
 Rem
 bbdoc: Negates provided vector (invert direction).
 End Rem
@@ -269,17 +372,10 @@ Function Vector3Negate:RVector3(v:RVector3)
 End Function
 
 Rem
-bbdoc: Divides vector by a #Float value.
-End Rem
-Function Vector3Divide:RVector3(v:RVector3, div:Float)
-	Return bmx_raymath_Vector3Divide(v, div)
-End Function
-
-Rem
 bbdoc: Divides vector by vector.
 End Rem
-Function Vector3DivideV:RVector3(v1:RVector3, v2:RVector3)
-	Return bmx_raymath_Vector3DivideV(v1, v2)
+Function Vector3Divide:RVector3(v1:RVector3, v2:RVector3)
+	Return bmx_raymath_Vector3Divide(v1, v2)
 End Function
 
 Rem
@@ -309,6 +405,10 @@ bbdoc: Transforms a vector by quaternion rotation.
 End Rem
 Function Vector3RotateByQuaternion:RVector3(v:RVector3, q:RQuaternion)
 	Return bmx_raymath_Vector3RotateByQuaternion(v, q)
+End Function
+
+Function Vector3RotateByAxisAngle:RVector3(v:RVector3, axis:RVector3, angle:Float)
+	Return bmx_raymath_Vector3RotateByAxisAngle(v, axis, angle)
 End Function
 
 Rem
@@ -348,6 +448,10 @@ Function Vector3Barycenter:RVector3(p:RVector3, a:RVector3, b:RVector3, c:RVecto
 	Return bmx_raymath_Vector3Barycenter(p, a, b, c)
 End Function
 
+Function Vector3Unproject:RVector3(source:RVector3, projection:RMatrix, view:RMatrix)
+	Return bmx_raymath_Vector3Unproject(source, projection, view)
+End Function
+
 Rem
 bbdoc: Returns Vector3 as float array.
 End Rem
@@ -355,6 +459,25 @@ Function Vector3ToFloatV:RVector3(v:RVector3)
 	Return bmx_raymath_Vector3ToFloatV(v)
 End Function
 
+Function Vector3Invert:RVector3(v:RVector3)
+	Return bmx_raymath_Vector3Invert(v)
+End Function
+
+Function Vector3Clamp:RVector3(v:RVector3, minimum:RVector3, maximum:RVector3)
+	Return bmx_raymath_Vector3Clamp(v, minimum, maximum)
+End Function
+
+Function Vector3ClampValue:RVector3(v:RVector3, minimum:Float, maximum:Float)
+	Return bmx_raymath_Vector3ClampValue(v, minimum, maximum)
+End Function
+
+Function Vector3Equals:Int(v1:RVector3, v2:RVector3)
+	Return bmx_raymath_Vector3Equals(v1, v2)
+End Function
+
+Function Vector3Refract:RVector3(v:RVector3, n:RVector3, r:Float)
+	Return bmx_raymath_Vector3Refract(v, n, r)
+End Function
 
 Rem
 bbdoc: Computes matrix determinant.
@@ -382,13 +505,6 @@ bbdoc: Inverts provided matrix.
 End Rem
 Function MatrixInvert:RMatrix(mat:RMatrix)
 	Return bmx_raymath_MatrixInvert(mat)
-End Function
-
-Rem
-bbdoc: Normalizes provided matrix.
-End Rem
-Function MatrixNormalize:RMatrix(mat:RMatrix)
-	Return bmx_raymath_MatrixNormalize(mat)
 End Function
 
 Rem
@@ -430,7 +546,7 @@ Rem
 bbdoc: Returns xyz-rotation matrix.
 End Rem
 Function MatrixRotateXYZ:RMatrix(ang:RVector3)
-	Return bmx_raymath_MatrixRotateXYZ(New RVector3(ang.x * 0.0174533, ang.y * 0.0174533, ang.z * 0.0174533))
+	Return bmx_raymath_MatrixRotateXYZ(ang)
 End Function
 
 Rem

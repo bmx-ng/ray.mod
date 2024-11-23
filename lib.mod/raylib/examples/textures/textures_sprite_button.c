@@ -2,10 +2,12 @@
 *
 *   raylib [textures] example - sprite button
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 2.5, last time updated with raylib 2.5
 *
-*   Copyright (c) 2019 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2019-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -13,6 +15,9 @@
 
 #define NUM_FRAMES  3       // Number of frames (rectangles) for the button sprite texture
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -28,11 +33,11 @@ int main(void)
     Texture2D button = LoadTexture("resources/button.png"); // Load button texture
 
     // Define frame rectangle for drawing
-    int frameHeight = button.height/NUM_FRAMES;
-    Rectangle sourceRec = { 0, 0, button.width, frameHeight };
+    float frameHeight = (float)button.height/NUM_FRAMES;
+    Rectangle sourceRec = { 0, 0, (float)button.width, frameHeight };
 
     // Define button bounds on screen
-    Rectangle btnBounds = { screenWidth/2 - button.width/2, screenHeight/2 - button.height/NUM_FRAMES/2, button.width, frameHeight };
+    Rectangle btnBounds = { screenWidth/2.0f - button.width/2.0f, screenHeight/2.0f - button.height/NUM_FRAMES/2.0f, (float)button.width, frameHeight };
 
     int btnState = 0;               // Button state: 0-NORMAL, 1-MOUSE_HOVER, 2-PRESSED
     bool btnAction = false;         // Button action should be activated
@@ -53,10 +58,10 @@ int main(void)
         // Check button state
         if (CheckCollisionPointRec(mousePoint, btnBounds))
         {
-            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) btnState = 2;
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) btnState = 2;
             else btnState = 1;
 
-            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) btnAction = true;
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
         }
         else btnState = 0;
 

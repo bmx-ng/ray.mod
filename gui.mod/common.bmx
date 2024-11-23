@@ -1,4 +1,4 @@
-' Copyright (c) 2020 Bruce A Henderson
+' Copyright (c) 2024 Bruce A Henderson
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -30,8 +30,9 @@ Extern
 	Function bmx_raygui_GuiDisable()="GuiDisable"
 	Function bmx_raygui_GuiLock()="GuiLock"
 	Function bmx_raygui_GuiUnlock()="GuiUnlock"
-	Function bmx_raygui_GuiFade(alpha:Float)="GuiFade"
-
+	Function bmx_raygui_GuiIsLocked:Int()="GuiIsLocked"
+	Function bmx_raygui_GuiSetAlpha(alpha:Float)="GuiSetAlpha"
+	' Function bmx_raygui_GuiFade(alpha:Float)="GuiFade"
 	Function bmx_raygui_GuiSetState(state:Int)="GuiSetState"
 	Function bmx_raygui_GuiGetState:Int()="GuiGetState"
 
@@ -41,48 +42,59 @@ Extern
 	Function bmx_raygui_GuiSetStyle(control:Int, property:Int, value:Int)="GuiSetStyle"
 	Function bmx_raygui_GuiGetStyle:Int(control:Int, property:Int)="GuiGetStyle"
 
+	Function bmx_raygui_GuiLoadStyle(fileName:Byte Ptr)="GuiLoadStyle"
+	Function bmx_raygui_GuiLoadStyleDefault()="GuiLoadStyleDefault"		
+	
+	Function bmx_raygui_GuiEnableTooltip()="GuiEnableTooltip"
+	Function bmx_raygui_GuiDisableTooltip()="GuiDisableTooltip"
+	Function bmx_raygui_GuiSetTooltip(text:Byte Ptr)="GuiSetTooltip"
+
+	Function bmx_raygui_GuiIconText:Byte Ptr(iconId:Int, txt:Byte Ptr)="GuiIconText"
+	Function bmx_raygui_GuiDrawIcon(iconId:Int, position:RVector2, pixelSize:Int, color:RColor)="GuiDrawIcon"
+		
 	Function bmx_raygui_GuiWindowBox:Int(bounds:RRectangle, title:Byte Ptr)="GuiWindowBox"
 	Function bmx_raygui_GuiGroupBox(bounds:RRectangle, txt:Byte Ptr)="GuiGroupBox"
 	Function bmx_raygui_GuiLine(bounds:RRectangle, txt:Byte Ptr)="GuiLine"
 	Function bmx_raygui_GuiPanel(bounds:RRectangle)="GuiPanel"
+	Function bmx_raygui_GuiTabBar:Int(bounds:RRectangle, tabs:String[], active:Int Var)
 	Function bmx_raygui_GuiScrollPanel:RRectangle(bounds:RRectangle, content:RRectangle, scroll:RVector2 Var)="GuiScrollPanel"
 
 	Function bmx_raygui_GuiLabel(bounds:RRectangle, txt:Byte Ptr)="GuiLabel"
 	Function bmx_raygui_GuiButton:Int(bounds:RRectangle, txt:Byte Ptr)="GuiButton"
 	Function bmx_raygui_GuiLabelButton:Int(bounds:RRectangle, txt:Byte Ptr)="GuiLabelButton"
-	Function bmx_raygui_GuiImageButton:Int(bounds:RRectangle, txt:Byte Ptr, texture:RTexture2D)="GuiImageButton"
-	Function bmx_raygui_GuiImageButtonEx:Int(bounds:RRectangle, txt:Byte Ptr, texture:RTexture2D, texSource:RRectangle)="GuiImageButtonEx"
-	Function bmx_raygui_GuiToggle:Int(bounds:RRectangle, txt:Byte Ptr, active:Int)="GuiToggle"
-	Function bmx_raygui_GuiToggleGroup:Int(bounds:RRectangle, txt:Byte Ptr, active:Int)="GuiToggleGroup"
-	Function bmx_raygui_GuiCheckBox:Int(bounds:RRectangle, txt:Byte Ptr, checked:Int)="GuiCheckBox"
-	Function bmx_raygui_GuiComboBox:Int(bounds:RRectangle, txt:Byte Ptr, active:Int)="GuiComboBox"
+	' Function bmx_raygui_GuiImageButton:Int(bounds:RRectangle, txt:Byte Ptr, texture:RTexture2D)="GuiImageButton"
+	' Function bmx_raygui_GuiImageButtonEx:Int(bounds:RRectangle, txt:Byte Ptr, texture:RTexture2D, texSource:RRectangle)="GuiImageButtonEx"
+	Function bmx_raygui_GuiToggle:Int(bounds:RRectangle, txt:Byte Ptr, active:Int Var)="GuiToggle"
+	Function bmx_raygui_GuiToggleGroup:Int(bounds:RRectangle, txt:Byte Ptr, active:Int Var)="GuiToggleGroup"
+	Function bmx_raygui_GuiToggleSlider:Int(bounds:RRectangle, txt:Byte Ptr, active:Int Var)="GuiToggleSlider"
+	Function bmx_raygui_GuiCheckBox:Int(bounds:RRectangle, txt:Byte Ptr, checked:Int Var)="GuiCheckBox"
+	Function bmx_raygui_GuiComboBox:Int(bounds:RRectangle, txt:Byte Ptr, active:Int Var)="GuiComboBox"
+
 	Function bmx_raygui_GuiDropdownBox:Int(bounds:RRectangle, txt:Byte Ptr, active:Int Var, editMode:Int)="GuiDropdownBox"
 	Function bmx_raygui_GuiSpinner:Int(bounds:RRectangle, txt:Byte Ptr, value:Int Var, minValue:Int, maxValue:Int, editMode:Int)="GuiSpinner"
 	Function bmx_raygui_GuiValueBox:Int(bounds:RRectangle, txt:Byte Ptr, value:Int Var, minValue:Int, maxValue:Int, editMode:Int)="GuiValueBox"
+	Function bmx_raygui_GuiValueBoxFloat:Int(bounds:RRectangle, txt:Byte Ptr, textValue:Byte Ptr, value:Float Var, editMode:Int)="GuiValueBoxFloat"
 	Function bmx_raygui_GuiTextBox:Int(bounds:RRectangle, txt:Byte Ptr, textSize:Int, editMode:Int)="GuiTextBox"
-	Function bmx_raygui_GuiTextBoxMulti:Int(bounds:RRectangle, txt:Byte Ptr, textSize:Int, editMode:Int)="GuiTextBoxMulti"
-	Function bmx_raygui_GuiSlider:Float(bounds:RRectangle, txtLeft:Byte Ptr, txtRight:Byte Ptr, value:Float, minValue:Float, maxValue:Float)="GuiSlider"
-	Function bmx_raygui_GuiSliderBar:Float(bounds:RRectangle, txtLeft:Byte Ptr, txtRight:Byte Ptr, value:Float, minValue:Float, maxValue:Float)="GuiSliderBar"
-	Function bmx_raygui_GuiProgressBar:Float(bounds:RRectangle, txtLeft:Byte Ptr, txtRight:Byte Ptr, value:Float, minValue:Float, maxValue:Float)="GuiProgressBar"
+
+	' Function bmx_raygui_GuiTextBoxMulti:Int(bounds:RRectangle, txt:Byte Ptr, textSize:Int, editMode:Int)="GuiTextBoxMulti"
+	Function bmx_raygui_GuiSlider:Int(bounds:RRectangle, txtLeft:Byte Ptr, txtRight:Byte Ptr, value:Float Var, minValue:Float, maxValue:Float)="GuiSlider"
+	Function bmx_raygui_GuiSliderBar:Int(bounds:RRectangle, txtLeft:Byte Ptr, txtRight:Byte Ptr, value:Float Var, minValue:Float, maxValue:Float)="GuiSliderBar"
+	Function bmx_raygui_GuiProgressBar:Int(bounds:RRectangle, txtLeft:Byte Ptr, txtRight:Byte Ptr, value:Float Var, minValue:Float, maxValue:Float)="GuiProgressBar"
 	Function bmx_raygui_GuiStatusBar(bounds:RRectangle, txt:Byte Ptr)="GuiStatusBar"
 	Function bmx_raygui_GuiDummyRec(bounds:RRectangle, txt:Byte Ptr)="GuiDummyRec"
-	Function bmx_raygui_GuiScrollBar:Int(bounds:RRectangle, value:Int, minValue:Int, maxValue:Int)="GuiScrollBar"
+	' Function bmx_raygui_GuiScrollBar:Int(bounds:RRectangle, value:Int, minValue:Int, maxValue:Int)="GuiScrollBar"
 	Function bmx_raygui_GuiGrid:RVector2(bounds:RRectangle, spacing:Float, subdivs:Int)="GuiGrid"
 
-	Function bmx_raygui_GuiListView:Int(bounds:RRectangle, txt:Byte Ptr, scrollIndex:Int Var, active:Int)="GuiListView"
+	Function bmx_raygui_GuiListView:Int(bounds:RRectangle, txt:Byte Ptr, scrollIndex:Int Var, active:Int Var)="GuiListView"
 	Function bmx_raygui_GuiListViewEx:Int(bounds:RRectangle, txt:Size_T Ptr, count:Int, focus:Int Var, scrollIndex:Int Var, active:Int)="GuiListViewEx"
 	Function bmx_raygui_GuiMessageBox:Int(bounds:RRectangle, title:Byte Ptr, message:Byte Ptr, buttons:Byte Ptr)="GuiMessageBox"
-	Function bmx_raygui_GuiColorPicker:RColor(bounds:RRectangle, color:RColor)="GuiColorPicker"
-	Function bmx_raygui_GuiTextInputBox:Int(bounds:RRectangle, title:Byte Ptr, message:Byte Ptr, buttons:Byte Ptr, txt:Byte Ptr)="GuiTextInputBox"
-
-	Function bmx_raygui_GuiLoadStyle(fileName:Byte Ptr)="GuiLoadStyle"
-	Function bmx_raygui_GuiLoadStyleDefault()="GuiLoadStyleDefault"
-
-	Function bmx_raygui_GuiIconText:Byte Ptr(iconId:Int, txt:Byte Ptr)="GuiIconText"
-	Function bmx_raygui_GuiDrawIcon(iconId:Int, position:RVector2, pixelSize:Int, color:RColor)="GuiDrawIcon"
-	
-	Function bmx_raygui_GuiColorBarAlpha:Float(bounds:RRectangle, alpha:Float)="GuiColorBarAlpha"
-	Function bmx_raygui_GuiColorBarHue:Float(bounds:RRectangle, value:Float)="GuiColorBarHue"
+	Function bmx_raygui_GuiTextInputBox:Int(bounds:RRectangle, title:Byte Ptr, message:Byte Ptr, buttons:Byte Ptr, txt:Byte Ptr, textMaxSize:Int, secretViewActive:Int Var)="GuiTextInputBox"
+	Function bmx_raygui_GuiColorPicker:Int(bounds:RRectangle, text:Byte Ptr, color:RColor Var)="GuiColorPicker"
+	Function bmx_raygui_GuiColorPanel:Int(bounds:RRectangle, text:Byte Ptr, color:RColor Var)="GuiColorPanel"
+	Function bmx_raygui_GuiColorBarAlpha:Float(bounds:RRectangle, text:Byte Ptr, alpha:Float Var)="GuiColorBarAlpha"
+	Function bmx_raygui_GuiColorBarHue:Float(bounds:RRectangle, text:Byte Ptr, value:Float Var)="GuiColorBarHue"
+	Function bmx_raygui_GuiColorPickerHSV:Int(bounds:RRectangle, text:Byte Ptr, colorHsv:RVector3 Var)="GuiColorPickerHSV"
+	Function bmx_raygui_GuiColorPanelHSV:Int(bounds:RRectangle, text:Byte Ptr, colorHsv:RVector3 Var)="GuiColorPanelHSV"
 End Extern
 
 Const GUI_DEFAULT:Int = 0
@@ -187,7 +199,7 @@ Const RICON_FOLDER_SAVE:Int = 4
 Const RICON_FILE_OPEN:Int = 5
 Const RICON_FILE_SAVE:Int = 6
 Const RICON_FILE_EXPORT:Int = 7
-Const RICON_FILE_NEW:Int = 8
+Const RICON_FILE_ADD:Int = 8
 Const RICON_FILE_DELETE:Int = 9
 Const RICON_FILETYPE_TEXT:Int = 10
 Const RICON_FILETYPE_AUDIO:Int = 11
@@ -379,35 +391,35 @@ Const RICON_LAYERS_VISIBLE:Int = 196
 Const RICON_LAYERS:Int = 197
 Const RICON_WINDOW:Int = 198
 Const RICON_HIDPI:Int = 199
-Const RICON_200:Int = 200
-Const RICON_201:Int = 201
-Const RICON_202:Int = 202
-Const RICON_203:Int = 203
-Const RICON_204:Int = 204
-Const RICON_205:Int = 205
-Const RICON_206:Int = 206
-Const RICON_207:Int = 207
-Const RICON_208:Int = 208
-Const RICON_209:Int = 209
-Const RICON_210:Int = 210
-Const RICON_211:Int = 211
-Const RICON_212:Int = 212
-Const RICON_213:Int = 213
-Const RICON_214:Int = 214
-Const RICON_215:Int = 215
-Const RICON_216:Int = 216
-Const RICON_217:Int = 217
-Const RICON_218:Int = 218
-Const RICON_219:Int = 219
-Const RICON_220:Int = 220
-Const RICON_221:Int = 221
-Const RICON_222:Int = 222
-Const RICON_223:Int = 223
-Const RICON_224:Int = 224
-Const RICON_225:Int = 225
-Const RICON_226:Int = 226
-Const RICON_227:Int = 227
-Const RICON_228:Int = 228
+Const RICON_FILETYPE_BINARY:Int = 200
+Const RICON_HEX:Int = 201
+Const RICON_SHIELD:Int = 202
+Const RICON_FILE_NEW:Int = 203
+Const RICON_FOLDER_ADD:Int = 204
+Const RICON_ALARM:Int = 205
+Const RICON_CPU:Int = 206
+Const RICON_ROM:Int = 207
+Const RICON_STEP_OVER:Int = 208
+Const RICON_STEP_INTO:Int = 209
+Const RICON_STEP_OUT:Int = 210
+Const RICON_RESTART:Int = 211
+Const RICON_BREAKPOINT_ON:Int = 212
+Const RICON_BREAKPOINT_OFF:Int = 213
+Const RICON_BURGER_MENU:Int = 214
+Const RICON_CASE_SENSITIVE:Int = 215
+Const RICON_REG_EXP:Int = 216
+Const RICON_FOLDER:Int = 217
+Const RICON_FILE:Int = 218
+Const RICON_SAND_TIMER:Int = 219
+Const RICON_WARNING:Int = 220
+Const RICON_HELP_BOX:Int = 221
+Const RICON_INFO_BOX:Int = 222
+Const RICON_PRIORITY:Int = 223
+Const RICON_LAYERS_ISO:Int = 224
+Const RICON_LAYERS2:Int = 225
+Const RICON_MLAYERS:Int = 226
+Const RICON_MAPS:Int = 227
+Const RICON_HOT:Int = 228
 Const RICON_229:Int = 229
 Const RICON_230:Int = 230
 Const RICON_231:Int = 231

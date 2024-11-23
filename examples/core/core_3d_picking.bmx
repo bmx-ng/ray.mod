@@ -15,16 +15,13 @@ camera.position = New RVector3(10.0, 10.0, 10.0) ' Camera position
 camera.target = New RVector3(0.0, 0.0, 0.0)      ' Camera looking at point
 camera.up = New RVector3(0.0, 1.0, 0.0)          ' Camera up vector (rotation towards target)
 camera.fovy = 45.0                                ' Camera field-of-view Y
-camera.cameraType = CAMERA_PERSPECTIVE                   ' Camera mode type
+camera.projection = CAMERA_PERSPECTIVE                   ' Camera mode type
 
 Local cubePosition:RVector3 = New RVector3(0.0, 1.0, 0.0)
 Local cubeSize:RVector3 = New RVector3(2.0, 2.0, 2.0)
 
 Local ray:RRay                    ' Picking line ray
-
-Local collision:Int = False
-
-SetCameraMode(camera, CAMERA_FREE) ' Set a free camera mode
+Local collision:RRayCollision ' Ray collision hit info
 
 SetTargetFPS(60)                   ' Set our game to run at 60 frames-per-second
 '--------------------------------------------------------------------------------------
@@ -33,18 +30,29 @@ SetTargetFPS(60)                   ' Set our game to run at 60 frames-per-second
 While Not WindowShouldClose()        ' Detect window close button or ESC key
 	' Update
 	'----------------------------------------------------------------------------------
-	UpdateCamera(camera)          ' Update camera
+	If IsCursorHidden() Then
+		UpdateCamera(camera, CAMERA_FIRST_PERSON)
+	End If
+
+	' Toggle camera controls
+	If IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) Then
+		If IsCursorHidden() Then
+			EnableCursor()
+		Else
+			DisableCursor()
+		End If
+	End If
 
 	If IsMouseButtonPressed(MOUSE_LEFT_BUTTON) Then
-		If Not collision Then
-			ray = GetMouseRay(GetMousePosition(), camera)
+		If Not collision.hit Then
+			ray = GetScreenToWorldRay(GetMousePosition(), camera)
 
 			' Check collision between ray and box
-			collision = CheckCollisionRayBox(ray, ..
+			collision = GetRayCollisionBox(ray, ..
 						New RBoundingBox(New RVector3(cubePosition.x - cubeSize.x/2, cubePosition.y - cubeSize.y/2, cubePosition.z - cubeSize.z/2), ..
 									     New RVector3(cubePosition.x + cubeSize.x/2, cubePosition.y + cubeSize.y/2, cubePosition.z + cubeSize.z/2)))
 		Else
-			collision = False
+			collision.hit = False
 		End If
 	End If
 	'----------------------------------------------------------------------------------
@@ -57,7 +65,7 @@ While Not WindowShouldClose()        ' Detect window close button or ESC key
 
 		BeginMode3D(camera)
 
-			If collision Then
+			If collision.hit Then
 				DrawCube(cubePosition, cubeSize.x, cubeSize.y, cubeSize.z, RED)
 				DrawCubeWires(cubePosition, cubeSize.x, cubeSize.y, cubeSize.z, MAROON)
 
@@ -74,9 +82,11 @@ While Not WindowShouldClose()        ' Detect window close button or ESC key
 
 		DrawText("Try selecting the box with mouse!", 240, 10, 20, DARKGRAY)
 
-		If collision Then
-			DrawText("BOX SELECTED", (screenWidth - MeasureText("BOX SELECTED", 30)) / 2, screenHeight * 0.1, 30, GREEN)
+		If collision.hit Then
+			DrawText("BOX SELECTED", (screenWidth - MeasureText("BOX SELECTED", 30)) / 2, Int(screenHeight * 0.1), 30, GREEN)
 		End If
+
+		DrawText("Right click mouse to toggle camera controls", 10, 430, 10, GRAY)
 
 		DrawFPS(10, 10)
 

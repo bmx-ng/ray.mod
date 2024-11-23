@@ -2,10 +2,12 @@
 *
 *   raylib [shapes] example - Colors palette
 *
-*   This example has been created using raylib 2.5 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*   Example originally created with raylib 1.0, last time updated with raylib 2.5
 *
-*   Copyright (c) 2014-2019 Ramon Santamaria (@raysan5)
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2014-2024 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -13,6 +15,9 @@
 
 #define MAX_COLORS_COUNT    21          // Number of colors available
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -37,10 +42,10 @@ int main(void)
     // Fills colorsRecs data (for every rectangle)
     for (int i = 0; i < MAX_COLORS_COUNT; i++)
     {
-        colorsRecs[i].x = 20 + 100*(i%7) + 10*(i%7);
-        colorsRecs[i].y = 80 + 100*(i/7) + 10*(i/7);
-        colorsRecs[i].width = 100;
-        colorsRecs[i].height = 100;
+        colorsRecs[i].x = 20.0f + 100.0f *(i%7) + 10.0f *(i%7);
+        colorsRecs[i].y = 80.0f + 100.0f *(i/7) + 10.0f *(i/7);
+        colorsRecs[i].width = 100.0f;
+        colorsRecs[i].height = 100.0f;
     }
 
     int colorState[MAX_COLORS_COUNT] = { 0 };           // Color state: 0-DEFAULT, 1-MOUSE_HOVER
@@ -79,10 +84,10 @@ int main(void)
 
                 if (IsKeyDown(KEY_SPACE) || colorState[i])
                 {
-                    DrawRectangle(colorsRecs[i].x, colorsRecs[i].y + colorsRecs[i].height - 26, colorsRecs[i].width, 20, BLACK);
+                    DrawRectangle((int)colorsRecs[i].x, (int)(colorsRecs[i].y + colorsRecs[i].height - 26), (int)colorsRecs[i].width, 20, BLACK);
                     DrawRectangleLinesEx(colorsRecs[i], 6, Fade(BLACK, 0.3f));
-                    DrawText(colorNames[i], colorsRecs[i].x + colorsRecs[i].width - MeasureText(colorNames[i], 10) - 12,
-                             colorsRecs[i].y + colorsRecs[i].height - 20, 10, colors[i]);
+                    DrawText(colorNames[i], (int)(colorsRecs[i].x + colorsRecs[i].width - MeasureText(colorNames[i], 10) - 12),
+                        (int)(colorsRecs[i].y + colorsRecs[i].height - 20), 10, colors[i]);
                 }
             }
 

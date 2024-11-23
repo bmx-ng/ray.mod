@@ -22,14 +22,14 @@ Local dstRecH:RRectangle = New RRectangle(160.0, 93.0, 32.0, 32.0)
 Local dstRecV:RRectangle = New RRectangle(92.0, 160.0, 32.0, 32.0)
 
 ' A 9-patch (NPT_9PATCH) changes its sizes in both axis
-Local ninePatchInfo1:RNPatchInfo = New RNPatchInfo(New RRectangle(0.0, 0.0, 64.0, 64.0), 12, 40, 12, 12, NPT_9PATCH)
-Local ninePatchInfo2:RNPatchInfo = New RNPatchInfo(New RRectangle(0.0, 128.0, 64.0, 64.0), 16, 16, 16, 16, NPT_9PATCH)
+Local ninePatchInfo1:RNPatchInfo = New RNPatchInfo(New RRectangle(0.0, 0.0, 64.0, 64.0), 12, 40, 12, 12, NPATCH_NINE_PATCH)
+Local ninePatchInfo2:RNPatchInfo = New RNPatchInfo(New RRectangle(0.0, 128.0, 64.0, 64.0), 16, 16, 16, 16, NPATCH_NINE_PATCH)
 
 ' A horizontal 3-patch (NPT_3PATCH_HORIZONTAL) changes its sizes along the x axis only
-Local h3PatchInfo:RNPatchInfo = New RNPatchInfo(New RRectangle(0.0, 64.0, 64.0, 64.0), 8, 8, 8, 8, NPT_3PATCH_HORIZONTAL)
+Local h3PatchInfo:RNPatchInfo = New RNPatchInfo(New RRectangle(0.0, 64.0, 64.0, 64.0), 8, 8, 8, 8, NPATCH_THREE_PATCH_HORIZONTAL)
 
 ' A vertical 3-patch (NPT_3PATCH_VERTICAL) changes its sizes along the y axis only
-Local v3PatchInfo:RNPatchInfo = New RNPatchInfo(New RRectangle(0.0, 192.0, 64.0, 64.0), 6, 6, 6, 6, NPT_3PATCH_VERTICAL)
+Local v3PatchInfo:RNPatchInfo = New RNPatchInfo(New RRectangle(0.0, 192.0, 64.0, 64.0), 6, 6, 6, 6, NPATCH_THREE_PATCH_VERTICAL)
 
 SetTargetFPS(60)
 '---------------------------------------------------------------------------------------

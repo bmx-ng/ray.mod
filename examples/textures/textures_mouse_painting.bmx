@@ -32,6 +32,7 @@ Local colorSelected:Int = 0
 Local colorSelectedPrev:Int = colorSelected
 Local colorMouseHover:Int = 0
 Local brushSize:Int = 20
+Local mouseWasPressed:Int = False
 
 Local btnSaveRec:RRectangle = New RRectangle(750, 10, 40, 30)
 Local btnSaveMouseHover:Int = False
@@ -111,7 +112,12 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 	End If
 
 	If IsMouseButtonDown(MOUSE_RIGHT_BUTTON) Then
-		colorSelected = 0
+		If Not mouseWasPressed Then
+			colorSelectedPrev = colorSelected
+			colorSelected = 0
+		End If
+
+		mouseWasPressed = True
 		
 		' Erase circle from render texture
 		BeginTextureMode(target)
@@ -119,8 +125,9 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 			DrawCircle(Int(mousePos.x), Int(mousePos.y), brushSize, colors[0])
 		End If
 		EndTextureMode()
-	Else
+	Else If IsMouseButtonReleased(MOUSE_BUTTON_RIGHT) And mouseWasPressed Then
 		colorSelected = colorSelectedPrev
+		mouseWasPressed = False
 	End If
 	
 	' Check mouse hover save button
@@ -133,7 +140,7 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 	' Image saving logic
 	' NOTE: Saving painted texture to a default named image
 	If (btnSaveMouseHover And IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) Or IsKeyPressed(KEY_S) Then
-		Local image:RImage = GetTextureData(target.texture)
+		Local image:RImage = LoadImageFromTexture(target.texture)
 		ImageFlipVertical(image)
 		ExportImage(image, "my_amazing_texture_painting.png")
 		UnloadImage(image)

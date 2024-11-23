@@ -10,10 +10,10 @@ Const screenHeight:Int = 450
 InitWindow(screenWidth, screenHeight, "raylib [shapes] example - draw rectangle rounded")
 
 Local roundness:Float = 0.2
-Local width:Int = 200
-Local height:Int = 100
-Local segments:Int = 0
-Local lineThick:Int = 1
+Local width:Float = 200
+Local height:Float = 100
+Local segments:Float = 0
+Local lineThick:Float = 1
 
 Local DrawRect:Int = False
 Local drawRoundedRect:Int = True
@@ -42,23 +42,23 @@ While Not WindowShouldClose()    ' Detect window close button or ESC key
 			DrawRectangleRec(rec, Fade(GOLD, 0.6))
 		End If
 		If drawRoundedRect Then
-			DrawRectangleRounded(rec, roundness, segments, Fade(MAROON, 0.2))
+			DrawRectangleRounded(rec, roundness, Int(segments), Fade(MAROON, 0.2))
 		End If
 		If drawRoundedLines Then
-			DrawRectangleRoundedLines(rec, roundness, segments, lineThick, Fade(MAROON, 0.4))
+			DrawRectangleRoundedLinesEx(rec, roundness, Int(segments), lineThick, Fade(MAROON, 0.4))
 		End If
 
 		' Draw GUI controls
 		'------------------------------------------------------------------------------
-		width = GuiSliderBar(New RRectangle(640, 40, 105, 20), "Width", "", width, 0, GetScreenWidth() - 300 )
-		height = GuiSliderBar(New RRectangle(640, 70, 105, 20), "Height", "", height, 0, GetScreenHeight() - 50)
-		roundness = GuiSliderBar(New RRectangle(640, 140, 105, 20), "Roundness", "", roundness, 0.0, 1.0)
-		lineThick = GuiSliderBar(New RRectangle(640, 170, 105, 20), "Thickness", "", lineThick, 0, 20)
-		segments = GuiSliderBar(New RRectangle(640, 240, 105, 20), "Segments", "", segments, 0, 60)
+		GuiSliderBar(New RRectangle(640, 40, 105, 20), "Width", "", width, 0, GetScreenWidth() - 300 )
+		GuiSliderBar(New RRectangle(640, 70, 105, 20), "Height", "", height, 0, GetScreenHeight() - 50)
+		GuiSliderBar(New RRectangle(640, 140, 105, 20), "Roundness", "", roundness, 0.0, 1.0)
+		GuiSliderBar(New RRectangle(640, 170, 105, 20), "Thickness", "", lineThick, 0, 20)
+		GuiSliderBar(New RRectangle(640, 240, 105, 20), "Segments", "", segments, 0, 60)
 
-		drawRoundedRect = GuiCheckBox(New RRectangle(640, 320, 20, 20), "DrawRoundedRect", drawRoundedRect)
-		drawRoundedLines = GuiCheckBox(New RRectangle(640, 350, 20, 20), "DrawRoundedLines", drawRoundedLines)
-		DrawRect = GuiCheckBox(New RRectangle(640, 380, 20, 20), "DrawRect", DrawRect)
+		GuiCheckBox(New RRectangle(640, 320, 20, 20), "DrawRoundedRect", drawRoundedRect)
+		GuiCheckBox(New RRectangle(640, 350, 20, 20), "DrawRoundedLines", drawRoundedLines)
+		GuiCheckBox(New RRectangle(640, 380, 20, 20), "DrawRect", DrawRect)
 		'------------------------------------------------------------------------------
 
 		Local txt:String

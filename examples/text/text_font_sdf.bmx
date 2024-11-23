@@ -3,9 +3,9 @@ SuperStrict
 Framework Ray.Lib
 Import Text.Format
 
-?win32
+?not opengles
 Const GLSL_VERSION:Int = 330
-?raspberrypi
+?opengles
 Const GLSL_VERSION:Int = 100
 ?
 
@@ -22,31 +22,39 @@ InitWindow(screenWidth, screenHeight, "raylib [text] example - SDF fonts")
 
 Local msg:String = "Signed Distance Fields"
 
+' Loading file to memory
+Local fileSize:Int
+Local fileData:Byte Ptr = LoadFileData("../../lib.mod/raylib/examples/text/resources/anonymous_pro_bold.ttf", fileSize)
+
 ' Default font generation from TTF font
 Local fontDefault:RFont
 fontDefault.baseSize = 16
-fontDefault.charsCount = 95
+fontDefault.glyphCount = 95
+
+' Loading font data from memory data
 ' Parameters > font size: 16, no chars array provided (0), chars count: 95 (autogenerate chars array)
-fontDefault.chars = LoadFontData("../../lib.mod/raylib/examples/text/resources/AnonymousPro-Bold.ttf", 16, 0, 95, FONT_DEFAULT)
+fontDefault.glyphs = LoadFontData(fileData, fileSize, 16, 0, 95, FONT_DEFAULT)
 ' Parameters > chars count: 95, font size: 16, chars padding in image: 4 px, pack method: 0 (default)
-Local atlas:RImage  = GenImageFontAtlas(fontDefault.chars, Varptr fontDefault.recs, 95, 16, 4, 0)
+Local atlas:RImage  = GenImageFontAtlas(fontDefault.glyphs, Varptr fontDefault.recs, 95, 16, 4, 0)
 fontDefault.texture = LoadTextureFromImage(atlas)
 UnloadImage(atlas)
 
 ' SDF font generation from TTF font
 Local fontSDF:RFont
 fontSDF.baseSize = 16
-fontSDF.charsCount = 95
+fontSDF.glyphCount = 95
 ' Parameters > font size: 16, no chars array provided (0), chars count: 0 (defaults to 95)
-fontSDF.chars = LoadFontData("../../lib.mod/raylib/examples/text/resources/AnonymousPro-Bold.ttf", 16, 0, 0, FONT_SDF)
+fontSDF.glyphs = LoadFontData(fileData, fileSize, 16, 0, 0, FONT_SDF)
 ' Parameters > chars count: 95, font size: 16, chars padding in image: 0 px, pack method: 1 (Skyline algorythm)
-atlas = GenImageFontAtlas(fontSDF.chars, Varptr fontSDF.recs, 95, 16, 0, 1)
+atlas = GenImageFontAtlas(fontSDF.glyphs, Varptr fontSDF.recs, 95, 16, 0, 1)
 fontSDF.texture = LoadTextureFromImage(atlas)
 UnloadImage(atlas)
 
+UnloadFileData(fileData)      ' Free memory from loaded file
+
 ' Load SDF required shader (we use default vertex shader)
 Local shader:RShader = LoadShader(0, "../../lib.mod/raylib/examples/text/resources/shaders/glsl" + GLSL_VERSION + "/sdf.fs")
-SetTextureFilter(fontSDF.texture, FILTER_BILINEAR)    ' Required for SDF font
+SetTextureFilter(fontSDF.texture, TEXTURE_FILTER_BILINEAR)    ' Required for SDF font
 
 Local fontPosition:RVector2 = New RVector2(40, screenHeight/2 - 50)
 Local textSize:RVector2 = New RVector2(0.0, 0.0)
