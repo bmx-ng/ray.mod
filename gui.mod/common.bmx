@@ -86,7 +86,7 @@ Extern
 	Function bmx_raygui_GuiGrid:RVector2(bounds:RRectangle, spacing:Float, subdivs:Int)="GuiGrid"
 
 	Function bmx_raygui_GuiListView:Int(bounds:RRectangle, txt:Byte Ptr, scrollIndex:Int Var, active:Int Var)="GuiListView"
-	Function bmx_raygui_GuiListViewEx:Int(bounds:RRectangle, txt:Size_T Ptr, count:Int, focus:Int Var, scrollIndex:Int Var, active:Int)="GuiListViewEx"
+	Function bmx_raygui_GuiListViewEx:Int(bounds:RRectangle, txt:Byte Ptr Ptr, count:Int, scrollIndex:Int Var, active:Int Var, focus:Int Var)="GuiListViewEx"
 	Function bmx_raygui_GuiMessageBox:Int(bounds:RRectangle, title:Byte Ptr, message:Byte Ptr, buttons:Byte Ptr)="GuiMessageBox"
 	Function bmx_raygui_GuiTextInputBox:Int(bounds:RRectangle, title:Byte Ptr, message:Byte Ptr, buttons:Byte Ptr, txt:Byte Ptr, textMaxSize:Int, secretViewActive:Int Var)="GuiTextInputBox"
 	Function bmx_raygui_GuiColorPicker:Int(bounds:RRectangle, text:Byte Ptr, color:RColor Var)="GuiColorPicker"
