@@ -782,7 +782,7 @@ Function RMemAlloc:Byte Ptr(size:UInt)
 End Function
 
 Rem
-bbc: Internal memory reallocator.
+bbdoc: Internal memory reallocator.
 End Rem
 Function RMemRealloc:Byte Ptr(data:Byte Ptr, size:UInt)
 	Return bmx_raylib_MemRealloc(data, size)
